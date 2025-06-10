@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { formatString } from "./FormatFunction.jsx";
-import Messages from "./Messages.jsx";
+import Messages from "./Message.jsx";
 
 export const checkStringType = (str, isFullSize = true) => {
     for (const char of str) {
@@ -17,9 +17,14 @@ export const checkStringType = (str, isFullSize = true) => {
     }
     return true;
 };
-export const checkEmailFormat = (fieldValue) => {
+
+export const checkEmailFormat = (fieldName, fieldValue) => {
     if (!fieldValue.includes("@")) {
-        return formatString(Messages.MSG_E_00008);
+        return formatString(Messages.MSG_E_00001, fieldName);
+    }
+    const parts = fieldValue.split("@");
+    if (parts.length !== 2 || !parts[1].includes(".")) {
+        return formatString(Messages.MSG_E_00001, fieldName);
     }
     return null;
 };
@@ -43,7 +48,7 @@ export const checkMustAfterToday = (fieldName, fieldValue) => {
 };
 export const checkRequiredInput = (fieldName, fieldValue) => {
     if (!fieldValue || (Array.isArray(fieldValue) && fieldValue.length === 0)) {
-        return formatString(Messages.MSG_E_00001, fieldName);
+        return formatString(Messages.MSG_E_00002, fieldName);
     }
     return null;
 };

@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
             let authorities = null;
             if (token) {
                 const decodedToken = jwtDecode(token);
-                authorities = decodedToken.roles;
+                authorities = decodedToken.authorities;
             }
             return {
                 isAuthenticated: !!token,
@@ -25,8 +25,7 @@ export const AuthProvider = ({ children }) => {
     const login = (token) => {
         localStorage.setItem(CONSTANTS.ACCESS_TOKEN, token);
         const decodedToken = jwtDecode(token);
-        // const authorities = decodedToken.authorities;
-        const authorities = decodedToken?.roles;
+        const authorities = decodedToken?.authorities;
         setAuthState({
             isAuthenticated: true,
             authorities: authorities,
@@ -41,10 +40,10 @@ export const AuthProvider = ({ children }) => {
                 return acc;
             }, {});
         });
-        // setAuthState({
-        //     isAuthenticated: false,
-        //     authorities: null,
-        // });
+        setAuthState({
+            isAuthenticated: false,
+            authorities: null,
+        });
         window.location.href = "/login";
     };
 

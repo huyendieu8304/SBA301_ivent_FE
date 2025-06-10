@@ -5,14 +5,12 @@ import App from "./App.jsx";
 import {createTheme, ThemeProvider} from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-
-dayjs.extend(utc);
-import "dayjs/locale/ja";
+import "dayjs/locale/vi";
+import { viVN } from '@mui/material/locale';
 import {AuthProvider} from "./context/AuthContext.jsx";
-// import {jaJP} from "@mui/material/locale";
 
-dayjs.locale("ja");
-
+dayjs.locale("vi");
+dayjs.extend(utc);
 let theme = createTheme({
     // Theme customization goes here as usual, including tonalOffset and/or
     // contrastThreshold as the augmentColor() function relies on these
@@ -22,13 +20,16 @@ theme = createTheme(
     {
         palette: {
             primary: {
-                main: "#1C6758",
+                main: "#12B76A",
             },
             secondary: {
                 main: "#FFFFFF",
             },
             buttonDefault: {
                 main: "#ecf3f0",
+            },
+            backgroundColor: {
+                main: "#252B37",
             },
             light: theme.palette.augmentColor({
                 color: {
@@ -44,10 +45,10 @@ theme = createTheme(
             }),
         },
         typography: {
-            fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+            fontFamily: "Roboto, Helvetica, Arial, sans-serif, Comfortaa",
         },
     },
-    // jaJP,
+    viVN,
 );
 
 export default theme;
