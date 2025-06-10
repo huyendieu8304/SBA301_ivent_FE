@@ -20,7 +20,7 @@ theme = createTheme(
     {
         palette: {
             primary: {
-                main: "#027A48",
+                main: "#12B76A",
             },
             secondary: {
                 main: "#FFFFFF",
@@ -29,7 +29,7 @@ theme = createTheme(
                 main: "#ecf3f0",
             },
             backgroundColor: {
-                main: "#E9EAEB",
+                main: "#252B37",
             },
             light: theme.palette.augmentColor({
                 color: {
@@ -45,7 +45,7 @@ theme = createTheme(
             }),
         },
         typography: {
-            fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+            fontFamily: "Roboto, Helvetica, Arial, sans-serif, Comfortaa",
         },
     },
     viVN,

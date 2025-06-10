@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router";
 import LoadingComponent from "./component/LoadingComponent.jsx";
-import {LazyHomePage, LazyLoginPage, LazyMainLayout, LazySecondaryLayout} from "./common/LazyLoad.jsx";
+import {LazyHomePage, LazyLoginPage, LazyMainLayout, LazyRegisterAccountPage} from "./common/LazyLoad.jsx";
 
 const routeDefinitions = createRoutesFromElements(
     <Route>
@@ -15,18 +15,10 @@ const routeDefinitions = createRoutesFromElements(
             }
         >
             <Route path="/" element={<LazyHomePage/>} />
-        </Route>
-        <Route
-            element={
-                <Suspense fallback={<LoadingComponent />}>
-                    <LazySecondaryLayout />
-                </Suspense>
-            }
-        >
             <Route path="/login" element={<LazyLoginPage/>} />
+            <Route path="/register" element={<LazyRegisterAccountPage/>} />
         </Route>
     </Route>
-
 );
 
 const router = createBrowserRouter(routeDefinitions);

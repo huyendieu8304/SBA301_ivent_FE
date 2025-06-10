@@ -17,8 +17,13 @@ export const checkStringType = (str, isFullSize = true) => {
     }
     return true;
 };
+
 export const checkEmailFormat = (fieldName, fieldValue) => {
     if (!fieldValue.includes("@")) {
+        return formatString(Messages.MSG_E_00001, fieldName);
+    }
+    const parts = fieldValue.split("@");
+    if (parts.length !== 2 || !parts[1].includes(".")) {
         return formatString(Messages.MSG_E_00001, fieldName);
     }
     return null;

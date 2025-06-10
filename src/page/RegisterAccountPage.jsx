@@ -1,22 +1,24 @@
 import {Button, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
-import ValidationTextField from "../component/ValidationTextField.jsx";
 import {useState} from "react";
+import {useAuth} from "../context/AuthContext.jsx";
+import {useNavigate} from "react-router";
 import {checkEmailFormat, checkRequiredInput} from "../common/ValidateFunction.jsx";
 import authSettingApi from "../api/service/authSettingApi.jsx";
-import {useAuth} from "../context/AuthContext.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
-import {useNavigate} from "react-router";
 import MascotSvg from "../component/MascotSvg.jsx";
-import {messageService} from "../service/MessageService.jsx";
-import Messages from "../common/Message.jsx";
-import {MESSAGE_TYPES} from "../common/Constant.jsx";
+import ValidationTextField from "../component/ValidationTextField.jsx";
 
-const LoginPage = () => {
+const RegisterAccountPage = () => {
     const theme = useTheme();
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
-        email: { value: "", error: "" },
-        password: { value: "", error: "" },
+        email: {value: "", error: ""},
+        password: {value: "", error: ""},
+        fullName: {value: "", error: ""},
+        phone: {value: "", error: ""},
+        dob: {value: "", error: ""},
+        gender: {value: "", error: ""},
+        avatarUri: {value: "", error: ""},
     });
     const {login} = useAuth();
     const navigate = useNavigate();
@@ -43,8 +45,8 @@ const LoginPage = () => {
 
     const validateEmail = (value) => {
         const fieldName = "Email";
-        const error = checkRequiredInput(fieldName,value) || checkEmailFormat(fieldName, value);
-        if(error) {
+        const error = checkRequiredInput(fieldName, value) || checkEmailFormat(fieldName, value);
+        if (error) {
             return error;
         }
         return null;
@@ -52,8 +54,44 @@ const LoginPage = () => {
 
     const validatePassword = (value) => {
         const fieldName = "Mật khẩu";
-        const error = checkRequiredInput(fieldName,value);
-        if(error) {
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
+    const validateFullName = (value) => {
+        const fieldName = "Họ và tên";
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
+    const validatePhone = (value) => {
+        const fieldName = "Số điện thoại";
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
+    const validateDob = (value) => {
+        const fieldName = "Ngày sinh";
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
+    const validateGender = (value) => {
+        const fieldName = "Giới tính";
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
             return error;
         }
         return null;
@@ -64,7 +102,7 @@ const LoginPage = () => {
         const passwordErr = validatePassword(formFields.password.value);
         updateError("email", emailErr || "");
         updateError("password", passwordErr || "");
-        if(emailErr || passwordErr) {
+        if (emailErr || passwordErr) {
             return;
         }
         const body = {
@@ -78,7 +116,6 @@ const LoginPage = () => {
     const loginSuccess = (data) => {
         login(data.jwtToken);
         navigate("/");
-        messageService.showMessage(Messages.MSG_I_00001,MESSAGE_TYPES.INFO);
         // setIsLoading(false);
     }
     const loginFailure = (error) => {
@@ -86,11 +123,23 @@ const LoginPage = () => {
         setIsLoading(false);
     }
 
-    if(isLoading) return <LoadingComponent/>
+    if (isLoading) return <LoadingComponent/>
     return (
-        <Container maxWidth="xl" sx={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%"}}>
-            <Card sx={{ width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px", }}>
-                <CardContent sx={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "0 !important"}}>
+        <Container maxWidth="xl" sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%"
+        }}>
+            <Card sx={{width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px",}}>
+                <CardContent sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "0 !important"
+                }}>
                     <Stack sx={{
                         width: "100%",
                         height: "80px",
@@ -129,4 +178,4 @@ const LoginPage = () => {
         </Container>
     )
 }
-export default LoginPage;
+export default RegisterAccountPage;
