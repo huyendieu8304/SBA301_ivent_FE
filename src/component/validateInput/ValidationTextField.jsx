@@ -1,5 +1,4 @@
 import {TextField} from "@mui/material";
-import {useEffect, useState} from "react";
 
 const ValidationTextField = ({
                                  label,
@@ -11,8 +10,8 @@ const ValidationTextField = ({
                                  isRequired = false,
                                  size = "medium",
                                  type = "text",
-                                 validatorFunction = () => {
-                                 }
+                                 validatorFunction,
+                                 relatedValue = null, isRePasswordInput = false,
                              },
 ) => {
 
@@ -23,7 +22,13 @@ const ValidationTextField = ({
     };
 
     const handleBlur = (e) => {
-        const errorMsg = validatorFunction(e.target.value);
+        let errorMsg;
+        if(isRePasswordInput) {
+            errorMsg = validatorFunction(e.target.value, relatedValue);
+        }
+        else {
+            errorMsg = validatorFunction(e.target.value);
+        }
         setError(fieldName, errorMsg || "");
     };
 

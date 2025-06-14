@@ -119,12 +119,12 @@ const MainLayout = () => {
             <Box sx={{
                 position: "fixed",
                 top: "8.5vh",
-                bottom: "6.5vh",
+                // bottom: "6.5vh",
                 left: 0,
                 right: 0,
                 height: "85vh",
                 overflowY: "auto",
-                backgroundColor: theme.palette.backgroundColor.main
+                backgroundColor: theme.palette.backgroundColor.main,
             }}>
                 <Outlet/>
             </Box>
