@@ -1,5 +1,5 @@
 import {Button, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
-import ValidationTextField from "../component/ValidationTextField.jsx";
+import ValidationTextField from "../component/validateInput/ValidationTextField.jsx";
 import {useState} from "react";
 import {checkEmailFormat, checkRequiredInput} from "../common/ValidateFunction.jsx";
 import authSettingApi from "../api/service/authSettingApi.jsx";
@@ -15,8 +15,8 @@ const LoginPage = () => {
     const theme = useTheme();
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
-        email: { value: "", error: "" },
-        password: { value: "", error: "" },
+        email: {value: "", error: ""},
+        password: {value: "", error: ""},
     });
     const {login} = useAuth();
     const navigate = useNavigate();
@@ -43,8 +43,8 @@ const LoginPage = () => {
 
     const validateEmail = (value) => {
         const fieldName = "Email";
-        const error = checkRequiredInput(fieldName,value) || checkEmailFormat(fieldName, value);
-        if(error) {
+        const error = checkRequiredInput(fieldName, value) || checkEmailFormat(fieldName, value);
+        if (error) {
             return error;
         }
         return null;
@@ -52,8 +52,8 @@ const LoginPage = () => {
 
     const validatePassword = (value) => {
         const fieldName = "Mật khẩu";
-        const error = checkRequiredInput(fieldName,value);
-        if(error) {
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
             return error;
         }
         return null;
@@ -64,7 +64,7 @@ const LoginPage = () => {
         const passwordErr = validatePassword(formFields.password.value);
         updateError("email", emailErr || "");
         updateError("password", passwordErr || "");
-        if(emailErr || passwordErr) {
+        if (emailErr || passwordErr) {
             return;
         }
         const body = {
@@ -78,7 +78,7 @@ const LoginPage = () => {
     const loginSuccess = (data) => {
         login(data.jwtToken);
         navigate("/");
-        messageService.showMessage(Messages.MSG_I_00001,MESSAGE_TYPES.INFO);
+        messageService.showMessage(Messages.MSG_I_00001, MESSAGE_TYPES.INFO);
         // setIsLoading(false);
     }
     const loginFailure = (error) => {
@@ -86,11 +86,21 @@ const LoginPage = () => {
         setIsLoading(false);
     }
 
-    if(isLoading) return <LoadingComponent/>
+    if (isLoading) return <LoadingComponent/>
     return (
-        <Container maxWidth="xl" sx={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%"}}>
-            <Card sx={{ width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px", }}>
-                <CardContent sx={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "0 !important"}}>
+        <Container maxWidth="xl" sx={{
+            display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
+            height: "fit-content",
+            margin: "24px 0",
+        }}>
+            <Card sx={{width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px",}}>
+                <CardContent sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "0 !important"
+                }}>
                     <Stack sx={{
                         width: "100%",
                         height: "80px",
@@ -119,7 +129,7 @@ const LoginPage = () => {
                     </Stack>
                     <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "24px"}}
                             onClick={submitForm}>
-                        <Typography gutterBottom variant="body1" component="div"
+                        <Typography variant="body1" component="div"
                                     sx={{color: "white", textAlign: "center"}}>
                             Đăng nhập
                         </Typography>

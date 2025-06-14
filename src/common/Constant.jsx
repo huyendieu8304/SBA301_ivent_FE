@@ -13,8 +13,7 @@ export const HTTP_METHOD = {
 };
 
 export const ROLES = {
-    SYSTEM_ADMIN: "ROLE_SYSTEM_ADMIN",
-    STAFF: "ROLE_STAFF",
+    ADMIN: "ROLE_ADMIN",
     USER: "ROLE_USER",
 };
 
@@ -25,4 +24,4 @@ export const MESSAGE_TYPES = {
     ERROR: "error",
 };
 
-export const DATE_FORMAT = "MM/DD/YYYY";
+export const DATE_FORMAT = "DD/MM/YYYY";

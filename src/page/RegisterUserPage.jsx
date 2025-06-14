@@ -2,21 +2,30 @@ import {Button, Card, CardContent, Container, Stack, Typography, useTheme} from 
 import {useState} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import {useNavigate} from "react-router";
-import {checkEmailFormat, checkRequiredInput} from "../common/ValidateFunction.jsx";
+import {
+    checkEmailFormat,
+    checkPasswordAndRePasswordInput,
+    checkRequiredInput,
+    checkValidDate
+} from "../common/ValidateFunction.jsx";
 import authSettingApi from "../api/service/authSettingApi.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
 import MascotSvg from "../component/MascotSvg.jsx";
-import ValidationTextField from "../component/ValidationTextField.jsx";
+import ValidationTextField from "../component/validateInput/ValidationTextField.jsx";
+import {ValidateDatePicker} from "../component/validateInput/ValidateDatePicker.jsx";
+import {DATE_FORMAT} from "../common/Constant.jsx";
+import ValidateRadioGroup from "../component/validateInput/ValidateRadioGroup.jsx";
 
-const RegisterAccountPage = () => {
+const RegisterUserPage = () => {
     const theme = useTheme();
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
         email: {value: "", error: ""},
         password: {value: "", error: ""},
+        rePassword: {value: "", error: ""},
         fullName: {value: "", error: ""},
         phone: {value: "", error: ""},
-        dob: {value: "", error: ""},
+        dob: {value: null, error: ""},
         gender: {value: "", error: ""},
         avatarUri: {value: "", error: ""},
     });
@@ -61,6 +70,15 @@ const RegisterAccountPage = () => {
         return null;
     }
 
+    const validateRePassword = (value, relatedValue) => {
+        const fieldName = "Xác nhận mật khẩu";
+        const error = checkRequiredInput(fieldName, value) || checkPasswordAndRePasswordInput(value, relatedValue);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
     const validateFullName = (value) => {
         const fieldName = "Họ và tên";
         const error = checkRequiredInput(fieldName, value);
@@ -81,7 +99,7 @@ const RegisterAccountPage = () => {
 
     const validateDob = (value) => {
         const fieldName = "Ngày sinh";
-        const error = checkRequiredInput(fieldName, value);
+        const error = checkRequiredInput(fieldName, value) || checkValidDate(fieldName, value, DATE_FORMAT);
         if (error) {
             return error;
         }
@@ -100,23 +118,37 @@ const RegisterAccountPage = () => {
     const submitForm = () => {
         const emailErr = validateEmail(formFields.email.value);
         const passwordErr = validatePassword(formFields.password.value);
+        const rePasswordErr = validateRePassword(formFields.rePassword.value, formFields.password.value);
+        const fullNameErr = validateFullName(formFields.fullName.value);
+        const phoneErr = validatePhone(formFields.phone.value);
+        const dobErr = validateDob(formFields.dob.value);
+        const genderErr = validateGender(formFields.gender.value);
         updateError("email", emailErr || "");
         updateError("password", passwordErr || "");
-        if (emailErr || passwordErr) {
+        updateError("rePassword", rePasswordErr || "");
+        updateError("fullName", fullNameErr || "");
+        updateError("phone", phoneErr || "");
+        updateError("dob", dobErr || "");
+        updateError("gender", genderErr || "");
+        if (emailErr || passwordErr || rePasswordErr || fullNameErr || phoneErr || dobErr || genderErr) {
             return;
         }
         const body = {
             email: formFields.email.value,
             password: formFields.password.value,
+            fullName: formFields.fullName.value,
+            phone: formFields.phone.value,
+            dob: formFields.dob.value,
+            gender: formFields.gender.value,
         }
-        setIsLoading(true);
-        authSettingApi.login(body, loginSuccess, loginFailure);
+        console.log(body);
+        // setIsLoading(true);
+        // authSettingApi.login(body, loginSuccess, loginFailure);
     };
 
     const loginSuccess = (data) => {
         login(data.jwtToken);
         navigate("/");
-        // setIsLoading(false);
     }
     const loginFailure = (error) => {
         console.log(error);
@@ -130,9 +162,10 @@ const RegisterAccountPage = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100%"
+            height: "fit-content",
+            margin: "32px 0",
         }}>
-            <Card sx={{width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px",}}>
+            <Card sx={{width: "fit-content", minWidth: "700px", height: "fit-content", borderRadius: "16px",}}>
                 <CardContent sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -152,25 +185,74 @@ const RegisterAccountPage = () => {
                     }}>
                         <Typography variant="h5" component="div"
                                     sx={{fontWeight: "bold", color: "white", textAlign: "center", marginBottom: 2}}>
-                            Đăng nhập
+                            Đăng ký tài khoản
                         </Typography>
                         <MascotSvg/>
                     </Stack>
                     <Stack direction="column" spacing={3} sx={{width: "80%"}}>
-                        <ValidationTextField label="Email" fieldName="email" value={formFields.email.value}
-                                             setValue={updateField} error={formFields.email.error}
-                                             setError={updateError} isRequired={true} size="small" type="text"
-                                             validatorFunction={validateEmail}/>
-                        <ValidationTextField label="Mật khẩu" fieldName="password" value={formFields.password.value}
-                                             setValue={updateField} error={formFields.password.error}
-                                             setError={updateError} isRequired={true} size="small" type="password"
-                                             validatorFunction={validatePassword}/>
+                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                            <div style={{width: "50%"}}>
+                                <ValidationTextField label="Email" fieldName="email" value={formFields.email.value}
+                                                     setValue={updateField} error={formFields.email.error}
+                                                     setError={updateError} isRequired={true} size="small" type="text"
+                                                     validatorFunction={validateEmail}/>
+                            </div>
+                            <div style={{width: "50%"}}></div>
+                        </Stack>
+                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                            <ValidationTextField label="Mật khẩu" fieldName="password" value={formFields.password.value}
+                                                 setValue={updateField} error={formFields.password.error}
+                                                 setError={updateError} isRequired={true} size="small" type="password"
+                                                 validatorFunction={validatePassword}/>
+                            <ValidationTextField label="Xác nhận mật khẩu" fieldName="rePassword"
+                                                 value={formFields.rePassword.value}
+                                                 setValue={updateField} error={formFields.rePassword.error}
+                                                 setError={updateError} isRequired={true} size="small" type="password"
+                                                 validatorFunction={validateRePassword} isRePasswordInput={true} relatedValue={formFields.password.value}/>
+                        </Stack>
+                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                            <ValidationTextField label="Họ và tên" fieldName="fullName" value={formFields.fullName.value}
+                                                 setValue={updateField} error={formFields.fullName.error}
+                                                 setError={updateError} isRequired={true} size="small" type="text"
+                                                 validatorFunction={validateFullName}/>
+                            <ValidationTextField label="Số điện thoại" fieldName="phone"
+                                                 value={formFields.phone.value}
+                                                 setValue={updateField} error={formFields.phone.error}
+                                                 setError={updateError} isRequired={true} size="small" type="text"
+                                                 validatorFunction={validatePhone}/>
+                        </Stack>
+                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                            <div style={{width: "50%"}}>
+                                <ValidateDatePicker label="Ngày sinh" fieldName="dob"
+                                                    value={formFields.dob.value}
+                                                    setValue={updateField} error={formFields.dob.error}
+                                                    setError={updateError} isRequired={true} size="small"
+                                                    validatorFunction={validateDob}/>
+                            </div>
+                            <div style={{width: "50%"}}></div>
+                        </Stack>
+                        <ValidateRadioGroup label="Giới tính" fieldName="gender"
+                                            listOptions={[
+                                                {
+                                                    value: "Nam",
+                                                },
+                                                {
+                                                    value: "Nữ",
+                                                },
+                                                {
+                                                    value: "Khác",
+                                                }
+                                            ]}
+                                             value={formFields.gender.value}
+                                             setValue={updateField} error={formFields.gender.error}
+                                             setError={updateError} isRequired={true} size="small"
+                                             validatorFunction={validateGender}/>
                     </Stack>
                     <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "24px"}}
                             onClick={submitForm}>
-                        <Typography gutterBottom variant="body1" component="div"
+                        <Typography variant="body1" component="div"
                                     sx={{color: "white", textAlign: "center"}}>
-                            Đăng nhập
+                            Đăng ký
                         </Typography>
                     </Button>
                 </CardContent>
@@ -178,4 +260,4 @@ const RegisterAccountPage = () => {
         </Container>
     )
 }
-export default RegisterAccountPage;
+export default RegisterUserPage;

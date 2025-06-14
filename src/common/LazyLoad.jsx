@@ -9,7 +9,7 @@ export const LazyLoginPage = React.lazy(
 );
 
 export const LazyRegisterAccountPage = React.lazy(
-    () => import("../../src/page/RegisterAccountPage.jsx"),
+    () => import("../page/RegisterUserPage.jsx"),
 );
 
 export const LazyMainLayout = React.lazy(

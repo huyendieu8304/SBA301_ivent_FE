@@ -109,11 +109,18 @@ export const checkFullSizeKanaInput = (fieldName, fieldValue) => {
     return null;
 };
 
-export const checkValidDate = (dateStr, dateFormats) => {
+export const checkValidDate = (fieldName, dateStr, dateFormats) => {
     const parsedDate = dayjs(dateStr, dateFormats, true);
     if (!parsedDate.isValid()) {
-        return formatString(Messages.MSG_E_00006, dateFormats);
+        return formatString(Messages.MSG_E_00003, fieldName, dateFormats);
     }
     return null;
 };
+
+export const checkPasswordAndRePasswordInput = (rePassword, password) => {
+    if (password !== rePassword) {
+        return Messages.MSG_E_00004;
+    }
+    return null;
+}
 
