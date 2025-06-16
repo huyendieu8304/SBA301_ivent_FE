@@ -10,7 +10,7 @@ import {
 } from "../common/ValidateFunction.jsx";
 import authSettingApi from "../api/service/authSettingApi.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
-import MascotSvg from "../component/MascotSvg.jsx";
+import MascotSvg from "../component/svg/MascotSvg.jsx";
 import ValidationTextField from "../component/validateInput/ValidationTextField.jsx";
 import {ValidateDatePicker} from "../component/validateInput/ValidateDatePicker.jsx";
 import {DATE_FORMAT} from "../common/Constant.jsx";

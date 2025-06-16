@@ -13,5 +13,5 @@ export const LazyRegisterAccountPage = React.lazy(
 );
 
 export const LazyMainLayout = React.lazy(
-    () => import("../Layout/MainLayout.jsx"),
+    () => import("../layout/MainLayout.jsx"),
 );

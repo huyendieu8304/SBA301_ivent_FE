@@ -6,7 +6,7 @@ import authSettingApi from "../api/service/authSettingApi.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
 import {useNavigate} from "react-router";
-import MascotSvg from "../component/MascotSvg.jsx";
+import MascotSvg from "../component/svg/MascotSvg.jsx";
 import {messageService} from "../service/MessageService.jsx";
 import Messages from "../common/Message.jsx";
 import {MESSAGE_TYPES} from "../common/Constant.jsx";
