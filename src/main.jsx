@@ -29,7 +29,7 @@ theme = createTheme(
                 main: "#ecf3f0",
             },
             backgroundColor: {
-                main: "#252B37",
+                main: "#27272A",
             },
             light: theme.palette.augmentColor({
                 color: {
