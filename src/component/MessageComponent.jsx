@@ -27,7 +27,7 @@ const MessageComponent = () => {
             open={open}
             autoHideDuration={3000}
             onClose={handleClose}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
             severity={severity}
             sx={{ zIndex: 10002 }}
         >
