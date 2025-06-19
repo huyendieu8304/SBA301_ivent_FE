@@ -5,4 +5,5 @@ export default class Messages {
     static MSG_E_00004 = "Xác nhận mật khẩu phải giống Mật khẩu";
 
     static MSG_I_00001 = "Đăng nhập thành công";
+    static MSG_I_00002 = "Đăng xuất thành công";
 }

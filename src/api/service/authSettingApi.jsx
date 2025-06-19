@@ -14,6 +14,16 @@ const authSettingApi = {
             successHandler,
             errorHandler,
         ),
+    logout: (successHandler, errorHandler) =>
+        callApi(
+            url.logout,
+            HTTP_METHOD.GET,
+            {},
+            {},
+            true,
+            successHandler,
+            errorHandler,
+        ),
 };
 
 export default authSettingApi;
