@@ -1,20 +1,20 @@
 import {Button, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
 import {useState} from "react";
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 import {useNavigate} from "react-router";
 import {
     checkEmailFormat,
     checkPasswordAndRePasswordInput,
     checkRequiredInput,
     checkValidDate
-} from "../common/ValidateFunction.jsx";
-import authSettingApi from "../api/service/authSettingApi.jsx";
-import LoadingComponent from "../component/LoadingComponent.jsx";
-import MascotSvg from "../component/svg/MascotSvg.jsx";
-import ValidationTextField from "../component/validateInput/ValidationTextField.jsx";
-import {ValidateDatePicker} from "../component/validateInput/ValidateDatePicker.jsx";
-import {DATE_FORMAT} from "../common/Constant.jsx";
-import ValidateRadioGroup from "../component/validateInput/ValidateRadioGroup.jsx";
+} from "../../common/ValidateFunction.jsx";
+import authSettingApi from "../../api/service/authSettingApi.jsx";
+import LoadingComponent from "../../component/LoadingComponent.jsx";
+import MascotSvg from "../../component/svg/MascotSvg.jsx";
+import ValidationTextField from "../../component/validateInput/ValidationTextField.jsx";
+import {ValidateDatePicker} from "../../component/validateInput/ValidateDatePicker.jsx";
+import {DATE_FORMAT} from "../../common/Constant.jsx";
+import ValidateRadioGroup from "../../component/validateInput/ValidateRadioGroup.jsx";
 
 const RegisterUserPage = () => {
     const theme = useTheme();
