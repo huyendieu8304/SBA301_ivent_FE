@@ -2,52 +2,60 @@ import React, { createContext, useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import {CONSTANTS} from "../common/Constant.jsx";
 
+const defaultAuthState = {
+    isAuthenticated: false,
+    authorities: null,
+    id: "",
+    email: "",
+    fullName: "",
+    avatarUri: "",
+}
+
+const decodeToken = (token) => {
+    const result = structuredClone(defaultAuthState);
+    if (token) {
+        try {
+            const { id, email, fullName, avatarUri, authorities, exp } = jwtDecode(token);
+            const isValid = !exp || exp > Date.now() / 1000; //kiểm tra xem token hết hạn chưa
+            if (isValid) {
+                //lấy dữ liệu từ token ra
+                Object.assign(result, {
+                    isAuthenticated: true,
+                    id, email, fullName, avatarUri, authorities
+                });
+            } else {
+                localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
+            }
+        } catch (e) {
+            console.error("Invalid token", e);
+            localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
+        }
+    }
+    return result;
+}
+
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
     const [authState, setAuthState] = useState(() => {
         try {
             const token = localStorage.getItem(CONSTANTS.ACCESS_TOKEN);
-            let authorities = null;
-            if (token) {
-                const decodedToken = jwtDecode(token);
-                authorities = decodedToken.authorities;
-            }
-            return {
-                isAuthenticated: !!token,
-                authorities: authorities,
-            };
+            return decodeToken(token);
         } catch (e) {
+            console.error("Error initializing auth state:", e);
             localStorage.clear();
-            return {
-                isAuthenticated: false,
-                authorities: null,
-            };
+            return defaultAuthState;
         }
     });
 
     const login = (token) => {
         localStorage.setItem(CONSTANTS.ACCESS_TOKEN, token);
-        const decodedToken = jwtDecode(token);
-        const authorities = decodedToken?.authorities;
-        setAuthState({
-            isAuthenticated: true,
-            authorities: authorities,
-        });
+        setAuthState(decodeToken(token));
     };
 
     const logout = () => {
         localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
-        setAuthState((prevState) => {
-            return Object.keys(prevState).reduce((acc, key) => {
-                acc[key] = key === "isAuthenticated" ? false : null;
-                return acc;
-            }, {});
-        });
-        setAuthState({
-            isAuthenticated: false,
-            authorities: null,
-        });
+        setAuthState(defaultAuthState);
         window.location.replace("/login");
     };
 

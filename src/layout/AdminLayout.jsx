@@ -21,28 +21,15 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import TicketIconSvg from "../component/svg/TicketIconSvg.jsx";
+import AvatarMenu from "../component/AvatarMenu.jsx";
 
 const drawerWidth = 240;
 
 const AdminLayout = () => {
-    const [anchorElUser, setAnchorElUser] = useState(null);
     const [pageTitle, setPageTitle] = useState("");
-    const {authorities, logout} = useAuth();
+    const {authorities} = useAuth();
     const theme = useTheme();
     const navigate = useNavigate();
-
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
-
-    const handleLogout = () => {
-        handleCloseUserMenu();
-        logout();
-    }
 
     return (
         <>
@@ -77,37 +64,7 @@ const AdminLayout = () => {
                                                     Tạo sự kiện
                                                 </Typography>
                                             </Button>
-                                            <Box sx={{flexGrow: 0}}>
-                                                <Tooltip title="Tùy chọn">
-                                                    <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                                        <Avatar alt="user avatar" src="/static/images/avatar/2.jpg"/>
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Menu
-                                                    sx={{mt: '45px'}}
-                                                    id="menu-appbar"
-                                                    anchorEl={anchorElUser}
-                                                    anchorOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    keepMounted
-                                                    transformOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    open={Boolean(anchorElUser)}
-                                                    onClose={handleCloseUserMenu}
-                                                >
-                                                    <MenuItem onClick={handleLogout}>
-                                                        <Typography sx={{
-                                                            textAlign: 'center',
-                                                            color: theme.palette.primary.main,
-                                                            margin: "0 6px"
-                                                        }}>Đăng xuất</Typography>
-                                                    </MenuItem>
-                                                </Menu>
-                                            </Box>
+                                            <AvatarMenu/>
                                         </Stack>
                                     </>
                                     :
