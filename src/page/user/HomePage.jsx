@@ -1,7 +1,7 @@
 import {Box, Container, ImageList, Stack} from "@mui/material";
-import FakeData from "../FakeData.jsx";
-import EventCard from "../component/EventCard.jsx";
-import CardSliderReactSlick from "../component/cardSlider/CardSliderReactSlick.jsx";
+import FakeData from "../../FakeData.jsx";
+import EventCard from "../../component/EventCard.jsx";
+import CardSliderReactSlick from "../../component/cardSlider/CardSliderReactSlick.jsx";
 
 
 const HomePage = () => {

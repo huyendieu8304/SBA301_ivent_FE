@@ -1,15 +1,15 @@
 import {Button, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
-import ValidationTextField from "../component/validateInput/ValidationTextField.jsx";
+import ValidationTextField from "../../component/validateInput/ValidationTextField.jsx";
 import {useState} from "react";
-import {checkEmailFormat, checkRequiredInput} from "../common/ValidateFunction.jsx";
-import authSettingApi from "../api/service/authSettingApi.jsx";
-import {useAuth} from "../context/AuthContext.jsx";
-import LoadingComponent from "../component/LoadingComponent.jsx";
+import {checkEmailFormat, checkRequiredInput} from "../../common/ValidateFunction.jsx";
+import authSettingApi from "../../api/service/authSettingApi.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
+import LoadingComponent from "../../component/LoadingComponent.jsx";
 import {useNavigate} from "react-router";
-import MascotSvg from "../component/svg/MascotSvg.jsx";
-import {messageService} from "../service/MessageService.jsx";
-import Messages from "../common/Message.jsx";
-import {MESSAGE_TYPES} from "../common/Constant.jsx";
+import MascotSvg from "../../component/svg/MascotSvg.jsx";
+import {messageService} from "../../service/MessageService.jsx";
+import Messages from "../../common/Message.jsx";
+import {MESSAGE_TYPES} from "../../common/Constant.jsx";
 
 const LoginPage = () => {
     const theme = useTheme();

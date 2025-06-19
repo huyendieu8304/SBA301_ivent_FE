@@ -19,6 +19,10 @@ export const AuthProvider = ({ children }) => {
             };
         } catch (e) {
             localStorage.clear();
+            return {
+                isAuthenticated: false,
+                authorities: null,
+            };
         }
     });
 
@@ -44,7 +48,7 @@ export const AuthProvider = ({ children }) => {
             isAuthenticated: false,
             authorities: null,
         });
-        window.location.href = "/login";
+        window.location.replace("/login");
     };
 
     return (
