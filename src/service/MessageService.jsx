@@ -1,4 +1,3 @@
-
 class MessageService {
     constructor() {
         this.messageHandler = null;
@@ -9,9 +8,6 @@ class MessageService {
     }
 
     showMessage(message, severity) {
-        // if (!MESSAGE_TYPES.includes(severity)) {
-        //   severity = "info";
-        // }
         if (this.messageHandler) {
             this.messageHandler(message, severity);
         } else {

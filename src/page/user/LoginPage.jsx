@@ -105,7 +105,7 @@ const LoginPage = () => {
                         width: "100%",
                         height: "80px",
                         marginBottom: "24px",
-                        backgroundColor: "#12B76A",
+                        backgroundColor: theme.palette.primary.main,
                         display: "flex",
                         flexDirection: "row",
                         justifyContent: "space-around",

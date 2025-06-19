@@ -16,6 +16,14 @@ export const LazyAdminDashboard = React.lazy(
     () => import("../page/admin/AdminDashboard.jsx"),
 );
 
+export const LazyErrorPage = React.lazy(
+    () => import("../page/ErrorPage.jsx"),
+);
+
+export const LazyNotFoundPage = React.lazy(
+    () => import("../page/NotFoundPage.jsx"),
+);
+
 export const LazyMainLayout = React.lazy(
     () => import("../layout/MainLayout.jsx"),
 );

@@ -1,14 +1,12 @@
-// import "./App.css";
-
 import { Suspense } from "react";
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet} from "react-router-dom";
 import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
     LazyAdminDashboard,
-    LazyAdminLayout,
+    LazyAdminLayout, LazyErrorPage,
     LazyHomePage,
     LazyLoginPage,
-    LazyMainLayout,
+    LazyMainLayout, LazyNotFoundPage,
     LazyRegisterAccountPage
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
@@ -42,6 +40,8 @@ const routeDefinitions = createRoutesFromElements(
                 <Route path="/admin" element={<LazyAdminDashboard />} />
             </Route>
         </Route>
+        <Route path="/error" element={<LazyErrorPage />} />
+        <Route path="/*" element={<LazyNotFoundPage/>} />
     </Route>
 );
 

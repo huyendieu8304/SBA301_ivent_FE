@@ -18,7 +18,6 @@ const ValidationTextField = ({
 
     const handleChange = (e) => {
         setValue(fieldName, e.target.value);
-        // if (error) setError(fieldName, ""); // clear lỗi khi người dùng chỉnh
     };
 
     const handleBlur = (e) => {
