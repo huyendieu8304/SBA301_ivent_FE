@@ -1,13 +1,9 @@
 import {Link, Outlet, useNavigate} from "react-router";
 import {
-    Avatar,
     Box, Button,
     Divider, Drawer,
-    IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText,
-    Menu,
-    MenuItem,
+    ListItem, ListItemButton, ListItemIcon, ListItemText,
     Stack,
-    Tooltip,
     Typography, useTheme,
 } from "@mui/material";
 import List from '@mui/material/List';
@@ -20,7 +16,6 @@ import '@fontsource/comfortaa/700.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import TicketIconSvg from "../component/svg/TicketIconSvg.jsx";
 import AvatarMenu from "../component/AvatarMenu.jsx";
 
 const drawerWidth = 240;

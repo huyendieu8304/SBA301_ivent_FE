@@ -5,7 +5,6 @@ import authSettingApi from "../api/service/authSettingApi.jsx";
 
 const AvatarMenu = () => {
     const [anchorElUser, setAnchorElUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
     const {avatarUri, logout} = useAuth();
     const theme = useTheme();
 
@@ -20,18 +19,15 @@ const AvatarMenu = () => {
     const handleLogout = () => {
         handleCloseUserMenu();
         authSettingApi.logout(LogoutSuccess, LogoutFail);
-        setIsLoading(true);
     }
 
     const LogoutSuccess = (data) => {
         logout();
         console.log(data);
-        setIsLoading(false);
     }
 
     const LogoutFail = (e) => {
         console.log(e);
-        setIsLoading(false);
     }
 
     return (

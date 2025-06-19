@@ -2,7 +2,7 @@ import {Link, Outlet, useNavigate} from "react-router";
 import {
     Box, Button,
     Container, Divider,
-    IconButton, InputBase,
+    InputBase,
     Paper,
     Stack,
     Typography, useTheme,
