@@ -4,14 +4,27 @@ import {Navigate, Outlet} from "react-router";
 import LoadingComponent from "./LoadingComponent.jsx";
 
 const ProtectedRoute = ({ allowedRole }) => {
-    const { isAuthenticated, authorities, logout } = useAuth();
+    const { isAuthenticated, authorities, logout, isTokenExpired } = useAuth();
     const [authFailed, setAuthFailed] = useState(null);
 
     useEffect(() => {
+        const token = localStorage.getItem("access_token");
+        let checkTokenExpired;
+        if (token) {
+            checkTokenExpired = isTokenExpired(token);
+        } else {
+            checkTokenExpired = true;
+        }
+        if (checkTokenExpired) {
+            setAuthFailed(true);
+            localStorage.clear();
+            logout();
+            return;
+        }
         if (isAuthenticated) {
             //check if the authorities of user has role in allowedRole or not
-            let haveRole = allowedRole.includes(authorities);
-            if (haveRole) {
+            const hasRole = allowedRole.includes(authorities);
+            if (hasRole) {
                 setAuthFailed(false);
             } else {
                 setAuthFailed(true);
