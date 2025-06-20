@@ -59,8 +59,18 @@ export const AuthProvider = ({ children }) => {
         window.location.replace("/login");
     };
 
+    const isTokenExpired = (token) => {
+        if (!token) return true;
+        try {
+            const { exp } = jwtDecode(token);
+            return exp < Date.now() / 1000;
+        } catch (e) {
+            return true;
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ ...authState, login, logout }}>
+        <AuthContext.Provider value={{ ...authState, login, logout, isTokenExpired }}>
             {children}
         </AuthContext.Provider>
     );

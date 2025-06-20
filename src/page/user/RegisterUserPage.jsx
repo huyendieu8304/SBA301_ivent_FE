@@ -1,6 +1,5 @@
 import {Button, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
 import {useState} from "react";
-import {useAuth} from "../../context/AuthContext.jsx";
 import {useNavigate} from "react-router";
 import {
     checkEmailFormat,
@@ -8,13 +7,19 @@ import {
     checkRequiredInput,
     checkValidDate
 } from "../../common/ValidateFunction.jsx";
-import authSettingApi from "../../api/service/authSettingApi.jsx";
 import LoadingComponent from "../../component/LoadingComponent.jsx";
 import MascotSvg from "../../component/svg/MascotSvg.jsx";
 import ValidationTextField from "../../component/validateInput/ValidationTextField.jsx";
 import {ValidateDatePicker} from "../../component/validateInput/ValidateDatePicker.jsx";
-import {DATE_FORMAT} from "../../common/Constant.jsx";
+import {DATE_FORMAT, MESSAGE_TYPES} from "../../common/Constant.jsx";
 import ValidateRadioGroup from "../../component/validateInput/ValidateRadioGroup.jsx";
+import accountSettingApi from "../../api/service/accountSettingApi.jsx";
+import {messageService} from "../../service/MessageService.jsx";
+import Messages from "../../common/Message.jsx";
+import {formatString} from "../../common/FormatFunction.jsx";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ValidatedIconTextField from "../../component/validateInput/ValidateIconTextField.jsx";
+
 
 const RegisterUserPage = () => {
     const theme = useTheme();
@@ -29,7 +34,6 @@ const RegisterUserPage = () => {
         gender: {value: "", error: ""},
         avatarUri: {value: "", error: ""},
     });
-    const {login} = useAuth();
     const navigate = useNavigate();
 
     const updateField = (fieldName, newValue) => {
@@ -138,126 +142,132 @@ const RegisterUserPage = () => {
             password: formFields.password.value,
             fullName: formFields.fullName.value,
             phone: formFields.phone.value,
-            dob: formFields.dob.value,
+            dob: new Date(formFields.dob.value).getTime(), //convert to timestamp
             gender: formFields.gender.value,
         }
         console.log(body);
-        // setIsLoading(true);
-        // authSettingApi.login(body, loginSuccess, loginFailure);
+        setIsLoading(true);
+        accountSettingApi.registerUser(body, registerSuccess, registerFail);
     };
 
-    const loginSuccess = (data) => {
-        login(data.jwtToken);
-        navigate("/");
+    const registerSuccess = (data) => {
+        messageService.showMessage(Messages.MSG_I_00002, MESSAGE_TYPES.INFO);
+        navigate("/login");
     }
-    const loginFailure = (error) => {
-        console.log(error);
-        setIsLoading(false);
+    const registerFail = (error) => {
+        if (error.response.data.httpStatusCode !== "OK") {
+            messageService.showMessage(formatString(Messages.MSG_E_00005, "Email"), MESSAGE_TYPES.ERROR);
+            setIsLoading(false);
+        }
     }
 
-    if (isLoading) return <LoadingComponent/>
     return (
-        <Container maxWidth="xl" sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "fit-content",
-            margin: "32px 0",
-        }}>
-            <Card sx={{width: "fit-content", minWidth: "700px", height: "fit-content", borderRadius: "16px",}}>
-                <CardContent sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "0 !important"
-                }}>
-                    <Stack sx={{
-                        width: "100%",
-                        height: "80px",
-                        marginBottom: "24px",
-                        backgroundColor: "#12B76A",
+        <>
+            <Container maxWidth="xl" sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "fit-content",
+            }}>
+                <Card sx={{width: "fit-content", minWidth: "700px", height: "fit-content", borderRadius: "16px",}}>
+                    <CardContent sx={{
                         display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-around",
-                        alignItems: "end"
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0 !important"
                     }}>
-                        <Typography variant="h5" component="div"
-                                    sx={{fontWeight: "bold", color: "white", textAlign: "center", marginBottom: 2}}>
-                            Đăng ký tài khoản
-                        </Typography>
-                        <MascotSvg/>
-                    </Stack>
-                    <Stack direction="column" spacing={3} sx={{width: "80%"}}>
-                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
-                            <div style={{width: "50%"}}>
-                                <ValidationTextField label="Email" fieldName="email" value={formFields.email.value}
-                                                     setValue={updateField} error={formFields.email.error}
+                        <Stack sx={{
+                            width: "100%",
+                            height: "80px",
+                            marginBottom: "24px",
+                            backgroundColor: theme.palette.primary.main,
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-around",
+                            alignItems: "end"
+                        }}>
+                            <Typography variant="h5" component="div"
+                                        sx={{fontWeight: "bold", color: "white", textAlign: "center", marginBottom: 2}}>
+                                Đăng ký tài khoản
+                            </Typography>
+                            <MascotSvg/>
+                        </Stack>
+                        <Stack direction="column" spacing={3} sx={{width: "80%"}}>
+                            <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                                <div style={{width: "50%"}}>
+                                    <ValidationTextField label="Email" fieldName="email" value={formFields.email.value}
+                                                         setValue={updateField} error={formFields.email.error}
+                                                         setError={updateError} isRequired={true} size="small"
+                                                         type="text"
+                                                         validatorFunction={validateEmail}/>
+                                </div>
+                                <div style={{width: "50%"}}></div>
+                            </Stack>
+                            <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                                <ValidatedIconTextField label="Mật khẩu" fieldName="password"
+                                                        value={formFields.password.value}
+                                                        setValue={updateField} error={formFields.password.error}
+                                                        setError={updateError} isRequired={true} size="small"
+                                                        type="password"
+                                                        validatorFunction={validatePassword}
+                                                        endIcon={<VisibilityOffIcon/>}/>
+                                <ValidatedIconTextField label="Xác nhận mật khẩu" fieldName="rePassword"
+                                                        value={formFields.rePassword.value}
+                                                        setValue={updateField} error={formFields.rePassword.error}
+                                                        setError={updateError} isRequired={true} size="small"
+                                                        type="password"
+                                                        isRePasswordInput={true}
+                                                        relatedValue={formFields.password.value}
+                                                        validatorFunction={validateRePassword}
+                                                        endIcon={<VisibilityOffIcon/>}/>
+                            </Stack>
+                            <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                                <ValidationTextField label="Họ và tên" fieldName="fullName"
+                                                     value={formFields.fullName.value}
+                                                     setValue={updateField} error={formFields.fullName.error}
                                                      setError={updateError} isRequired={true} size="small" type="text"
-                                                     validatorFunction={validateEmail}/>
-                            </div>
-                            <div style={{width: "50%"}}></div>
+                                                     validatorFunction={validateFullName}/>
+                                <ValidationTextField label="Số điện thoại" fieldName="phone"
+                                                     value={formFields.phone.value}
+                                                     setValue={updateField} error={formFields.phone.error}
+                                                     setError={updateError} isRequired={true} size="small" type="text"
+                                                     validatorFunction={validatePhone}/>
+                            </Stack>
+                            <Stack direction="row" spacing={3} sx={{width: "100%"}}>
+                                <div style={{width: "50%"}}>
+                                    <ValidateDatePicker label="Ngày sinh" fieldName="dob"
+                                                        value={formFields.dob.value}
+                                                        setValue={updateField} error={formFields.dob.error}
+                                                        setError={updateError} isRequired={true} size="small"
+                                                        validatorFunction={validateDob}/>
+                                </div>
+                                <div style={{width: "50%"}}></div>
+                            </Stack>
+                            <ValidateRadioGroup label="Giới tính" fieldName="gender"
+                                                listOptions={[
+                                                    {value: "Nam",},
+                                                    {value: "Nữ",},
+                                                    {value: "Khác",}
+                                                ]}
+                                                value={formFields.gender.value}
+                                                setValue={updateField} error={formFields.gender.error}
+                                                setError={updateError} isRequired={true} size="small"
+                                                validatorFunction={validateGender}/>
                         </Stack>
-                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
-                            <ValidationTextField label="Mật khẩu" fieldName="password" value={formFields.password.value}
-                                                 setValue={updateField} error={formFields.password.error}
-                                                 setError={updateError} isRequired={true} size="small" type="password"
-                                                 validatorFunction={validatePassword}/>
-                            <ValidationTextField label="Xác nhận mật khẩu" fieldName="rePassword"
-                                                 value={formFields.rePassword.value}
-                                                 setValue={updateField} error={formFields.rePassword.error}
-                                                 setError={updateError} isRequired={true} size="small" type="password"
-                                                 validatorFunction={validateRePassword} isRePasswordInput={true} relatedValue={formFields.password.value}/>
-                        </Stack>
-                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
-                            <ValidationTextField label="Họ và tên" fieldName="fullName" value={formFields.fullName.value}
-                                                 setValue={updateField} error={formFields.fullName.error}
-                                                 setError={updateError} isRequired={true} size="small" type="text"
-                                                 validatorFunction={validateFullName}/>
-                            <ValidationTextField label="Số điện thoại" fieldName="phone"
-                                                 value={formFields.phone.value}
-                                                 setValue={updateField} error={formFields.phone.error}
-                                                 setError={updateError} isRequired={true} size="small" type="text"
-                                                 validatorFunction={validatePhone}/>
-                        </Stack>
-                        <Stack direction="row" spacing={3} sx={{width: "100%"}}>
-                            <div style={{width: "50%"}}>
-                                <ValidateDatePicker label="Ngày sinh" fieldName="dob"
-                                                    value={formFields.dob.value}
-                                                    setValue={updateField} error={formFields.dob.error}
-                                                    setError={updateError} isRequired={true} size="small"
-                                                    validatorFunction={validateDob}/>
-                            </div>
-                            <div style={{width: "50%"}}></div>
-                        </Stack>
-                        <ValidateRadioGroup label="Giới tính" fieldName="gender"
-                                            listOptions={[
-                                                {
-                                                    value: "Nam",
-                                                },
-                                                {
-                                                    value: "Nữ",
-                                                },
-                                                {
-                                                    value: "Khác",
-                                                }
-                                            ]}
-                                             value={formFields.gender.value}
-                                             setValue={updateField} error={formFields.gender.error}
-                                             setError={updateError} isRequired={true} size="small"
-                                             validatorFunction={validateGender}/>
-                    </Stack>
-                    <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "24px"}}
-                            onClick={submitForm}>
-                        <Typography variant="body1" component="div"
-                                    sx={{color: "white", textAlign: "center"}}>
-                            Đăng ký
-                        </Typography>
-                    </Button>
-                </CardContent>
-            </Card>
-        </Container>
+                        <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "24px"}}
+                                onClick={submitForm}>
+                            <Typography variant="body1" component="div"
+                                        sx={{color: "white", textAlign: "center"}}>
+                                Đăng ký
+                            </Typography>
+                        </Button>
+                    </CardContent>
+                </Card>
+            </Container>
+            {isLoading && <LoadingComponent/>}
+        </>
     )
 }
 export default RegisterUserPage;

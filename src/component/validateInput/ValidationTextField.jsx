@@ -11,23 +11,14 @@ const ValidationTextField = ({
                                  size = "medium",
                                  type = "text",
                                  validatorFunction,
-                                 relatedValue = null, isRePasswordInput = false,
-                             },
-) => {
-
-
+                             }) => {
     const handleChange = (e) => {
         setValue(fieldName, e.target.value);
     };
 
     const handleBlur = (e) => {
         let errorMsg;
-        if(isRePasswordInput) {
-            errorMsg = validatorFunction(e.target.value, relatedValue);
-        }
-        else {
-            errorMsg = validatorFunction(e.target.value);
-        }
+        errorMsg = validatorFunction(e.target.value);
         setError(fieldName, errorMsg || "");
     };
 

@@ -10,6 +10,8 @@ import MascotSvg from "../../component/svg/MascotSvg.jsx";
 import {messageService} from "../../service/MessageService.jsx";
 import Messages from "../../common/Message.jsx";
 import {MESSAGE_TYPES} from "../../common/Constant.jsx";
+import ValidatedIconTextField from "../../component/validateInput/ValidateIconTextField.jsx";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const LoginPage = () => {
     const theme = useTheme();
@@ -84,59 +86,61 @@ const LoginPage = () => {
     const loginFailure = (error) => {
         console.log(error);
         setIsLoading(false);
+        messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
     }
 
-    if (isLoading) return <LoadingComponent/>
     return (
-        <Container maxWidth="xl" sx={{
-            display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
-            height: "fit-content",
-            margin: "24px 0",
-        }}>
-            <Card sx={{width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px",}}>
-                <CardContent sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "0 !important"
-                }}>
-                    <Stack sx={{
-                        width: "100%",
-                        height: "80px",
-                        marginBottom: "24px",
-                        backgroundColor: theme.palette.primary.main,
+        <>
+            <Container maxWidth="xl" sx={{
+                display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
+                height: "fit-content",
+            }}>
+                <Card sx={{width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px",}}>
+                    <CardContent sx={{
                         display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-around",
-                        alignItems: "end"
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0 !important"
                     }}>
-                        <Typography variant="h5" component="div"
-                                    sx={{fontWeight: "bold", color: "white", textAlign: "center", marginBottom: 2}}>
-                            Đăng nhập
-                        </Typography>
-                        <MascotSvg/>
-                    </Stack>
-                    <Stack direction="column" spacing={3} sx={{width: "80%"}}>
-                        <ValidationTextField label="Email" fieldName="email" value={formFields.email.value}
-                                             setValue={updateField} error={formFields.email.error}
-                                             setError={updateError} isRequired={true} size="small" type="text"
-                                             validatorFunction={validateEmail}/>
-                        <ValidationTextField label="Mật khẩu" fieldName="password" value={formFields.password.value}
-                                             setValue={updateField} error={formFields.password.error}
-                                             setError={updateError} isRequired={true} size="small" type="password"
-                                             validatorFunction={validatePassword}/>
-                    </Stack>
-                    <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "24px"}}
-                            onClick={submitForm}>
-                        <Typography variant="body1" component="div"
-                                    sx={{color: "white", textAlign: "center"}}>
-                            Đăng nhập
-                        </Typography>
-                    </Button>
-                </CardContent>
-            </Card>
-        </Container>
+                        <Stack sx={{
+                            width: "100%",
+                            height: "80px",
+                            marginBottom: "24px",
+                            backgroundColor: theme.palette.primary.main,
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-around",
+                            alignItems: "end"
+                        }}>
+                            <Typography variant="h5" component="div"
+                                        sx={{fontWeight: "bold", color: "white", textAlign: "center", marginBottom: 2}}>
+                                Đăng nhập
+                            </Typography>
+                            <MascotSvg/>
+                        </Stack>
+                        <Stack direction="column" spacing={3} sx={{width: "80%"}}>
+                            <ValidationTextField label="Email" fieldName="email" value={formFields.email.value}
+                                                 setValue={updateField} error={formFields.email.error}
+                                                 setError={updateError} isRequired={true} size="small" type="text"
+                                                 validatorFunction={validateEmail}/>
+                            <ValidatedIconTextField label="Mật khẩu" fieldName="password" value={formFields.password.value}
+                                                 setValue={updateField} error={formFields.password.error}
+                                                 setError={updateError} isRequired={true} size="small" type="password"
+                                                 validatorFunction={validatePassword} endIcon={<VisibilityOffIcon/>}/>
+                        </Stack>
+                        <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "24px"}}
+                                onClick={submitForm}>
+                            <Typography variant="body1" component="div"
+                                        sx={{color: "white", textAlign: "center"}}>
+                                Đăng nhập
+                            </Typography>
+                        </Button>
+                    </CardContent>
+                </Card>
+            </Container>
+            {isLoading && <LoadingComponent/>}
+        </>
     )
 }
 export default LoginPage;
