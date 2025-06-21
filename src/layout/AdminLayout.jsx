@@ -148,7 +148,6 @@ const AdminLayout = () => {
                     </Box>
                 </Box>
             </Box>
-            <MessageComponent/>
         </>
     );
 };

@@ -145,7 +145,6 @@ const RegisterUserPage = () => {
             dob: new Date(formFields.dob.value).getTime(), //convert to timestamp
             gender: formFields.gender.value,
         }
-        console.log(body);
         setIsLoading(true);
         accountSettingApi.registerUser(body, registerSuccess, registerFail);
     };

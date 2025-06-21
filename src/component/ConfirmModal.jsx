@@ -6,20 +6,22 @@ import {
     DialogContentText,
     DialogTitle,
     IconButton,
-    Stack,
+    Stack, Typography, useTheme,
 } from "@mui/material";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ConfirmModal = ({
-                          title = "確認してください！",
-                          content = "",
+                          title = "Hãy xác nhận lại!",
+                          content = "abc",
                           open,
                           setOpen,
                           confirmButtonColor = "primary",
                           handleConfirmSubmit,
                           hasCancel = true,
                       }) => {
+    const theme = useTheme();
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -34,9 +36,11 @@ const ConfirmModal = ({
             <DialogTitle
                 id="alert-dialog-title"
                 sx={{
-                    padding: "16px 24px 0px !important",
-                    fontWeight: "bold",
+                    padding: "16px 24px !important",
                     minWidth: "300px",
+                    backgroundColor: theme.palette.primary.main,
+                    fontWeight: "bold",
+                    color: "white",
                 }}
             >
                 {title}
@@ -45,21 +49,21 @@ const ConfirmModal = ({
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}
-                    sx={(theme) => ({
+                    sx={{
                         position: "absolute",
                         right: 8,
                         top: 8,
-                        color: theme.palette.grey[500],
-                    })}
+                        color: "white",
+                    }}
                 >
                     <CloseIcon />
                 </IconButton>
             )}
 
             <DialogContent sx={{ padding: "16px 24px !important" }}>
-                <DialogContentText id="alert-dialog-description">
+                {/*<DialogContentText id="alert-dialog-description">*/}
                     {content}
-                </DialogContentText>
+                {/*</DialogContentText>*/}
             </DialogContent>
             <DialogActions>
                 <Stack
@@ -77,21 +81,19 @@ const ConfirmModal = ({
                             variant="contained"
                             color="secondary"
                             onClick={handleClose}
-                            sx={{ width: "150px" }}
+                            sx={{width: "150px", textTransform: "none", color: theme.palette.primary.main, }}
                         >
-                            いいえ
+                            Không
                         </Button>
                     )}
                     <Button
                         variant="contained"
                         color={confirmButtonColor}
-                        sx={{
-                            width: "150px",
-                        }}
+                        sx={{width: "150px", textTransform: "none", color:"white"}}
                         onClick={handleConfirmSubmit}
                         autoFocus
                     >
-                        はい
+                        Đồng ý
                     </Button>
                 </Stack>
             </DialogActions>

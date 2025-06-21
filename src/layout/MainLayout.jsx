@@ -150,29 +150,6 @@ const MainLayout = () => {
                     </Typography>
                 </Box>
             </Box>
-
-            {/*<Box*/}
-            {/*    component="footer"*/}
-            {/*    sx={{*/}
-            {/*        position: "fixed",*/}
-            {/*        bottom: 0,*/}
-            {/*        left: 0,*/}
-            {/*        right: 0,*/}
-            {/*        height: "6.5vh",*/}
-            {/*        backgroundColor: "#1D1D1D",*/}
-            {/*        display: "flex",*/}
-            {/*        flexDirection: "column",*/}
-            {/*        alignItems: "center",*/}
-            {/*        justifyContent: "center",*/}
-            {/*        boxShadow: "inset 0 1px 0 rgba(0, 0, 0, 0.1)",*/}
-            {/*        zIndex: 1100,*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <Typography variant="body2" sx={{color: "#B3B3B3", margin: 0}} gutterBottom>*/}
-            {/*        © {year} Bản quyền thuộc công ty ivent*/}
-            {/*    </Typography>*/}
-            {/*</Box>*/}
-            <MessageComponent/>
         </>
     )
         ;

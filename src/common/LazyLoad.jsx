@@ -16,6 +16,10 @@ export const LazyAdminDashboard = React.lazy(
     () => import("../page/admin/AdminDashboard.jsx"),
 );
 
+export const LazyEmailValidationTokenPage = React.lazy(
+    () => import("../page/EmailValidationTokenPage.jsx"),
+);
+
 export const LazyErrorPage = React.lazy(
     () => import("../page/ErrorPage.jsx"),
 );

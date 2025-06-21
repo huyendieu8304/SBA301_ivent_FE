@@ -13,6 +13,26 @@ const accountSettingApi = {
             successHandler,
             errorHandler,
         ),
+    validateEmailToken: (body, successHandler, errorHandler) =>
+        callApi(
+            url.validateEmailToken,
+            HTTP_METHOD.POST,
+            {},
+            body,
+            false,
+            successHandler,
+            errorHandler,
+        ),
+    resendEmailToken: (body, successHandler, errorHandler) =>
+        callApi(
+            url.resendEmailToken,
+            HTTP_METHOD.POST,
+            {},
+            body,
+            false,
+            successHandler,
+            errorHandler,
+        ),
 };
 
 export default accountSettingApi;
