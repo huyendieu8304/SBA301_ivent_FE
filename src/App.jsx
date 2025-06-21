@@ -3,7 +3,7 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Ou
 import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
     LazyAdminDashboard,
-    LazyAdminLayout, LazyErrorPage,
+    LazyAdminLayout, LazyEmailValidationTokenPage, LazyErrorPage,
     LazyHomePage,
     LazyLoginPage,
     LazyMainLayout, LazyNotFoundPage,
@@ -11,6 +11,7 @@ import {
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
+import MessageComponent from "./component/MessageComponent.jsx";
 
 const routeDefinitions = createRoutesFromElements(
     <Route>
@@ -40,6 +41,7 @@ const routeDefinitions = createRoutesFromElements(
                 <Route path="/admin" element={<LazyAdminDashboard />} />
             </Route>
         </Route>
+        <Route path="/validate/:token" element={<LazyEmailValidationTokenPage />} />
         <Route path="/error" element={<LazyErrorPage />} />
         <Route path="/*" element={<LazyNotFoundPage/>} />
     </Route>

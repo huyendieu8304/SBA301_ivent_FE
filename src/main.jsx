@@ -6,8 +6,9 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import "dayjs/locale/vi";
-import { viVN } from '@mui/material/locale';
+import {viVN} from '@mui/material/locale';
 import {AuthProvider} from "./context/AuthContext.jsx";
+import MessageComponent from "./component/MessageComponent.jsx";
 
 dayjs.locale("vi");
 dayjs.extend(utc);
@@ -58,6 +59,7 @@ createRoot(document.getElementById("root")).render(
         <ThemeProvider theme={theme}>
             <AuthProvider>
                 <App/>
+                <MessageComponent/>
             </AuthProvider>
         </ThemeProvider>
     </StrictMode>
