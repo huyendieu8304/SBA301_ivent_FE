@@ -12,6 +12,10 @@ export const LazyRegisterAccountPage = React.lazy(
     () => import("../page/user/RegisterUserPage.jsx"),
 );
 
+export const LazyProfilePage = React.lazy(
+    () => import("../page/user/ProfilePage.jsx"),
+);
+
 export const LazyAdminDashboard = React.lazy(
     () => import("../page/admin/AdminDashboard.jsx"),
 );

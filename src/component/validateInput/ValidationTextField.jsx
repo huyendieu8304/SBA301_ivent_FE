@@ -8,9 +8,10 @@ const ValidationTextField = ({
                                  error,
                                  setError,
                                  isRequired = false,
+                                 isDisabled = false,
                                  size = "medium",
                                  type = "text",
-                                 validatorFunction,
+                                 validatorFunction = (e) => {""},
                              }) => {
     const handleChange = (e) => {
         setValue(fieldName, e.target.value);
@@ -25,6 +26,7 @@ const ValidationTextField = ({
     return (
         <TextField
             fullWidth
+            disabled={isDisabled}
             label={
                 isRequired ? (
                     <span style={{color: "#027A48"}}>

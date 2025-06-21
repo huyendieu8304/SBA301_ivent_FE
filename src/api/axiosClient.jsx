@@ -3,9 +3,9 @@ import queryString from "query-string";
 
 const axiosClient = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
-    headers: {
-        "Content-Type": "application/json",
-    },
+    // headers: {
+    //     "Content-Type": "application/json",
+    // },
     paramsSerializer: (params) => queryString.stringify(params),
 });
 

@@ -32,7 +32,6 @@ const RegisterUserPage = () => {
         phone: {value: "", error: ""},
         dob: {value: null, error: ""},
         gender: {value: "", error: ""},
-        avatarUri: {value: "", error: ""},
     });
     const navigate = useNavigate();
 
