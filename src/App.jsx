@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet} from "react-router-dom";
 import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
+    LayzyEventDetailsPage,
     LazyAdminDashboard,
     LazyAdminLayout, LazyErrorPage,
     LazyHomePage,
@@ -14,6 +15,7 @@ import {ROLES} from "./common/Constant.jsx";
 
 const routeDefinitions = createRoutesFromElements(
     <Route>
+        {/*PUBLIC PAGE*/}
         <Route
             element={
                 <Suspense fallback={<LoadingComponent />}>
@@ -24,7 +26,10 @@ const routeDefinitions = createRoutesFromElements(
             <Route path="/" element={<LazyHomePage/>} />
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
+            <Route path="/event" element={<LayzyEventDetailsPage/>} />
+
         </Route>
+        {/*ADMIN PAGE*/}
         <Route
             element={
                 <ProtectedRoute allowedRole={[ROLES.ADMIN]}/>
