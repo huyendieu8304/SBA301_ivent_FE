@@ -245,9 +245,9 @@ const RegisterUserPage = () => {
                             </Stack>
                             <ValidateRadioGroup label="Giới tính" fieldName="gender"
                                                 listOptions={[
-                                                    {value: "Nam",},
-                                                    {value: "Nữ",},
-                                                    {value: "Khác",}
+                                                    {value: "Male", label: "Nam"},
+                                                    {value: "Female", label: "Nữ"},
+                                                    {value: "Others", label: "Khác"}
                                                 ]}
                                                 value={formFields.gender.value}
                                                 setValue={updateField} error={formFields.gender.error}
