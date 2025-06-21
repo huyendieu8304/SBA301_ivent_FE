@@ -7,4 +7,6 @@ export const url = {
     registerUser: PATH_URL + "/register-user",
     validateEmailToken: PATH_URL + "/validate-email-token",
     resendEmailToken: PATH_URL + "/resend-validate-email-token",
+    userProfile: PATH_URL + "/profile",
+    updateProfile: PATH_URL + "/update-profile",
 };

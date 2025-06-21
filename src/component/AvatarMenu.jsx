@@ -83,7 +83,7 @@ const AvatarMenu = () => {
                             Sự kiện của tôi
                         </Typography>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem onClick={() => navigate("/profile")}>
                         <Typography sx={{
                             textAlign: 'center',
                             color: theme.palette.primary.main,

@@ -42,7 +42,7 @@ const ValidateRadioGroup = ({
                 onBlur={(e) => handleBlur(e)}
             >
                 {listOptions.map((option) => (
-                    <FormControlLabel value={option.value} key={option.value} control={<Radio size={size}/>} label={option.value}/>
+                    <FormControlLabel value={option.value} key={option.value} control={<Radio size={size}/>} label={option.label}/>
                 ))}
             </RadioGroup>
             <FormHelperText>{error}</FormHelperText>

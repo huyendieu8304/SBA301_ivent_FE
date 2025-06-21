@@ -6,15 +6,42 @@ import {
     LazyAdminLayout, LazyEmailValidationTokenPage, LazyErrorPage,
     LazyHomePage,
     LazyLoginPage,
-    LazyMainLayout, LazyNotFoundPage,
+    LazyMainLayout, LazyNotFoundPage, LazyProfilePage,
     LazyRegisterAccountPage
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
-import MessageComponent from "./component/MessageComponent.jsx";
 
 const routeDefinitions = createRoutesFromElements(
     <Route>
+        {/*WITH ALL ROLE*/}
+        <Route element={<ProtectedRoute allowedRole={[ROLES.USER, ROLES.ADMIN]}/>}>
+            <Route
+                element={
+                    <Suspense fallback={<LoadingComponent />}>
+                        <LazyMainLayout />
+                    </Suspense>
+                }
+            >
+                <Route path="/profile" element={<LazyProfilePage/>} />
+            </Route>
+        </Route>
+
+        {/*WITH ONLY ADMIN ROLE*/}
+        <Route element={<ProtectedRoute allowedRole={[ROLES.ADMIN]}/>}>
+            <Route
+                element={
+                    <Suspense fallback={<LoadingComponent />}>
+                        <LazyAdminLayout />
+                    </Suspense>
+                }
+            >
+                <Route path="/admin" element={<LazyAdminDashboard />} />
+            </Route>
+        </Route>
+
+
+        {/*WITHOUT ROLE*/}
         <Route
             element={
                 <Suspense fallback={<LoadingComponent />}>
@@ -25,21 +52,6 @@ const routeDefinitions = createRoutesFromElements(
             <Route path="/" element={<LazyHomePage/>} />
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
-        </Route>
-        <Route
-            element={
-                <ProtectedRoute allowedRole={[ROLES.ADMIN]}/>
-            }
-        >
-            <Route
-                element={
-                    <Suspense fallback={<LoadingComponent />}>
-                        <LazyAdminLayout />
-                    </Suspense>
-                }
-            >
-                <Route path="/admin" element={<LazyAdminDashboard />} />
-            </Route>
         </Route>
         <Route path="/validate/:token" element={<LazyEmailValidationTokenPage />} />
         <Route path="/error" element={<LazyErrorPage />} />

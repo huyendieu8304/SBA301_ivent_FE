@@ -24,16 +24,20 @@ export const callApi = (
     tokenNeeded,
     successHandler,
     errorHandler,
+    sendFile = false,
 ) => {
-    let config = { params };
     const token = localStorage.getItem("access_token");
+    const headers = {};
     if (token && tokenNeeded) {
-        const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        };
-        config = { ...config, headers };
+        headers["Authorization"] = `Bearer ${token}`;
     }
+    if (!sendFile) {
+        headers["Content-Type"] = "application/json";
+    }
+    const config = {
+        params,
+        headers,
+    };
 
     fetch(url, method, config, body)
         .then((response) => response)
