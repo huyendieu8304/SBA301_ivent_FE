@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet} from "react-router-dom";
 import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
+    LayzyEventDetailsPage,
     LazyAdminDashboard,
     LazyAdminLayout, LazyEmailValidationTokenPage, LazyErrorPage,
     LazyHomePage,
@@ -24,6 +25,7 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
+                <Route path="/event/:id" element={<LayzyEventDetailsPage/>} />
             </Route>
         </Route>
 
