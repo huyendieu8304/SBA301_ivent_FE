@@ -25,7 +25,6 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
-                <Route path="/event/:id" element={<LayzyEventDetailsPage/>} />
             </Route>
         </Route>
 
@@ -51,6 +50,7 @@ const routeDefinitions = createRoutesFromElements(
                 </Suspense>
             }
         >
+            <Route path="/event/:id" element={<LayzyEventDetailsPage/>} />
             <Route path="/" element={<LazyHomePage/>} />
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
