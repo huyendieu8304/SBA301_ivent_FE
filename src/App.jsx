@@ -26,7 +26,7 @@ const routeDefinitions = createRoutesFromElements(
             <Route path="/" element={<LazyHomePage/>} />
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
-            <Route path="/event" element={<LayzyEventDetailsPage/>} />
+            <Route path="/event/:id" element={<LayzyEventDetailsPage/>} />
 
         </Route>
         {/*ADMIN PAGE*/}

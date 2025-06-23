@@ -124,3 +124,10 @@ export const checkPasswordAndRePasswordInput = (rePassword, password) => {
     return null;
 }
 
+export const isInSellingTicketPeriod = (startSellingTicketTime, endSellingTicketTime) => {
+    const now = new Date();
+    const start = new Date(startSellingTicketTime);
+    const end = new Date(endSellingTicketTime);
+
+    return now >= start && now <= end;
+};
