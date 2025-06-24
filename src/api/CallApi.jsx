@@ -25,9 +25,12 @@ export const callApi = (
     successHandler,
     errorHandler,
     sendFile = false,
+    extraHeaders = {},
 ) => {
     const token = localStorage.getItem("access_token");
-    const headers = {};
+    const headers = {
+        ...extraHeaders,
+    };
     if (token && tokenNeeded) {
         headers["Authorization"] = `Bearer ${token}`;
     }
