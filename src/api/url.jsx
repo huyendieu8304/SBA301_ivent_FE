@@ -1,7 +1,7 @@
 const PATH_URL = "/api/v1";
 const PATH_AUTH_URL = PATH_URL + "/auth";
 const PATH_EVENT_PUBLIC_URL = PATH_URL + "/event/public";
-
+const PATH_ADMIN = PATH_URL + "/admin";
 export const url = {
     login: PATH_AUTH_URL + "/login",
     logout: PATH_AUTH_URL + "/logout",
@@ -11,4 +11,6 @@ export const url = {
     userProfile: PATH_URL + "/profile",
     updateProfile: PATH_URL + "/update-profile",
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,
+    adminEvent : PATH_ADMIN + "/event",
+    getAdminEventDetails: (id) => PATH_ADMIN + "/event"+ `/${id}`,
 };

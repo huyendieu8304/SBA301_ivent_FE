@@ -3,7 +3,7 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Ou
 import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
     LayzyEventDetailsPage,
-    LazyAdminDashboard,
+    LazyAdminDashboard, LazyAdminEvent,
     LazyAdminLayout, LazyEmailValidationTokenPage, LazyErrorPage,
     LazyHomePage,
     LazyLoginPage,
@@ -12,6 +12,7 @@ import {
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
+import {Navigate} from "react-router";
 
 const routeDefinitions = createRoutesFromElements(
     <Route>
@@ -29,17 +30,26 @@ const routeDefinitions = createRoutesFromElements(
         </Route>
 
         {/*WITH ONLY ADMIN ROLE*/}
-        <Route element={<ProtectedRoute allowedRole={[ROLES.ADMIN]}/>}>
-            <Route
-                element={
-                    <Suspense fallback={<LoadingComponent />}>
-                        <LazyAdminLayout />
-                    </Suspense>
-                }
-            >
-                <Route path="/admin" element={<LazyAdminDashboard />} />
+            <Route  path="/admin" element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
+                <Route
+                    element={
+                        <Suspense fallback={<LoadingComponent />}>
+                            <LazyAdminLayout />
+                        </Suspense>
+                    }
+                >
+                    {/* Tự chuyển về /admin/event */}
+                    <Route index element={<LazyAdminDashboard />} />
+
+                    {/* Trang event table */}
+                    <Route
+                        path="event"
+                        element={<LazyAdminEvent />}
+                    />
+
+                </Route>
             </Route>
-        </Route>
+
 
 
         {/*WITHOUT ROLE*/}

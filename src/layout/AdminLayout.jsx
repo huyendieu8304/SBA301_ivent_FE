@@ -103,17 +103,27 @@ const AdminLayout = () => {
                     </Stack>
                     <Divider />
                     <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/admin">
+                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemText primary="Thống kê" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/admin/event">
+                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemText primary="Quản lý sự kiện" />
+                            </ListItemButton>
+                        </ListItem>
+
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/admin/users">
+                                <ListItemIcon><MailIcon /></ListItemIcon>
+                                <ListItemText primary="Quản lý người dùng" />
+                            </ListItemButton>
+                        </ListItem>
                     </List>
+
                     <Divider />
                     <List>
                         {['All mail', 'Trash', 'Spam'].map((text, index) => (
