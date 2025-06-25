@@ -136,6 +136,18 @@ const LoginPage = () => {
                                 Đăng nhập
                             </Typography>
                         </Button>
+                        <Button
+                            variant="text"
+                            color="primary"
+                            // fullWidth
+                            sx={{textTransform: "none", marginTop: 1, marginBottom: 3}}
+                            startIcon={<img src="https://developers.google.com/identity/images/g-logo.png" alt="G" style={{width: 20, height: 20}} />}
+                            href="http://localhost:8080/ivent/oauth2/authorization/google"
+                        >
+                            <Typography variant="body1" component="div" sx={{textAlign: "center"}}>
+                                Đăng nhập bằng Google
+                            </Typography>
+                        </Button>
                     </CardContent>
                 </Card>
             </Container>

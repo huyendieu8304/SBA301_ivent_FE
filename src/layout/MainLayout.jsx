@@ -7,17 +7,19 @@ import {
     Stack,
     Typography, useTheme,
 } from "@mui/material";
-import MessageComponent from "../component/MessageComponent.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
 import '@fontsource/comfortaa/700.css';
 import TicketIconSvg from "../component/svg/TicketIconSvg.jsx";
 import SearchIcon from '@mui/icons-material/Search';
 import AvatarMenu from "../component/AvatarMenu.jsx";
+import LoadingComponent from "../component/LoadingComponent.jsx";
+import {useState} from "react";
 
 const MainLayout = () => {
     const {authorities} = useAuth();
     const theme = useTheme();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const year = new Date().getFullYear();
 
@@ -101,7 +103,7 @@ const MainLayout = () => {
                                         </Stack>
                                     </Button>
                                 </Stack>
-                                <AvatarMenu/>
+                                <AvatarMenu setIsLoading={setIsLoading} />
                             </>
                             :
                             <Stack direction="row" spacing={0.5} justifyContent="center" alignItems="center">
@@ -150,9 +152,9 @@ const MainLayout = () => {
                     </Typography>
                 </Box>
             </Box>
+            {isLoading && <LoadingComponent/>}
         </>
-    )
-        ;
+    );
 };
 
 export default MainLayout;
