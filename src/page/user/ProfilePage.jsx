@@ -69,7 +69,6 @@ const ProfilePage = () => {
         setAvatar(data.avatarUri)
         setIsLoading(false);
     }
-    console.log(subInformation)
 
     const getDataFail = (error) => {
         console.log(error);
