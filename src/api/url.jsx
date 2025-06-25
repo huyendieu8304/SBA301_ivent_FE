@@ -10,6 +10,8 @@ export const url = {
     resendEmailToken: PATH_URL + "/resend-validate-email-token",
     userProfile: PATH_URL + "/profile",
     updateProfile: PATH_URL + "/update-profile",
+    getMyEvents: (id, page = 0, size = 10) =>
+        `${PATH_URL}/event/my_events/${id}?page=${page}&size=${size}`,
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,
     adminEvent : PATH_ADMIN + "/event",
     getAdminEventDetails: (id) => PATH_ADMIN + "/event"+ `/${id}`,

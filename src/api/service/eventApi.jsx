@@ -1,8 +1,17 @@
-import {callApi} from "../CallApi.jsx";
-import {HTTP_METHOD} from "../../common/Constant.jsx";
-import {url} from "../url.jsx";
+import { callApi } from "../CallApi.jsx";
+import { HTTP_METHOD } from "../../common/Constant.jsx";
 
-const eventApi={
+const eventApi = {
+    getMyEvents: (id, page, size, successHandler, errorHandler) =>
+        callApi(
+            url.getMyEvents(id, page, size),
+            HTTP_METHOD.GET,
+            {},  
+            {},
+            true,
+            successHandler,
+            errorHandler
+        ),
     getEventDetails: (id, successHandler, errorHandler) =>
         callApi(
             url.getEventDetails(id),
@@ -13,7 +22,6 @@ const eventApi={
             successHandler,
             errorHandler,
         )
-}
-
+};
 
 export default eventApi;
