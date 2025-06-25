@@ -13,12 +13,15 @@ import {
     TableRow,
     Paper,
     useTheme,
-    Pagination
+    Pagination, Chip, TextField, Button
 } from "@mui/material";
 import { useAuth } from "../../context/AuthContext.jsx";
 import eventApi from "../../api/service/eventApi.jsx";
 import LoadingComponent from "../../component/LoadingComponent.jsx";
 import dayjs from "dayjs";
+import TableComponent from "../../component/TableComponent.jsx";
+
+
 
 const MyEvents = () => {
     const theme = useTheme();
@@ -28,17 +31,41 @@ const MyEvents = () => {
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
+    const [eventName, setEventName] = useState("");
 
     useEffect(() => {
-    console.log("useEffect running - id:", accountId);
     if (accountId) {
-        setIsLoading(true);
-        eventApi.getMyEvents(accountId, page, size, fetchSuccess, fetchFail);
+        fetchEvents("");
     } else {
         console.log("No accountId available yet.");
     }
 }, [accountId, page, size]);
 
+    const fetchEvents = (name = "") => {
+        setIsLoading(true);
+        eventApi.getMyEvents(accountId, page, size, name, fetchSuccess, fetchFail);
+    };
+
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        fetchEvents(eventName);
+    };
+
+    const columns = [
+        { field: 'name', headerName: 'Tên sự kiện', width: 330, flex: 1, align: "center" },
+        { field: 'province', headerName: 'Địa điểm', width: 260, flex: 1, align: "center"},
+        { field: 'startTime', headerName: 'Ngày bắt đầu', width: 260, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
+        { field: 'endTime', headerName: 'Ngày kết thúc', width: 260, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
+        { field: 'createdAt', headerName: 'Ngày tạo', width: 260, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
+        { field: 'status', headerName: 'Trạng thái', width: 160, flex: 1, align: "center",
+            renderCell: (params) => (
+                <Box sx={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
+                    {params.value === "APPROVED" ? (<Chip label="Approved" sx={{backgroundColor: theme.palette.primary.main, color: "white", fontWeight: "bold"}}/>) : (<Chip label="Denied" color={"red"} />)}
+                </Box>
+            )}
+
+    ];
 
 const fetchSuccess = (data) => {
     console.log("API response:", data);
@@ -55,9 +82,7 @@ const fetchSuccess = (data) => {
         setIsLoading(false);
     };
 
-const formatDateTime = (isoString) => {
-    return isoString ? dayjs(isoString).format("DD/MM/YYYY HH:mm") : "";
-};
+
 
     return (
         <Container maxWidth="xl" sx={{ paddingTop: 4 }}>
@@ -66,38 +91,26 @@ const formatDateTime = (isoString) => {
                     <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
                         Sự kiện của tôi
                     </Typography>
-                    <TableContainer component={Paper}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Tên sự kiện</TableCell>
-                                    <TableCell>Địa điểm</TableCell>
-                                    <TableCell>Ngày bắt đầu</TableCell>
-                                    <TableCell>Ngày kết thúc</TableCell>
-                                    <TableCell>Trạng thái</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {events.map((event) => (
-                                    <TableRow key={event.id}>
-                                        <TableCell>{event.name}</TableCell>
-                                        <TableCell>{event.province}</TableCell>
-                                        <TableCell>{formatDateTime(event.startTime)}</TableCell>
-                                        <TableCell>{formatDateTime(event.endTime)}</TableCell>
-                                        <TableCell>{event.status}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-                <Pagination
-                    count={totalPages}
-                    page={page + 1}
-                    onChange={(e, value) => setPage(value - 1)}
-                    color="primary"
-                />
-                </Box>
+
+                    <form onSubmit={handleSearchSubmit}>
+                    <Box display="flex" alignItems="center" gap={2} mb={2}>
+                        <TextField
+                            label="Nhập tên sự kiện"
+                            variant="outlined"
+                            value={eventName}
+                            onChange={(e) => setEventName(e.target.value)}
+                            size="small"
+                            sx={{ width: 300 }}
+                        />
+                        <Button type="submit" variant="contained" color="primary" size="medium" sx={{ color:"white", fontWeight: "bold" }}>
+                            Tìm kiếm
+                        </Button>
+                    </Box>
+                </form>
+
+
+
+                <TableComponent columns={columns} data={events} handleClickRow={() => {}}/>
                 </CardContent>
             </Card>
             {isLoading && <LoadingComponent />}
