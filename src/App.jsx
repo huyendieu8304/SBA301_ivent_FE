@@ -9,7 +9,7 @@ import {
     LazyLoginPage,
     LazyMainLayout, LazyNotFoundPage, LazyProfilePage,
     LazyRegisterAccountPage,
-    LazyMyEvents
+    LazyMyEvents, LazyOAuth2RedirectPage
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -52,8 +52,6 @@ const routeDefinitions = createRoutesFromElements(
                 </Route>
             </Route>
 
-
-
         {/*WITHOUT ROLE*/}
         <Route
             element={
@@ -67,6 +65,7 @@ const routeDefinitions = createRoutesFromElements(
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
         </Route>
+        <Route path="/oauth2-redirect" element={<LazyOAuth2RedirectPage/>} />
         <Route path="/validate/:token" element={<LazyEmailValidationTokenPage />} />
         <Route path="/error" element={<LazyErrorPage />} />
         <Route path="/*" element={<LazyNotFoundPage/>} />

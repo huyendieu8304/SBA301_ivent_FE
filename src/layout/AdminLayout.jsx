@@ -9,7 +9,6 @@ import {
 import List from '@mui/material/List';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import MessageComponent from "../component/MessageComponent.jsx";
 import React, {useState, Fragment} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import '@fontsource/comfortaa/700.css';
@@ -17,6 +16,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import AvatarMenu from "../component/AvatarMenu.jsx";
+import LoadingComponent from "../component/LoadingComponent.jsx";
 
 const drawerWidth = 240;
 
@@ -25,6 +25,7 @@ const AdminLayout = () => {
     const {authorities} = useAuth();
     const theme = useTheme();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     return (
         <>
@@ -59,7 +60,7 @@ const AdminLayout = () => {
                                                     Tạo sự kiện
                                                 </Typography>
                                             </Button>
-                                            <AvatarMenu/>
+                                            <AvatarMenu setIsLoading={setIsLoading} />
                                         </Stack>
                                     </>
                                     :
@@ -158,6 +159,7 @@ const AdminLayout = () => {
                     </Box>
                 </Box>
             </Box>
+            {isLoading && <LoadingComponent/>}
         </>
     );
 };

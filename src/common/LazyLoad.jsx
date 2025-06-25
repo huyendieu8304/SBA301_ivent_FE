@@ -50,3 +50,7 @@ export const LazyMyEvents = React.lazy(
 export const LayzyEventDetailsPage = React.lazy(
     () => import("../page/EventDetailsPage.jsx"),
 )
+
+export const LazyOAuth2RedirectPage = React.lazy(
+    () => import("../page/OAuth2RedirectPage.jsx"),
+);
