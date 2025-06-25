@@ -33,7 +33,7 @@ const translateColumn = (listColumn) => {
         };
     });
 };
-const CommonTable = ({
+const TableComponent = ({
                          columns,
                          data,
                          handleClickRow,
@@ -73,4 +73,4 @@ const CommonTable = ({
         />
     );
 };
-export default CommonTable;
+export default TableComponent;
