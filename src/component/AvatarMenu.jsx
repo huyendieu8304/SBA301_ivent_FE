@@ -74,12 +74,17 @@ const AvatarMenu = () => {
                             Vé đã mua
                         </Typography>
                     </MenuItem>
-                    <MenuItem>
-                        <Typography sx={{
-                            textAlign: 'center',
-                            color: theme.palette.primary.main,
-                            margin: "0 6px"
-                        }}>
+                    <MenuItem onClick={() => {
+                        handleCloseUserMenu(); 
+                        navigate("/my-events"); 
+                    }}>
+                        <Typography
+                            sx={{
+                                textAlign: 'center',
+                                color: theme.palette.primary.main,
+                                margin: "0 6px"
+                                }}
+                        >
                             Sự kiện của tôi
                         </Typography>
                     </MenuItem>

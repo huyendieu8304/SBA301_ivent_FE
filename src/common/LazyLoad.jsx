@@ -43,6 +43,10 @@ export const LazyAdminLayout = React.lazy(
     () => import("../layout/AdminLayout.jsx"),
 );
 
+export const LazyMyEvents = React.lazy(
+    () => import("../page/user/MyEvents.jsx")
+);
+
 export const LayzyEventDetailsPage = React.lazy(
     () => import("../page/EventDetailsPage.jsx"),
 )

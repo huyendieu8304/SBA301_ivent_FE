@@ -8,7 +8,8 @@ import {
     LazyHomePage,
     LazyLoginPage,
     LazyMainLayout, LazyNotFoundPage, LazyProfilePage,
-    LazyRegisterAccountPage
+    LazyRegisterAccountPage,
+    LazyMyEvents
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -26,6 +27,7 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
+                <Route path="/my-events" element={<LazyMyEvents/>} />
             </Route>
         </Route>
 
