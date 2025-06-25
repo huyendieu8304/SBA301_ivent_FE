@@ -19,6 +19,9 @@ export const LazyProfilePage = React.lazy(
 export const LazyAdminDashboard = React.lazy(
     () => import("../page/admin/AdminDashboard.jsx"),
 );
+export const LazyAdminEvent = React.lazy(
+    () => import("../page/admin/AdminEventPage.jsx"),
+);
 
 export const LazyEmailValidationTokenPage = React.lazy(
     () => import("../page/EmailValidationTokenPage.jsx"),
