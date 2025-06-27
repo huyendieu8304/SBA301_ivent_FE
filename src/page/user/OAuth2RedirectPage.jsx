@@ -1,10 +1,10 @@
 import {useLocation, useNavigate} from "react-router";
-import LoadingComponent from "../component/LoadingComponent.jsx";
+import LoadingComponent from "../../component/LoadingComponent.jsx";
 import {useEffect} from "react";
-import {messageService} from "../service/MessageService.jsx";
-import {MESSAGE_TYPES} from "../common/Constant.jsx";
-import Messages from "../common/Message.jsx";
-import {useAuth} from "../context/AuthContext.jsx";
+import {messageService} from "../../service/MessageService.jsx";
+import {MESSAGE_TYPES} from "../../common/Constant.jsx";
+import Messages from "../../common/Message.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 const OAuth2RedirectPage = () => {
     const navigate = useNavigate();

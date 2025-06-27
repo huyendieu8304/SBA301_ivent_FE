@@ -24,7 +24,7 @@ export const LazyAdminEvent = React.lazy(
 );
 
 export const LazyEmailValidationTokenPage = React.lazy(
-    () => import("../page/EmailValidationTokenPage.jsx"),
+    () => import("../page/user/EmailValidationTokenPage.jsx"),
 );
 
 export const LazyErrorPage = React.lazy(
@@ -43,6 +43,14 @@ export const LazyAdminLayout = React.lazy(
     () => import("../layout/AdminLayout.jsx"),
 );
 
+export const LazySimpleLayout = React.lazy(
+    () => import("../layout/SimpleLayout.jsx"),
+);
+
+export const LazyForgotPasswordPage = React.lazy(
+    () => import("../page/user/ForgotPasswordPage.jsx"),
+);
+
 export const LazyMyEvents = React.lazy(
     () => import("../page/user/MyEvents.jsx")
 );
@@ -52,5 +60,5 @@ export const LayzyEventDetailsPage = React.lazy(
 )
 
 export const LazyOAuth2RedirectPage = React.lazy(
-    () => import("../page/OAuth2RedirectPage.jsx"),
+    () => import("../page/user/OAuth2RedirectPage.jsx"),
 );

@@ -15,4 +15,6 @@ export const url = {
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,
     adminEvent : PATH_ADMIN + "/event",
     getAdminEventDetails: (id) => PATH_ADMIN + "/event"+ `/${id}`,
+    forgotPasswordRequest: PATH_URL + "/forgot-password",
+    setPassword: PATH_URL + "/set-password",
 };
