@@ -3,10 +3,9 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     IconButton,
-    Stack, Typography, useTheme,
+    Stack, useTheme,
 } from "@mui/material";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -32,6 +31,11 @@ const ConfirmModal = ({
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             closeAfterTransition={false}
+            PaperProps={{
+                sx: {
+                    borderRadius: "10px",
+                }
+            }}
         >
             <DialogTitle
                 id="alert-dialog-title"
@@ -83,7 +87,7 @@ const ConfirmModal = ({
                             onClick={handleClose}
                             sx={{width: "150px", textTransform: "none", color: theme.palette.primary.main, }}
                         >
-                            Không
+                            Hủy
                         </Button>
                     )}
                     <Button

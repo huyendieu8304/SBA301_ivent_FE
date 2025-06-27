@@ -58,6 +58,26 @@ const accountSettingApi = {
             errorHandler,
             true,
         ),
+    forgotPasswordRequest: (body, successHandler, errorHandler) =>
+        callApi(
+            url.forgotPasswordRequest,
+            HTTP_METHOD.POST,
+            {},
+            body,
+            false,
+            successHandler,
+            errorHandler,
+        ),
+    setPassword: (body, successHandler, errorHandler) =>
+        callApi(
+            url.setPassword,
+            HTTP_METHOD.POST,
+            {},
+            body,
+            false,
+            successHandler,
+            errorHandler,
+        ),
 };
 
 export default accountSettingApi;
