@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import {Navigate, Outlet} from "react-router";
 import LoadingComponent from "./LoadingComponent.jsx";
+import Messages from "../common/Message.jsx";
 
 const ProtectedRoute = ({ allowedRole }) => {
     const { isAuthenticated, authorities, logout, isTokenExpired } = useAuth();
@@ -28,8 +29,8 @@ const ProtectedRoute = ({ allowedRole }) => {
                 setAuthFailed(false);
             } else {
                 setAuthFailed(true);
-                localStorage.clear();
-                logout();
+                // localStorage.clear();
+                // logout();
             }
         } else {
             setAuthFailed(true);
@@ -37,7 +38,15 @@ const ProtectedRoute = ({ allowedRole }) => {
     }, [isAuthenticated, authorities, allowedRole, logout]);
 
     if (authFailed) {
-        return <Navigate to="/login" replace />;
+        // return <Navigate to="/error" replace />;
+        return <Navigate
+            to="/error"
+            replace
+            state={{
+                message: Messages.MSG_E_00008,
+                code: 403,
+            }}
+        />
     } else if (authFailed === false) {
         return <Outlet/>;
     } else {

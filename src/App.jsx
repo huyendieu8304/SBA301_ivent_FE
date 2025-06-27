@@ -2,16 +2,22 @@ import { Suspense } from "react";
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet} from "react-router-dom";
 import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
-    LazyEventDetailsPage, LazyOrganizerLayout,
+    LazyEventDetailsPage,
+    LazyOrganizerLayout,
     LazyAdminDashboard,
+    LazyAdminEvent,
     LazyAdminLayout, LazyEmailValidationTokenPage, LazyErrorPage,
     LazyHomePage,
     LazyLoginPage,
     LazyMainLayout, LazyNotFoundPage, LazyProfilePage,
-    LazyRegisterAccountPage, LazyCreateEventPage
+    LazyRegisterAccountPage,
+    LazyCreateEventPage,
+    LazyMyEvents,
+    LazyOAuth2RedirectPage
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
+import {Navigate} from "react-router";
 
 const routeDefinitions = createRoutesFromElements(
     <Route>
@@ -25,21 +31,30 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
+                <Route path="/my-events" element={<LazyMyEvents/>} />
             </Route>
         </Route>
 
         {/*WITH ONLY ADMIN ROLE*/}
-        <Route element={<ProtectedRoute allowedRole={[ROLES.ADMIN]}/>}>
-            <Route
-                element={
-                    <Suspense fallback={<LoadingComponent />}>
-                        <LazyAdminLayout />
-                    </Suspense>
-                }
-            >
-                <Route path="/admin" element={<LazyAdminDashboard />} />
+            <Route  path="/admin" element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
+                <Route
+                    element={
+                        <Suspense fallback={<LoadingComponent />}>
+                            <LazyAdminLayout />
+                        </Suspense>
+                    }
+                >
+                    {/* Tự chuyển về /admin/event */}
+                    <Route index element={<LazyAdminDashboard />} />
+
+                    {/* Trang event table */}
+                    <Route
+                        path="event"
+                        element={<LazyAdminEvent />}
+                    />
+
+                </Route>
             </Route>
-        </Route>
 
         {/*WITH ONLY USER ROLE*/}
         <Route path="/organizer" element={<ProtectedRoute allowedRole={[ROLES.USER]}/>}>
@@ -84,6 +99,7 @@ const routeDefinitions = createRoutesFromElements(
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
         </Route>
+        <Route path="/oauth2-redirect" element={<LazyOAuth2RedirectPage/>} />
         <Route path="/validate/:token" element={<LazyEmailValidationTokenPage />} />
         <Route path="/error" element={<LazyErrorPage />} />
         <Route path="/*" element={<LazyNotFoundPage/>} />

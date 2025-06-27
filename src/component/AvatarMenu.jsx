@@ -3,11 +3,9 @@ import {useState} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import authSettingApi from "../api/service/authSettingApi.jsx";
 import {useNavigate} from "react-router";
-import LoadingComponent from "./LoadingComponent.jsx";
 
-const AvatarMenu = () => {
+const AvatarMenu = ({setIsLoading}) => {
     const [anchorElUser, setAnchorElUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
     const {avatarUri, logout} = useAuth();
     const theme = useTheme();
     const navigate = useNavigate();
@@ -74,12 +72,17 @@ const AvatarMenu = () => {
                             Vé đã mua
                         </Typography>
                     </MenuItem>
-                    <MenuItem>
-                        <Typography sx={{
-                            textAlign: 'center',
-                            color: theme.palette.primary.main,
-                            margin: "0 6px"
-                        }}>
+                    <MenuItem onClick={() => {
+                        handleCloseUserMenu(); 
+                        navigate("/my-events"); 
+                    }}>
+                        <Typography
+                            sx={{
+                                textAlign: 'center',
+                                color: theme.palette.primary.main,
+                                margin: "0 6px"
+                                }}
+                        >
                             Sự kiện của tôi
                         </Typography>
                     </MenuItem>
@@ -103,7 +106,6 @@ const AvatarMenu = () => {
                     </MenuItem>
                 </Menu>
             </Box>
-            {isLoading && <LoadingComponent/>}
         </>
     )
 }
