@@ -131,3 +131,10 @@ export const isInSellingTicketPeriod = (startSellingTicketTime, endSellingTicket
 
     return now >= start && now <= end;
 };
+
+export const checkInputStringLength = (fieldValue, fieldName, limitedLength) => {
+    if (fieldValue.length > limitedLength) {
+        return formatString(Messages.MSG_E_00006, fieldName, limitedLength);
+    }
+    return null;
+}
