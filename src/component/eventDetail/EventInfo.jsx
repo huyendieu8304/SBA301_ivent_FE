@@ -14,10 +14,15 @@ const PROVINCE_LIST = AddressData.map(
         label: item.province
     }));
 
-function EventInfo({ formFields, setFormFields}) {
+function EventInfo({ formFields, setFormFields, categories}) {
 
     const [wardList, setWardList] = useState([]);
 
+    const categoryList = categories.map(category => ({
+        id: category.id,
+        label: category.name,
+        value: category.id
+    }))
     //change wardlist when the province change
     useEffect(() => {
         setFormFields(prevState => ({
@@ -88,6 +93,14 @@ function EventInfo({ formFields, setFormFields}) {
 
     const validateEventLocation= (value) => {
         const fieldName = formFields.location.label;
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+    const validateEventCategory= (value) => {
+        const fieldName = formFields.category.label;
         const error = checkRequiredInput(fieldName, value);
         if (error) {
             return error;
@@ -213,7 +226,17 @@ function EventInfo({ formFields, setFormFields}) {
                     padding: '10px',
                 }}
             >
-
+                <ValidateSelect
+                    label={formFields.category.label}
+                    fieldName="category"
+                    value={formFields.category.value}
+                    error={formFields.category.error}
+                    validatorFunction={validateEventCategory}
+                    setValue={updateField}
+                    setError={updateError}
+                    listOptions={categoryList}
+                    isRequired={true}
+                />
             </Box>
             {/*description*/}
             <Box

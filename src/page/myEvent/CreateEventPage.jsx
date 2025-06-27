@@ -2,11 +2,13 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Stack, useTheme} from "@mui/material";
 import EventTicket from "../../component/eventDetail/EventTicket.jsx";
 import EventInfo from "../../component/eventDetail/EventInfo.jsx";
 import EventPayment from "../../component/eventDetail/EventPayment.jsx";
+import LoadingComponent from "../../component/LoadingComponent.jsx";
+import categoryApi from "../../api/service/categoryApi.jsx";
 
 const GRAY_COLOR = "#3b3b3d"
 const steps = [
@@ -25,9 +27,31 @@ const steps = [
     }
 ];
 
+const CATEGORY_TEMP= [
+    {
+        "id": "1",
+        "name": "Nh?c s?ng"
+    },
+    {
+        "id": "2",
+        "name": "Sân kh?u & ngh? thu?t"
+    },
+    {
+        "id": "3",
+        "name": "Th? thao"
+    },
+    {
+        "id": "4",
+        "name": "Khác"
+    }
+];
+
+
 function CreateEventPage(props) {
     const [activeStepId, setActiveStepId] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
+    const [isLoading, setIsLoading] = useState(false);
+
     const theme = useTheme();
 
     const [formFields, setFormFields] = useState({
@@ -58,6 +82,25 @@ function CreateEventPage(props) {
         ticketType: {label: "Loại vé", value: "", error: ""},
     });
 
+    const [categories, setCategories] = useState(CATEGORY_TEMP);
+    //GET CATEGORY FROM BACKEND
+    // useEffect(() => {
+    //     setIsLoading(true);
+    //     categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
+    // },[])
+    //
+    // const getCategoriesSuccess = (data) => {
+    //     setCategories(data)
+    //     setIsLoading(false);
+    // }
+    //
+    // const getCategoriesFail = (data) => {
+    //     console.log("get categories fail")
+    //     console.error(data)
+    //     setIsLoading(false);
+    // }
+
+    //FUNCTION FOR NAVIGATION
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
@@ -76,9 +119,12 @@ function CreateEventPage(props) {
         setActiveStepId((prevActiveStep) => prevActiveStep - 1);
     };
 
+    //SUBMIT FORM
     const handleSubmit = () => {
         console.log("Submit form")
     }
+
+    if (isLoading) return <LoadingComponent/>
 
     return (
         <>
@@ -166,6 +212,7 @@ function CreateEventPage(props) {
                 <EventInfo
                     formFields={formFields}
                     setFormFields={setFormFields}
+                    categories = {categories}
                 />
             }
 
