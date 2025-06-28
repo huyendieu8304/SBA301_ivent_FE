@@ -1,6 +1,6 @@
 import {Box, Button, FormHelperText, Stack, styled, Typography, useTheme} from "@mui/material";
 import FileUpload from '@mui/icons-material/CloudUpload';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -29,6 +29,22 @@ export const ValidateUploadImage = ({
     const theme = useTheme();
     const [previewUrl, setPreviewUrl] = useState(value);
 
+    useEffect(() => {
+        if (typeof value === "string") {
+            setPreviewUrl(value);
+            return; // Không tạo object URL nếu là URL string
+        }
+
+        if (value instanceof File) {
+            const objectUrl = URL.createObjectURL(value);
+            setPreviewUrl(objectUrl);
+            return () => {
+                URL.revokeObjectURL(objectUrl);
+            };
+        }
+
+        setPreviewUrl(null); // fallback nếu không phải string cũng không phải File
+    }, [value]);
 
     const handleChange = (e) => {
         const file = e.target.files?.[0];

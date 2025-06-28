@@ -44,6 +44,7 @@ const DEFAULT_DESCRIPTION = "<p><strong>Giới\n" +
 
 function EventInfo({ formFields, setFormFields, categories, updateField, updateError}) {
 
+    console.log("eventInfo", formFields);
     const [wardList, setWardList] = useState([]);
 
     const categoryList = categories.map(category => ({
@@ -53,16 +54,8 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
     }))
     //change wardlist when the province change
     useEffect(() => {
-        setFormFields(prevState => ({
-            ...prevState,
-            ward: {
-                ...prevState.ward,
-                value: "",
-                error: "",
-            }
-        }));
         if (!formFields.province.value) {
-            setWardList([]); // Không có tỉnh thì không có phường
+            setWardList([]);
             return;
         }
 
@@ -71,15 +64,28 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
         );
 
         if (selectedProvince) {
-            setWardList(selectedProvince.wards.map((item, index) => ({
-                        id: index,
-                        value: item,
-                        label: item
-                    })
-                )
-            );
+            const newWardList = selectedProvince.wards.map((item, index) => ({
+                id: index,
+                value: item,
+                label: item
+            }));
+
+            setWardList(newWardList);
+
+            // Nếu ward.value không nằm trong danh sách ward mới thì reset
+            const isWardValid = newWardList.some(opt => opt.value === formFields.ward.value);
+            if (!isWardValid) {
+                setFormFields(prevState => ({
+                    ...prevState,
+                    ward: {
+                        ...prevState.ward,
+                        value: "",  // chỉ reset nếu không hợp lệ
+                        error: "",
+                    }
+                }));
+            }
         } else {
-            setWardList([]); // Tỉnh không tìm thấy trong danh sách
+            setWardList([]);
         }
     }, [formFields.province.value])
 
@@ -243,11 +249,6 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                         }
                     }}
                 >
-                {/*todo anh su kien chua co*/}
-                {/*    <p>Thêm ảnh s kiện vào đê</p>*/}
-
-
-
                     <Box
                         sx={{
                             flex: {
@@ -263,7 +264,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     >
                         <ValidateUploadImage
                             label={formFields.eventLogoUri.label}
-                            fieldName="banner"
+                            fieldName="eventLogoUri"
                             value={formFields.eventLogoUri.value}
                             setValue={updateField}
                             error={formFields.eventLogoUri.error}
@@ -288,7 +289,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     >
                         <ValidateUploadImage
                             label={formFields.bannerUri.label}
-                            fieldName="banner"
+                            fieldName="bannerUri"
                             value={formFields.bannerUri.value}
                             setValue={updateField}
                             error={formFields.bannerUri.error}
@@ -471,7 +472,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     >
                         <ValidateUploadImage
                             label={formFields.organizerLogoUri.label}
-                            fieldName="banner"
+                            fieldName="organizerLogoUri"
                             value={formFields.organizerLogoUri.value}
                             setValue={updateField}
                             error={formFields.organizerLogoUri.error}

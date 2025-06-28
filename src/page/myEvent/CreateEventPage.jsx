@@ -63,10 +63,10 @@ function CreateEventPage(props) {
 
         description: {label: "Mô tả sự kiện ", value: "", error: ""},
 
-        startTime: {label: "Thời gian bắt đầu", value: null, error: ""},
-        endTime: {label: "Thời gian kết thúc", value: null, error: ""},
-        startSellingTicketTime: {label: "", value: null, error: ""},
-        endSellingTicketTime: {label: "", value: null, error: ""},
+        startTime: {label: "Thời gian bắt đầu sự kiện", value: null, error: ""},
+        endTime: {label: "Thời gian kết thúc sự kiện", value: null, error: ""},
+        startSellingTicketTime: {label: "Thời gian bắt đầu bán vé", value: null, error: ""},
+        endSellingTicketTime: {label: "Thời gian kết thúc bán vé", value: null, error: ""},
 
         eventLogoUri: {label: "Logo sự kiện", value: null, error: ""},
         bannerUri: {label: "Banner sự kiện", value: null, error: ""},
@@ -246,7 +246,12 @@ function CreateEventPage(props) {
             }
 
             {activeStepId === 1 &&
-                <EventTicket/>
+                <EventTicket
+                    formFields={formFields}
+                    setFormFields={setFormFields}
+                    updateField={updateField}
+                    updateError={updateError}
+                />
             }
 
             {activeStepId === 2 &&
