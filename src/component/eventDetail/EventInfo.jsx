@@ -1,12 +1,20 @@
 import Box from "@mui/material/Box";
 import ValidationTextField from "../validateInput/ValidationTextField.jsx";
-import { checkInputStringLength, checkRequiredInput} from "../../common/ValidateFunction.jsx";
+import {
+    checkDateAfter,
+    checkDateBefore,
+    checkInputStringLength,
+    checkRequiredInput,
+    checkValidDate
+} from "../../common/ValidateFunction.jsx";
 import React, {useEffect, useRef, useState} from "react";
 import ValidateRadioGroup from "../validateInput/ValidateRadioGroup.jsx";
 import AddressData  from "../../AddressData.js";
 import ValidateSelect from "../validateInput/ValidateSelect.jsx";
 import { Stack} from "@mui/material";
 import ValidateRichTextEditor from "../validateInput/ValidateRichTextEditor.jsx";
+import { DATETIME_FORMAT} from "../../common/Constant.jsx";
+import {ValidateDateTimePicker} from "../validateInput/ValidateDateTimePicker.jsx";
 
 const PROVINCE_LIST = AddressData.map(
     (item, index) => ({
@@ -136,6 +144,37 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
         return null;
     }
 
+    const validateEventStartTime = (startValue, endValue) => {
+        const fieldName = formFields.startTime.label;
+        const error = checkRequiredInput(fieldName, startValue)
+            || checkValidDate(fieldName, startValue, DATETIME_FORMAT)
+            || checkDateBefore(fieldName, startValue, endValue, formFields.endTime.label, DATETIME_FORMAT)
+
+        return error || null;
+
+    }
+
+    const validateEventEndTime = (endValue, startValue) => {
+        const fieldName = formFields.endTime.label;
+        const error = checkRequiredInput(fieldName, endValue)
+            || checkValidDate(fieldName, endValue, DATETIME_FORMAT)
+            || checkDateAfter(fieldName, endValue, startValue, formFields.startTime.label, DATETIME_FORMAT);
+
+        return error || null;
+    };
+
+    const handleStartEndChange = (fieldName, newValue) => {
+        const startVal = fieldName === "startTime" ? newValue : formFields.startTime.value;
+        const endVal = fieldName === "endTime" ? newValue : formFields.endTime.value;
+
+        updateField(fieldName, newValue);
+
+        const startError = validateEventStartTime(startVal, endVal);
+        const endError = validateEventEndTime(endVal, startVal);
+
+        updateError("startTime", startError);
+        updateError("endTime", endError);
+    };
 
     return (
         <Box sx={{
@@ -149,7 +188,10 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     padding: '10px',
                 }}
             >
+                <Stack direction={'row'} spacing={1} mt={1}>
                 {/*todo anh su kien chua co*/}
+                    <p>Thêm ảnh s kiện vào đê</p>
+                </Stack>
                 <ValidationTextField
                     label={formFields.name.label}
                     fieldName="name"
@@ -162,8 +204,32 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     type="text"
                 />
 
-            {/*    todo: start time, end time*/}
+                <Stack direction={'row'} spacing={1} mt={1}>
+                    <ValidateDateTimePicker
+                        label={formFields.startTime.label}
+                        fieldName="startTime"
+                        value={formFields.startTime.value}
+                        error={formFields.startTime.error}
+                        setValue={updateField}
+                        setError={updateError}
+                        isRequired={true}
+                        validatorFunction={(val) => handleStartEndChange("startTime", val)}
+                    />
+                    <ValidateDateTimePicker
+                        label={formFields.endTime.label}
+                        fieldName="endTime"
+                        value={formFields.endTime.value}
+                        error={formFields.endTime.error}
+                        setValue={updateField}
+                        setError={updateError}
+                        isRequired={true}
+                        validatorFunction={(val) => handleStartEndChange("endTime", val)}
+                    />
+
+                </Stack>
+
             </Box>
+            {/*Address*/}
             <Box
                 sx={{
                     margin: "10px 10px",
@@ -191,7 +257,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     />
                 </Box>
                 {!formFields.isOnline.value && (
-                    <Stack direction={'row'} spacing={2} mb={1}>
+                    <Stack direction={'row'} spacing={1} mb={1}>
                         <ValidateSelect
                             label={formFields.province.label}
                             fieldName="province"

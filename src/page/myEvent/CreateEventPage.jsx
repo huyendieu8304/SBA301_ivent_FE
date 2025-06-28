@@ -63,10 +63,10 @@ function CreateEventPage(props) {
 
         description: {label: "Mô tả sự kiện ", value: "", error: ""},
 
-        startTime: {label: "Thời gian bắt đầu", value: "", error: ""},
-        endTime: {label: "Thời gian kết thúc", value: "", error: ""},
-        startSellingTicketTime: {label: "", value: "", error: ""},
-        endSellingTicketTime: {label: "", value: "", error: ""},
+        startTime: {label: "Thời gian bắt đầu", value: null, error: ""},
+        endTime: {label: "Thời gian kết thúc", value: null, error: ""},
+        startSellingTicketTime: {label: "", value: null, error: ""},
+        endSellingTicketTime: {label: "", value: null, error: ""},
 
         eventLogoUri: {label: "", value: "", error: ""},
         bannerUri: {label: "", value: "", error: ""},

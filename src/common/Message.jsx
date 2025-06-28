@@ -7,6 +7,8 @@ export default class Messages {
     static MSG_E_00006 = "{0} không được dài quá {1} kí tự";
     static MSG_E_00007 = "Đăng nhập thất bại, đã có lỗi xảy ra";
     static MSG_E_00008 = "Bạn không có quyền truy cập vào đường dẫn này";
+    static MSG_E_00009 = "{0} phải sau {1}";
+    static MSG_E_00010 = "{0} phải trước {1}";
 
     static MSG_I_00001 = "Đăng nhập thành công";
     static MSG_I_00002 = "Đăng ký người dùng thành công";

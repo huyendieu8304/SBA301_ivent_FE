@@ -109,11 +109,35 @@ export const checkFullSizeKanaInput = (fieldName, fieldValue) => {
     return null;
 };
 
+//thực ra cái hàm này có thể check cả date time luôn, chỉ cần truyền dateFormats vào laf được
 export const checkValidDate = (fieldName, dateStr, dateFormats) => {
     const parsedDate = dayjs(dateStr, dateFormats, true);
     if (!parsedDate.isValid()) {
         return formatString(Messages.MSG_E_00003, fieldName, dateFormats);
     }
+    return null;
+};
+
+
+export const checkDateBefore = (fieldName, valueDate, maxDate, maxDateFieldName, dateFormats) => {
+    const parsedValue = dayjs(valueDate, dateFormats, true);
+    const parsedMax = dayjs(maxDate, dateFormats, true);
+
+    if (parsedValue.isAfter(parsedMax)) {
+        return formatString(Messages.MSG_E_00010, fieldName, maxDateFieldName );
+    }
+
+    return null;
+};
+
+export const checkDateAfter = (fieldName, valueDate, minDate, minDateFieldName, dateFormats) => {
+    const parsedValue = dayjs(valueDate, dateFormats, true);
+    const parsedMin = dayjs(minDate, dateFormats, true);
+
+    if (!parsedValue.isAfter(parsedMin)) {
+        return formatString(Messages.MSG_E_00009, fieldName, minDateFieldName);
+    }
+
     return null;
 };
 
