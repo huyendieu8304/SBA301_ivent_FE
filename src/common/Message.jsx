@@ -9,6 +9,9 @@ export default class Messages {
     static MSG_E_00008 = "Bạn không có quyền truy cập vào đường dẫn này";
     static MSG_E_00009 = "{0} phải sau {1}";
     static MSG_E_00010 = "{0} phải trước {1}";
+    static MSG_E_00011 = "{0} phải được tải lên";
+    static MSG_E_00012 = "{0} chỉ chấp nhận định dạng ảnh";
+    static MSG_E_00013 = "{0} phải có dung lượng nhỏ hơn {1}Mb";
 
     static MSG_I_00001 = "Đăng nhập thành công";
     static MSG_I_00002 = "Đăng ký người dùng thành công";

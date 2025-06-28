@@ -5,16 +5,18 @@ import {
     checkDateBefore,
     checkInputStringLength,
     checkRequiredInput,
+    checkUploadImage,
     checkValidDate
 } from "../../common/ValidateFunction.jsx";
 import React, {useEffect, useRef, useState} from "react";
 import ValidateRadioGroup from "../validateInput/ValidateRadioGroup.jsx";
 import AddressData  from "../../AddressData.js";
 import ValidateSelect from "../validateInput/ValidateSelect.jsx";
-import { Stack} from "@mui/material";
+import {InputLabel, Stack} from "@mui/material";
 import ValidateRichTextEditor from "../validateInput/ValidateRichTextEditor.jsx";
 import { DATETIME_FORMAT} from "../../common/Constant.jsx";
 import {ValidateDateTimePicker} from "../validateInput/ValidateDateTimePicker.jsx";
+import {ValidateUploadImage} from "../validateInput/ValidateUploadImage.jsx";
 
 const PROVINCE_LIST = AddressData.map(
     (item, index) => ({
@@ -176,6 +178,42 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
         updateError("endTime", endError);
     };
 
+    const validateEventLogo = (file) => {
+        const fieldName = formFields.eventLogoUri.label;
+        const error = checkUploadImage(fieldName, file, 5)
+        return error || null;
+    }
+
+    const validateEventBanner = (file) => {
+        const fieldName = formFields.bannerUri.label;
+        const error = checkUploadImage(fieldName, file, 5)
+        return error || null;
+    }
+
+    const validateOrganizerLogo = (file) => {
+        const fieldName = formFields.organizerLogoUri.label;
+        const error = checkUploadImage(fieldName, file, 5)
+        return error || null;
+    }
+
+    const validateOrganizerName = (value) => {
+        const fieldName = formFields.organizerName.label;
+        const error = checkRequiredInput(fieldName, value) || checkInputStringLength(value, fieldName, 200);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
+    const validateOrganizerInformation = (value) => {
+        const fieldName = formFields.organizerInformation.label;
+        const error = checkRequiredInput(fieldName, value) || checkInputStringLength(value, fieldName, 250);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
     return (
         <Box sx={{
             marginTop: '20px',
@@ -188,9 +226,79 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     padding: '10px',
                 }}
             >
-                <Stack direction={'row'} spacing={1} mt={1}>
+                <InputLabel >
+                        <span style={{color: "#027A48"}}>
+                            Upload hình ảnh sự kiện <span style={{color: "red"}}>*</span>
+                        </span>
+                </InputLabel>
+                <Stack
+                    direction={{sm: 'column', md: 'row'}}
+                    spacing={1}
+                    mt={1}
+                    mb={1}
+                    sx={{
+                        height: {
+                            sm: 'auto',
+                            md: "30vh"
+                        }
+                    }}
+                >
                 {/*todo anh su kien chua co*/}
-                    <p>Thêm ảnh s kiện vào đê</p>
+                {/*    <p>Thêm ảnh s kiện vào đê</p>*/}
+
+
+
+                    <Box
+                        sx={{
+                            flex: {
+                                sm: "0 0 100%", //column 100%
+                                md: "0 0 30%"  //row 70%
+                            },
+                            maxWidth: {
+                                sm: '100%',
+                                md: '30%'
+                            },
+
+                        }}
+                    >
+                        <ValidateUploadImage
+                            label={formFields.eventLogoUri.label}
+                            fieldName="banner"
+                            value={formFields.eventLogoUri.value}
+                            setValue={updateField}
+                            error={formFields.eventLogoUri.error}
+                            setError={updateError}
+                            isRequired={true}
+                            isDisabled={false}
+                            validatorFunction={validateEventLogo}
+                        />
+                    </Box>
+                    <Box
+                         sx={{
+                             flex: {
+                                 sm: '0 0 100%',
+                                 md: '0 0 70%'
+                             },
+                             maxWidth: {
+                                 sm: '100%',
+                                 md: '70%'
+                             },
+                             paddingRight: "10px",
+                         }}
+                    >
+                        <ValidateUploadImage
+                            label={formFields.bannerUri.label}
+                            fieldName="banner"
+                            value={formFields.bannerUri.value}
+                            setValue={updateField}
+                            error={formFields.bannerUri.error}
+                            setError={updateError}
+                            isRequired={true}
+                            isDisabled={false}
+                            validatorFunction={validateEventBanner}
+                        />
+                    </Box>
+
                 </Stack>
                 <ValidationTextField
                     label={formFields.name.label}
@@ -345,7 +453,72 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     padding: '10px',
                 }}
             >
+                <Stack
+                    direction={{sm: 'column', md: 'row'}}
+                    spacing={1}
+                    mt={1}
+                    mb={1}
+                    display="flex"
+                >
+                    <Box
+                        sx={{
+                            height: "200px",
+                            width: {
+                                sm: "100%",
+                                md: "20%"
+                            },
+                        }}
+                    >
+                        <ValidateUploadImage
+                            label={formFields.organizerLogoUri.label}
+                            fieldName="banner"
+                            value={formFields.organizerLogoUri.value}
+                            setValue={updateField}
+                            error={formFields.organizerLogoUri.error}
+                            setError={updateError}
+                            isRequired={true}
+                            isDisabled={false}
+                            validatorFunction={validateOrganizerLogo}
+                        />
+                    </Box>
+                    <Box
+                        sx={{
+                            width: {
+                                sm: "100%",
+                                md: "80%"
+                            },
+                        }}
+                    >
+                        <ValidationTextField
+                            label={formFields.organizerName.label}
+                            fieldName="organizerName"
+                            value={formFields.organizerName.value}
+                            error={formFields.organizerName.error}
+                            validatorFunction={validateOrganizerName}
+                            setValue={updateField}
+                            setError={updateError}
+                            isRequired={true}
+                            type="text"
+                            sx={{
+                                marginBottom: '10px',
+                            }}
+                        />
 
+                        <ValidationTextField
+                            label={formFields.organizerInformation.label}
+                            fieldName="organizerInformation"
+                            value={formFields.organizerInformation.value}
+                            error={formFields.organizerInformation.error}
+                            validatorFunction={validateOrganizerInformation}
+                            setValue={updateField}
+                            setError={updateError}
+                            isRequired={true}
+                            type="text"
+
+                        />
+                    </Box>
+
+                </Stack>
             </Box>
         </Box>
     );

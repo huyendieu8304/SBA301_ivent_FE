@@ -12,6 +12,7 @@ const ValidationTextField = ({
                                  size = "medium",
                                  type = "text",
                                  validatorFunction = (e) => {""},
+                                sx,
                              }) => {
     const handleChange = (e) => {
         setValue(fieldName, e.target.value);
@@ -43,6 +44,7 @@ const ValidationTextField = ({
             error={!!error}
             helperText={error}
             onBlur={(e) => handleBlur(e)}
+            sx={sx}
         />
     )
 }

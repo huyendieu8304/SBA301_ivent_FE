@@ -162,3 +162,19 @@ export const checkInputStringLength = (fieldValue, fieldName, limitedLength) => 
     }
     return null;
 }
+
+export const checkUploadImage = (fieldName, file, maxSizeMb) => {
+    if (!file) {
+        return formatString(Messages.MSG_E_00011, fieldName);
+    }
+    // Kiểm tra MIME type
+    if (!file.type.startsWith("image/")) {
+        return formatString(Messages.MSG_E_00012, fieldName);
+    }
+    //kiểm tra kiích thước ảnh
+    const maxSizeBytes = maxSizeMb * 1024 * 1024;
+    if (file.size > maxSizeBytes) {
+        return formatString(Messages.MSG_E_00013, fieldName, maxSizeMb);
+    }
+    return null;
+}

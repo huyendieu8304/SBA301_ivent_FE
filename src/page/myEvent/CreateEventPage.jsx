@@ -68,12 +68,12 @@ function CreateEventPage(props) {
         startSellingTicketTime: {label: "", value: null, error: ""},
         endSellingTicketTime: {label: "", value: null, error: ""},
 
-        eventLogoUri: {label: "", value: "", error: ""},
-        bannerUri: {label: "", value: "", error: ""},
+        eventLogoUri: {label: "Logo sự kiện", value: null, error: ""},
+        bannerUri: {label: "Banner sự kiện", value: null, error: ""},
 
         organizerName: {label: "Tên ban tổ chức", value: "", error: ""},
         organizerInformation: {label: "Thông tin ban tổ chức", value: "", error: ""},
-        organizerLogoUri: {label: "", value: "", error: ""},
+        organizerLogoUri: {label: "Logo ban tổ chức", value: null, error: ""},
 
         bankName: {label: "Tên ngân hàng", value: "", error: ""},
         bankBranch: {label: "Chi nhánh", value: "", error: ""},
