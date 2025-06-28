@@ -1,11 +1,12 @@
 import Box from "@mui/material/Box";
 import ValidationTextField from "../validateInput/ValidationTextField.jsx";
 import { checkInputStringLength, checkRequiredInput} from "../../common/ValidateFunction.jsx";
-import {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import ValidateRadioGroup from "../validateInput/ValidateRadioGroup.jsx";
 import AddressData  from "../../AddressData.js";
 import ValidateSelect from "../validateInput/ValidateSelect.jsx";
-import {Stack} from "@mui/material";
+import { Stack} from "@mui/material";
+import ValidateRichTextEditor from "../validateInput/ValidateRichTextEditor.jsx";
 
 const PROVINCE_LIST = AddressData.map(
     (item, index) => ({
@@ -14,7 +15,24 @@ const PROVINCE_LIST = AddressData.map(
         label: item.province
     }));
 
-function EventInfo({ formFields, setFormFields, categories}) {
+const DEFAULT_DESCRIPTION = "<p><strong>Giới\n" +
+    "    thiệu sự kiện:</strong></p><p>[Tóm tắt ngắn gọn về sự kiện: Nội dung chính của sự kiện, điểm đặc sắc nhất và lý do\n" +
+    "    khiến người tham gia không nên bỏ lỡ]</p><p><strong>Chi tiết sự kiện:</strong></p>\n" +
+    "<ul>\n" +
+    "    <li><strong>Chương trình chính:</strong> [Liệt kê những hoạt động nổi bật trong sự kiện: các phần trình diễn, khách\n" +
+    "        mời đặc biệt, lịch trình các tiết mục cụ thể nếu có.]\n" +
+    "    </li>\n" +
+    "    <li><strong>Khách mời:</strong> [Thông tin về các khách mời đặc biệt, nghệ sĩ, diễn giả sẽ tham gia sự kiện. Có thể\n" +
+    "        bao gồm phần mô tả ngắn gọn về họ và những gì họ sẽ mang lại cho sự kiện.]\n" +
+    "    </li>\n" +
+    "    <li><strong>Trải nghiệm đặc biệt:</strong> [Nếu có các hoạt động đặc biệt khác như workshop, khu trải nghiệm, photo\n" +
+    "        booth, khu vực check-in hay các phần quà/ưu đãi dành riêng cho người tham dự.]\n" +
+    "    </li>\n" +
+    "</ul>\n" +
+    "<p><strong>Điều khoản và điều kiện:</strong></p><p>[TnC] sự kiện</p><p>Lưu ý về điều khoản trẻ em</p><p>Lưu ý về điều\n" +
+    "    khoản VAT</p>"
+
+function EventInfo({ formFields, setFormFields, categories, updateField, updateError}) {
 
     const [wardList, setWardList] = useState([]);
 
@@ -55,7 +73,8 @@ function EventInfo({ formFields, setFormFields, categories}) {
         }
     }, [formFields.province.value])
 
-    // validate field
+
+    // VALIDATE FIELD
     const validateEventName = (value) => {
         const fieldName = formFields.name.label;
         const error = checkRequiredInput(fieldName, value) || checkInputStringLength(value, fieldName, 200);
@@ -108,26 +127,16 @@ function EventInfo({ formFields, setFormFields, categories}) {
         return null;
     }
 
-    //common update field value and error
-    const updateField = (fieldName, newValue) => {
-        setFormFields((prev) => ({
-            ...prev,
-            [fieldName]: {
-                ...prev[fieldName],
-                value: newValue,
-            },
-        }));
-    };
+    const validateEventDescription = (value) => {
+        const fieldName = formFields.description.label;
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
 
-    const updateError = (fieldName, errorMsg) => {
-        setFormFields((prev) => ({
-            ...prev,
-            [fieldName]: {
-                ...prev[fieldName],
-                error: errorMsg,
-            },
-        }));
-    };
+
     return (
         <Box sx={{
             marginTop: '20px',
@@ -140,7 +149,7 @@ function EventInfo({ formFields, setFormFields, categories}) {
                     padding: '10px',
                 }}
             >
-                {/*todo; anh su kien chua co*/}
+                {/*todo anh su kien chua co*/}
                 <ValidationTextField
                     label={formFields.name.label}
                     fieldName="name"
@@ -152,6 +161,8 @@ function EventInfo({ formFields, setFormFields, categories}) {
                     isRequired={true}
                     type="text"
                 />
+
+            {/*    todo: start time, end time*/}
             </Box>
             <Box
                 sx={{
@@ -161,49 +172,50 @@ function EventInfo({ formFields, setFormFields, categories}) {
                     padding: '10px',
                 }}
             >
-                <ValidateRadioGroup
-                    label={formFields.isOnline.label}
-                    fieldName="isOnline"
-                    value={formFields.isOnline.value}
-                    error={formFields.isOnline.error}
-                    validatorFunction={validateEventType}
-                    setValue={updateField}
-                    setError={updateError}
-                    listOptions={[
-                        {value: false, label: "Sự kiện Offline"},
-                        {value: true, label: "Sự kiện Online"},
-                    ]}
-                    size="medium"
-                    isRequired={true}
-                />
-
-
-                {/*todo: Address*/}
-
-                <Stack direction={'row'} spacing={2} mb={1}>
-                    <ValidateSelect
-                        label={formFields.province.label}
-                        fieldName="province"
-                        value={formFields.province.value}
-                        error={formFields.province.error}
-                        validatorFunction={validateEventProvince}
+                <Box ml={2}>
+                    <ValidateRadioGroup
+                        label={formFields.isOnline.label}
+                        fieldName="isOnline"
+                        value={formFields.isOnline.value}
+                        error={formFields.isOnline.error}
+                        validatorFunction={validateEventType}
                         setValue={updateField}
                         setError={updateError}
-                        listOptions={PROVINCE_LIST}
+                        listOptions={[
+                            {value: false, label: "Sự kiện Offline"},
+                            {value: true, label: "Sự kiện Online"},
+                        ]}
+                        size="medium"
                         isRequired={true}
+                        defaultValue={false}
                     />
-                    <ValidateSelect
-                        label={formFields.ward.label}
-                        fieldName="ward"
-                        value={formFields.ward.value}
-                        error={formFields.ward.error}
-                        validatorFunction={validateEventWard}
-                        setValue={updateField}
-                        setError={updateError}
-                        listOptions={wardList}
-                        isRequired={true}
-                    />
-                </Stack>
+                </Box>
+                {!formFields.isOnline.value && (
+                    <Stack direction={'row'} spacing={2} mb={1}>
+                        <ValidateSelect
+                            label={formFields.province.label}
+                            fieldName="province"
+                            value={formFields.province.value}
+                            error={formFields.province.error}
+                            validatorFunction={validateEventProvince}
+                            setValue={updateField}
+                            setError={updateError}
+                            listOptions={PROVINCE_LIST}
+                            isRequired={true}
+                        />
+                        <ValidateSelect
+                            label={formFields.ward.label}
+                            fieldName="ward"
+                            value={formFields.ward.value}
+                            error={formFields.ward.error}
+                            validatorFunction={validateEventWard}
+                            setValue={updateField}
+                            setError={updateError}
+                            listOptions={wardList}
+                            isRequired={true}
+                        />
+                    </Stack>
+                )}
                 <ValidationTextField
                     label={formFields.location.label}
                     fieldName="location"
@@ -247,7 +259,16 @@ function EventInfo({ formFields, setFormFields, categories}) {
                     padding: '10px',
                 }}
             >
-
+                <ValidateRichTextEditor
+                    label={formFields.description.label}
+                    fieldName="description"
+                    value={DEFAULT_DESCRIPTION}
+                    error={formFields.description.error}
+                    validatorFunction={validateEventDescription}
+                    setValue={updateField}
+                    setError={updateError}
+                    isRequired={true}
+                />
             </Box>
             {/*organizer*/}
             <Box

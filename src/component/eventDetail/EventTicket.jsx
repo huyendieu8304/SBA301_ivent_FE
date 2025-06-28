@@ -17,6 +17,17 @@ function EventTicket({event}) {
                     color: 'white',
                 }}
             >
+                start seeling ticket, ending selling ticket
+            </Box>
+            <Box
+                sx={{
+                    margin: "10px 10px",
+                    backgroundColor: GRAY_COLOR,
+                    borderRadius: '4px',
+                    padding: '10px',
+                    color: 'white',
+                }}
+            >
                 ticket
             </Box>
         </Box>

@@ -56,10 +56,12 @@ function CreateEventPage(props) {
 
     const [formFields, setFormFields] = useState({
         name: {label: "Tên sự kiện", value: "", error: ""},
-        isOnline: {label: "Hình thức sự kiện", value: "", error: ""},
+        isOnline: {label: "Hình thức sự kiện", value: false, error: ""},
         province: {label: "Tỉnh", value: "", error: ""},
         ward: {label: "Quận/Huyện", value: "", error: ""},
         location: {label: "Địa chỉ ", value: "", error: ""},
+
+        description: {label: "Mô tả sự kiện ", value: "", error: ""},
 
         startTime: {label: "Thời gian bắt đầu", value: "", error: ""},
         endTime: {label: "Thời gian kết thúc", value: "", error: ""},
@@ -100,12 +102,16 @@ function CreateEventPage(props) {
     //     setIsLoading(false);
     // }
 
+
+
+
     //FUNCTION FOR NAVIGATION
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
 
     const handleNext = () => {
+        // todo: check xem có chỗ nào lỗi không trước khi chuyển qua bước tiếp theo
         let newSkipped = skipped;
         if (isStepSkipped(activeStepId)) {
             newSkipped = new Set(newSkipped.values());
@@ -123,6 +129,27 @@ function CreateEventPage(props) {
     const handleSubmit = () => {
         console.log("Submit form")
     }
+
+    //common update field value and error
+    const updateField = (fieldName, newValue) => {
+        setFormFields((prev) => ({
+            ...prev,
+            [fieldName]: {
+                ...prev[fieldName],
+                value: newValue,
+            },
+        }));
+    };
+
+    const updateError = (fieldName, errorMsg) => {
+        setFormFields((prev) => ({
+            ...prev,
+            [fieldName]: {
+                ...prev[fieldName],
+                error: errorMsg,
+            },
+        }));
+    };
 
     if (isLoading) return <LoadingComponent/>
 
@@ -213,6 +240,8 @@ function CreateEventPage(props) {
                     formFields={formFields}
                     setFormFields={setFormFields}
                     categories = {categories}
+                    updateField={updateField}
+                    updateError={updateError}
                 />
             }
 

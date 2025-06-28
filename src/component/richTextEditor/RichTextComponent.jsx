@@ -19,8 +19,15 @@ const toolbarOptions = [
 
 
 const RichTextComponent = forwardRef((props, ref) => {
+    const {
+        onChangeDebounced,
+        defaultValue = ""
+    } = props;
+
     const editorWrapperRef = useRef(null);
     const quillRef = useRef(null);
+    const debounceTimerRef = useRef(null);
+
 
     useEffect(() => {
         if (editorWrapperRef.current && !quillRef.current) {
@@ -36,8 +43,30 @@ const RichTextComponent = forwardRef((props, ref) => {
                     toolbar: toolbarOptions,
                 },
             });
+
+            // Set nội dung mặc định
+            if (defaultValue) {
+                quillRef.current.clipboard.dangerouslyPasteHTML(defaultValue);
+            }
+
+            // Lắng nghe thay đổi nội dung
+            quillRef.current.on("text-change", () => {
+                if (debounceTimerRef.current) {
+                    clearTimeout(debounceTimerRef.current);
+                }
+
+                debounceTimerRef.current = setTimeout(() => {
+                    if (onChangeDebounced) {
+                        onChangeDebounced({
+                            html: quillRef.current.root.innerHTML,
+                            text: quillRef.current.getText(),
+                            delta: quillRef.current.getContents(),
+                        });
+                    }
+                }, 500); // debounce 500ms
+            });
         }
-    }, []);
+    }, [onChangeDebounced, defaultValue]);
 
     useImperativeHandle(ref, () => ({
         getHTML: () => quillRef.current?.root.innerHTML,

@@ -1,7 +1,7 @@
 import {FormControl, FormControlLabel, FormHelperText, FormLabel} from "@mui/material";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import React from "react";
+import React, {useEffect} from "react";
 
 const ValidateRadioGroup = ({
                                 fieldName,
@@ -11,10 +11,27 @@ const ValidateRadioGroup = ({
                                 size = "medium",
                                 isRequired = false,
                                 validatorFunction,
+                                defaultValue = null
                             }) => {
 
+    useEffect(() => {
+        if ((value === undefined || value === "") && defaultValue !== undefined) {
+            setValue(fieldName, defaultValue);
+        }
+    }, [defaultValue]);
+
     const handleRadioChange = (e) => {
-        setValue(fieldName, e.target.value);
+        let rawValue = e.target.value;
+        let parsedValue;
+        if (rawValue === "true") {
+            parsedValue = true;
+        } else if (rawValue === "false") {
+            parsedValue = false;
+        } else {
+            parsedValue = rawValue;
+        }
+
+        setValue(fieldName, parsedValue);
     };
 
     const handleBlur = (e) => {
