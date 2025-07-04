@@ -1,13 +1,13 @@
 import {TextField} from "@mui/material";
 
-const ValidationTextField = ({
+const ValidateNumberField = ({
+                                 isRequired = false,
                                  label,
                                  fieldName,
                                  value,
                                  setValue,
                                  error,
                                  setError,
-                                 isRequired = false,
                                  isDisabled = false,
                                  size = "medium",
                                  type = "number",
@@ -20,6 +20,7 @@ const ValidationTextField = ({
     const handleChange = (e) => {
         const value = e.target.value;
         let newValue = Number(value);
+        //kiểm soát min max
         if (newValue < minValue) {
             newValue = minValue;
         }
@@ -27,10 +28,25 @@ const ValidationTextField = ({
             newValue = maxValue;
         }
 
+        //nếu có truyền vào onchange riêng
+        if(onChange) {
+            onChange(newValue);
+            return;
+        }
+
         setValue(fieldName, newValue);
     };
 
     const handleBlur = (e) => {
+        const value = e.target.value;
+        let newValue = Number(value);
+
+        //nếu có truyền vào onchange riêng
+        if(onChange) {
+            onChange(newValue);
+            return;
+        }
+
         let errorMsg;
         errorMsg = validatorFunction( e.target.value);
         setError(fieldName, errorMsg || "");
@@ -60,4 +76,4 @@ const ValidationTextField = ({
         />
     )
 }
-export default ValidationTextField;
+export default ValidateNumberField;

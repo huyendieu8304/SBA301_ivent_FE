@@ -82,7 +82,6 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
     };
 
     const handleSaveTicket = () => {
-        // setTickets([...tickets, newTicket]);
         updateField("ticketType", [... formFields.ticketType.value, newTicket]);
         setOpenDialog(false);
     };
@@ -112,88 +111,6 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
             },
         }));
     };
-
-    // VALIDATE TICKET INFORMATION
-    const validateTicketName = (value) => {
-        const fieldName = newTicket.name.label;
-        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 100);
-        return error || null;
-    }
-    const validateTicketDescription = (value) => {
-        const fieldName = newTicket.description.label;
-        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 250);
-        return error || null;
-    }
-
-    // todo validate laij price
-    const validateTicketPrice = (value) => {
-        const fieldName = newTicket.price.label;
-        const error = checkRequiredInput(fieldName, value);
-        return error || null;
-    }
-
-    // todo validate laij total
-    const validateTicketTotalQuantity = (value) => {
-        const fieldName = newTicket.totalQuantity.label;
-        const error = checkRequiredInput(fieldName, value);
-        return error || null;
-    }
-
-    const validateTicketMinimumOrderQuantity = (minVal, maxVal) => {
-        const fieldName = newTicket.minimumOrderQuantity.label;
-        const error = checkRequiredInput(fieldName, minVal)
-            || checkNumberSmallerThan(fieldName, Number(minVal), Number(maxVal), newTicket.maximumOrderQuantity.label)
-        ;
-        return error || null;
-    }
-
-    // const validateTicketMinimumOrderQuantity = (value) => {
-    //     const fieldName = newTicket.minimumOrderQuantity.label;
-    //     const min = Number(value);
-    //     const max = Number(newTicket.maximumOrderQuantity.value);
-    //
-    //     const error = checkRequiredInput(fieldName, value)
-    //         || checkNumberSmallerThan(fieldName, min, max, newTicket.maximumOrderQuantity.label);
-    //
-    //     return error || null;
-    // }
-
-    const validateTicketMaximumOrderQuantity = (minVal, maxVal) => {
-        const fieldName = newTicket.maximumOrderQuantity.label;
-        const error = checkRequiredInput(fieldName, maxVal)
-            || checkNumberGreaterThan(fieldName, Number(maxVal), Number(minVal), newTicket.minimumOrderQuantity.label)
-            || checkNumberSmallerThan(fieldName, Number(maxVal),  newTicket.totalQuantity.value, newTicket.totalQuantity.label)
-        ;
-        return error || null;
-    }
-
-    // const validateTicketMaximumOrderQuantity = (value) => {
-    //     const fieldName = newTicket.maximumOrderQuantity.label;
-    //     const max = Number(value);
-    //     const min = Number(newTicket.minimumOrderQuantity.value);
-    //     const total = Number(newTicket.totalQuantity.value);
-    //
-    //     const error = checkRequiredInput(fieldName, value)
-    //         || checkNumberGreaterThan(fieldName, max, min, newTicket.minimumOrderQuantity.label)
-    //         || checkNumberSmallerThan(fieldName, max, total, newTicket.totalQuantity.label);
-    //
-    //     return error || null;
-    // }
-
-    const validateTicketQuantityChange = (fieldName, newValue) => {
-        const minRaw = fieldName === "minimumOrderQuantity" ? newValue : newTicket.minimumOrderQuantity.value;
-        const maxRaw = fieldName === "maximumOrderQuantity" ? newValue : newTicket.maximumOrderQuantity.value;
-
-        const minVal = Number(minRaw);
-        const maxVal = Number(maxRaw);
-
-        const minError = validateTicketMinimumOrderQuantity(minRaw, maxVal);
-        const maxError = validateTicketMaximumOrderQuantity(minVal, maxRaw);
-
-
-        updateNewTicketError("minimumOrderQuantity", minError);
-        updateNewTicketError("maximumOrderQuantity", maxError);
-    }
 
     // VALIDATE SELLING TIME
     const validateEventStartTime = (startValue, endValue) => {
@@ -228,6 +145,76 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
         updateError("startSellingTicketTime", startError);
         updateError("endSellingTicketTime", endError);
     };
+
+    // VALIDATE TICKET INFORMATION
+    const validateTicketName = (value) => {
+        const fieldName = newTicket.name.label;
+        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 100);
+        return error || null;
+    }
+    const validateTicketDescription = (value) => {
+        const fieldName = newTicket.description.label;
+        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 250);
+        return error || null;
+    }
+
+    // todo validate laij price
+    const validateTicketPrice = (value) => {
+        const fieldName = newTicket.price.label;
+        const error = checkRequiredInput(fieldName, value);
+        return error || null;
+    }
+
+
+    //VALIDATE TICKET QUANTITY
+    const validateTicketTotalQuantity = (total, max) => {
+        const fieldName = newTicket.totalQuantity.label;
+        const error = checkRequiredInput(fieldName, total)
+            || checkNumberGreaterThan(fieldName, total, max, newTicket.maximumOrderQuantity.label)
+        ;
+        return error || null;
+    }
+
+    const validateTicketMinimumOrderQuantity = (min, max) => {
+        const fieldName = newTicket.minimumOrderQuantity.label;
+
+        const error = checkRequiredInput(fieldName, min)
+            || checkNumberSmallerThan(fieldName, min, max, newTicket.maximumOrderQuantity.label);
+
+        return error || null;
+    }
+
+    const validateTicketMaximumOrderQuantity = (max, min, total) => {
+        const fieldName = newTicket.maximumOrderQuantity.label;
+
+        const error = checkRequiredInput(fieldName, max)
+            || checkNumberGreaterThan(fieldName, max, min, newTicket.minimumOrderQuantity.label)
+            || checkNumberSmallerThan(fieldName, max, total, newTicket.totalQuantity.label);
+
+        return error || null;
+    }
+
+    const handleTicketQuantityChange = (fieldName, newValue) => {
+
+        const minRaw = fieldName === "minimumOrderQuantity" ? newValue : newTicket.minimumOrderQuantity.value;
+        const maxRaw = fieldName === "maximumOrderQuantity" ? newValue : newTicket.maximumOrderQuantity.value;
+        const totalRaw = fieldName === "totalQuantity" ? newValue : newTicket.totalQuantity.value;
+
+        const min = Number(minRaw);
+        const max = Number(maxRaw);
+        const total = Number(totalRaw);
+
+        updateNewTicketField(fieldName, newValue);
+
+        const minError = validateTicketMinimumOrderQuantity(min, max);
+        const maxError = validateTicketMaximumOrderQuantity(max, min, total);
+        const totalError = validateTicketTotalQuantity(total, max);
+
+        updateNewTicketError("minimumOrderQuantity", minError);
+        updateNewTicketError("maximumOrderQuantity", maxError);
+        updateNewTicketError("totalQuantity", totalError);
+
+    }
 
 
     return (
@@ -279,7 +266,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                         </span>
                 </InputLabel>
 
-                {formFields.ticketType.value.map((ticket, index) => (
+                {formFields.ticketType?.value.map((ticket, index) => (
                     <Paper
                         key={index}
                         sx={{
@@ -289,7 +276,6 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                             mb: 1,
                         }}
                     >
-
                         <Box display="flex" alignItems="center" justifyContent="space-between">
                             <ConfirmationNumber
                                 sx={{
@@ -326,10 +312,21 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                 </Box>
 
                 {/* Dialog thêm vé */}
-                <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <Dialog
+                    open={openDialog}
+                    onClose={handleCloseDialog}
+                    slotProps={{
+                        paper: {
+                            sx: {
+                                width: "90vw",          // gần full màn hình trên thiết bị nhỏ
+                                maxWidth: "800px",      // giới hạn ở màn to
+                            },
+                        },
+                    }}
+                >
                     <DialogTitle>Thêm loại vé mới</DialogTitle>
                     <DialogContent>
-                        <Stack direction={'row'} spacing={1} mt={1}>
+                        <Stack direction={'row'} spacing={1} mt={2}>
                             <ValidationTextField
                                 label={newTicket.name.label}
                                 fieldName="name"
@@ -355,8 +352,9 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                             />
                         </Stack>
 
-                        <Stack direction={'row'} spacing={1} mt={1}>
+                        <Stack direction={'row'} spacing={1} mt={2}>
                             <ValidateNumberField
+                                isRequired={true}
                                 label={newTicket.price.label}
                                 fieldName="price"
                                 value={newTicket.price.value}
@@ -364,54 +362,41 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                                 validatorFunction={validateTicketPrice}
                                 setValue={updateNewTicketField}
                                 setError={updateNewTicketError}
-                                isRequired={true}
                                 minValue={0}
                                 maxValue={100000000}
                             />
 
                             <ValidateNumberField
+                                isRequired={true}
                                 label={newTicket.totalQuantity.label}
                                 fieldName="totalQuantity"
                                 value={newTicket.totalQuantity.value}
                                 error={newTicket.totalQuantity.error}
-                                validatorFunction={validateTicketTotalQuantity}
-                                setValue={updateNewTicketField}
-                                setError={updateNewTicketError}
-                                isRequired={true}
                                 minValue={1}
                                 maxValue={100000}
+                                onChange={val => handleTicketQuantityChange("totalQuantity", val)}
                             />
                         </Stack>
-                        <Stack direction={'row'} spacing={1} mt={1}>
+                        <Stack direction={'row'} spacing={1} mt={2}>
                             <ValidateNumberField
+                                isRequired={true}
                                 label={newTicket.minimumOrderQuantity.label}
                                 fieldName="minimumOrderQuantity"
                                 value={newTicket.minimumOrderQuantity.value}
                                 error={newTicket.minimumOrderQuantity.error}
-                                validatorFunction={val => validateTicketQuantityChange("minimumOrderQuantity", val)}
-                                // validatorFunction={val => validateTicketQuantityChange("minimumOrderQuantity", val, newTicket.maximumOrderQuantity.value, newTicket.totalQuantity.value)}
-                                // validatorFunction={validateTicketMinimumOrderQuantity}
-                                setValue={updateNewTicketField}
-                                setError={updateNewTicketError}
-                                isRequired={true}
                                 minValue={1}
-                                // maxValue={newTicket.totalQuantity.value || 100000}
                                 maxValue={100000}
+                                onChange={val => handleTicketQuantityChange("minimumOrderQuantity", val)}
                             />
                             <ValidateNumberField
+                                isRequired={true}
                                 label={newTicket.maximumOrderQuantity.label}
                                 fieldName="maximumOrderQuantity"
                                 value={newTicket.maximumOrderQuantity.value}
                                 error={newTicket.maximumOrderQuantity.error}
-                                // validatorFunction={(val) => validateTicketQuantityChange("maximumOrderQuantity", val, newTicket.minimumOrderQuantity.value, newTicket.totalQuantity.value)}
-                                validatorFunction={(val) => validateTicketQuantityChange("maximumOrderQuantity", val)}
-                                // validatorFunction={validateTicketMaximumOrderQuantity}
-                                setValue={updateNewTicketField}
-                                setError={updateNewTicketError}
-                                isRequired={true}
                                 minValue={1}
                                 maxValue={100000}
-                                // maxValue={newTicket.totalQuantity.value || 100000}
+                                onChange={(val) => handleTicketQuantityChange("maximumOrderQuantity", val)}
                             />
 
                         </Stack>
