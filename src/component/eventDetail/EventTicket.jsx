@@ -25,6 +25,7 @@ import ConfirmationNumber from '@mui/icons-material/ConfirmationNumber';
 import TicketModal from "./TicketModal.jsx";
 import {messageService} from "../../service/MessageService.jsx";
 import ConfirmModal from "../ConfirmModal.jsx";
+import ValidateRadioGroup from "../validateInput/ValidateRadioGroup.jsx";
 
 const GRAY_COLOR = "#3b3b3d"
 
@@ -53,6 +54,13 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
         minimumOrderQuantity: {label: "Lượng vé tối thiểu trong 1 đơn hàng", value: "", error: ""},
         maximumOrderQuantity: {label: "Lượng vé tối đa trong 1 đơn hàng", value: "", error: ""},
     });
+
+    const validateIsFree = (value) => {
+        const fieldName = formFields.isFree.label;
+        const error = checkRequiredInput(fieldName, value);
+        return error || null;
+
+    }
 
     const handleOpenDialog = () => {
         setNewTicket({
@@ -164,103 +172,130 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                     padding: '10px',
                 }}
             >
-                <InputLabel sx={{marginLeft: "4px"}}>
+                <ValidateRadioGroup
+                    label={formFields.isFree.label}
+                    fieldName="isFree"
+                    value={formFields.isFree.value}
+                    error={formFields.isFree.error}
+                    validatorFunction={validateIsFree}
+                    setValue={updateField}
+                    setError={updateError}
+                    listOptions={[
+                        {value: false, label: "Sự kiện trả phí"},
+                        {value: true, label: "Sự kiện miễn phí"},
+                    ]}
+                    size="medium"
+                    isRequired={true}
+                    defaultValue={false}
+                />
+            </Box>
+
+            {!formFields.isFree.value && (
+                <Box
+                    sx={{
+                        margin: "10px 10px",
+                        backgroundColor: "white",
+                        borderRadius: '4px',
+                        padding: '10px',
+                    }}
+                >
+                    <InputLabel sx={{marginLeft: "4px"}}>
                         <span style={{color: "#027A48"}}>
                             Thời gian bán vé <span style={{color: "red"}}>*</span>
                         </span>
-                </InputLabel>
-                <Stack direction={'row'} spacing={1} mt={1}>
-                    <ValidateDateTimePicker
-                        isRequired={true}
-                        label={formFields.startSellingTicketTime.label}
-                        fieldName="startSellingTicketTime"
-                        value={formFields.startSellingTicketTime.value}
-                        error={formFields.startSellingTicketTime.error}
-                        // setValue={updateField}
-                        // setError={null}
-                        // validatorFunction={(val) => handleStartEndChange("startSellingTicketTime", val)}
-                        onChange={(val) => handleStartEndChange("startSellingTicketTime", val)}
-                    />
-                    <ValidateDateTimePicker
-                        isRequired={true}
-                        label={formFields.endSellingTicketTime.label}
-                        fieldName="endSellingTicketTime"
-                        value={formFields.endSellingTicketTime.value}
-                        error={formFields.endSellingTicketTime.error}
-                        // setValue={updateField}
-                        // setError={null}
-                        // validatorFunction={(val) => handleStartEndChange("endSellingTicketTime", val)}
-                        onChange={(val) => handleStartEndChange("endSellingTicketTime", val)}
-                    />
-                </Stack>
-                {/*TICKET*/}
-                <InputLabel sx={{marginLeft: "4px", marginTop: "8px"}} >
+                    </InputLabel>
+                    <Stack direction={'row'} spacing={1} mt={1}>
+                        <ValidateDateTimePicker
+                            isRequired={true}
+                            label={formFields.startSellingTicketTime.label}
+                            fieldName="startSellingTicketTime"
+                            value={formFields.startSellingTicketTime.value}
+                            error={formFields.startSellingTicketTime.error}
+                            // setValue={updateField}
+                            // setError={null}
+                            // validatorFunction={(val) => handleStartEndChange("startSellingTicketTime", val)}
+                            onChange={(val) => handleStartEndChange("startSellingTicketTime", val)}
+                        />
+                        <ValidateDateTimePicker
+                            isRequired={true}
+                            label={formFields.endSellingTicketTime.label}
+                            fieldName="endSellingTicketTime"
+                            value={formFields.endSellingTicketTime.value}
+                            error={formFields.endSellingTicketTime.error}
+                            // setValue={updateField}
+                            // setError={null}
+                            // validatorFunction={(val) => handleStartEndChange("endSellingTicketTime", val)}
+                            onChange={(val) => handleStartEndChange("endSellingTicketTime", val)}
+                        />
+                    </Stack>
+                    {/*TICKET*/}
+                    <InputLabel sx={{marginLeft: "4px", marginTop: "8px"}} >
                         <span style={{color: "#027A48"}}>
                             Loại vé <span style={{color: "red"}}>*</span>
                         </span>
-                </InputLabel>
+                    </InputLabel>
 
-                {formFields.ticketType?.value.map((ticket, index) => (
-                    <Paper
-                        key={index}
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            mb: 1,
-                        }}
-                    >
-                        <Box display="flex" alignItems="center" justifyContent="space-between">
-                            <ConfirmationNumber
-                                sx={{
-                                    fontSize: '32px',
-                                    color: "#757575",
-                                    paddingLeft: "8px",
-                                }}
-                            />
-                            <Typography sx={{paddingLeft: "8px"}} alignContent={"center"}>
-                                {ticket.name.value}
-                            </Typography>
-                        </Box>
-                        <Box>
-                                {/*todo edit ticket*/}
-                            <IconButton onClick={() => handleEditTicket(index)} >
-                                <Edit />
-                            </IconButton>
-                            <IconButton onClick={() => handleDeleteTicket(index)}>
-                                <Delete />
-                            </IconButton>
-                        </Box>
-                    </Paper>
-                ))}
+                    {formFields.ticketType?.value.map((ticket, index) => (
+                        <Paper
+                            key={index}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                mb: 1,
+                            }}
+                        >
+                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                                <ConfirmationNumber
+                                    sx={{
+                                        fontSize: '32px',
+                                        color: "#757575",
+                                        paddingLeft: "8px",
+                                    }}
+                                />
+                                <Typography sx={{paddingLeft: "8px"}} alignContent={"center"}>
+                                    {ticket.name.value}
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <IconButton onClick={() => handleEditTicket(index)} >
+                                    <Edit />
+                                </IconButton>
+                                <IconButton onClick={() => handleDeleteTicket(index)}>
+                                    <Delete />
+                                </IconButton>
+                            </Box>
+                        </Paper>
+                    ))}
 
-                <Box display="flex" justifyContent="center">
-                <Button
-                    variant="outlined"
-                    startIcon={<Add />}
-                    onClick={handleOpenDialog}
-                >
-                    Tạo loại vé mới
-                </Button>
+                    <Box display="flex" justifyContent="center">
+                        <Button
+                            variant="outlined"
+                            startIcon={<Add />}
+                            onClick={handleOpenDialog}
+                        >
+                            Tạo loại vé mới
+                        </Button>
 
+                    </Box>
+
+                    {/* Dialog thêm vé */}
+                    <TicketModal
+                        openState={openDialog}
+                        handleCloseDialog={handleCloseDialog}
+                        handleSaveTicket={handleSaveTicket}
+                        ticket={newTicket}
+                        setTicket={setNewTicket}
+                    />
+                    <ConfirmModal
+                        open={openConfirmModal}
+                        setOpen={setOpenConfirmModal}
+                        title={"Xác nhận xóa"}
+                        handleConfirmSubmit={handleConfirmDeleteTicket}
+                        content={"Bạn xác nhận muốn xóa loại vé này khỏi sự kiện?"}
+                    />
                 </Box>
-
-                {/* Dialog thêm vé */}
-                <TicketModal
-                    openState={openDialog}
-                    handleCloseDialog={handleCloseDialog}
-                    handleSaveTicket={handleSaveTicket}
-                    ticket={newTicket}
-                    setTicket={setNewTicket}
-                />
-            </Box>
-            <ConfirmModal
-                open={openConfirmModal}
-                setOpen={setOpenConfirmModal}
-                title={"Xác nhận xóa"}
-                handleConfirmSubmit={handleConfirmDeleteTicket}
-                content={"Bạn xác nhận muốn xóa loại vé này khỏi sự kiện?"}
-            />
+            )}
         </Box>
     );
 }

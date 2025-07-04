@@ -84,7 +84,7 @@ function CreateEventPage(props) {
         ticketType: {label: "Loại vé", value: [], error: ""},
 
     //     just for frontend
-        isFree: {label: "Sự kiện miễn phí", value: true, error: ""},
+        isFree: {label: "Sự kiện miễn phí", value: false, error: ""},
     });
 
     const [categories, setCategories] = useState(CATEGORY_TEMP);
@@ -115,6 +115,7 @@ function CreateEventPage(props) {
 
     const handleNext = () => {
         // todo: check xem có chỗ nào lỗi không trước khi chuyển qua bước tiếp theo
+        //todo: cần xem mâu thuẫn giuwx mấy cái mà online thì ko cần wward, isFree thì ko cần ticket
         let newSkipped = skipped;
         if (isStepSkipped(activeStepId)) {
             newSkipped = new Set(newSkipped.values());
