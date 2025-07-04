@@ -196,3 +196,28 @@ export const checkNumberSmallerThan = (fieldName, fieldValue, maxValue, maxValue
     return null;
 }
 
+//for checking ticket and event
+export const checkAllFieldsValid = (anObject) => {
+    for (const [key, field] of Object.entries(anObject)) {
+        // Bỏ qua các field không phải object (như id)
+        if (typeof field !== 'object' || field === null) continue;
+
+        // Nếu có error thì trả về error luôn
+        if (field.error) {
+            return field.error;
+        }
+
+        // Nếu value không hợp lệ (trừ boolean false)
+        const isValueValid = (
+            typeof field.value === "boolean" ||
+            (field.value !== undefined && field.value !== null && field.value !== "")
+        );
+
+        if (!isValueValid) {
+            return formatString(Messages.MSG_E_00002, field.label || key);
+        }
+    }
+
+    // Nếu mọi thứ đều ổn
+    return null;
+};

@@ -89,7 +89,7 @@ function CreateEventPage(props) {
 
     const [categories, setCategories] = useState(CATEGORY_TEMP);
     //GET CATEGORY FROM BACKEND
-    // useEffect(() => {
+    // todo useEffect(() => {
     //     setIsLoading(true);
     //     categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
     // },[])

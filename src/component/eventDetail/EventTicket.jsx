@@ -1,38 +1,30 @@
 import React, {useState} from 'react';
 import Box from "@mui/material/Box";
 import {
+    checkAllFieldsValid,
     checkDateAfter,
-    checkDateBefore, checkNumberGreaterThan, checkNumberSmallerThan,
-    checkRequiredInput, checkStringMaxLength,
+    checkDateBefore,
+    checkRequiredInput,
     checkValidDate
 } from "../../common/ValidateFunction.jsx";
-import {DATETIME_FORMAT} from "../../common/Constant.jsx";
+import {DATETIME_FORMAT, MESSAGE_TYPES} from "../../common/Constant.jsx";
 import {ValidateDateTimePicker} from "../validateInput/ValidateDateTimePicker.jsx";
 import {
-    Accordion,
-    AccordionActions,
-    AccordionDetails,
-    AccordionSummary,
     Button,
-    DialogActions,
-    DialogContent,
     InputLabel,
     Stack,
     Paper,
     IconButton,
-    TextField,
     Typography,
-    useTheme
 } from "@mui/material";
-
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
 import Add from '@mui/icons-material/Add';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import ConfirmationNumber from '@mui/icons-material/ConfirmationNumber';
-import ValidationTextField from "../validateInput/ValidationTextField.jsx";
-import ValidateNumberField from "../validateInput/ValidateNumberField.jsx";
+
+import TicketModal from "./TicketModal.jsx";
+import {messageService} from "../../service/MessageService.jsx";
+import ConfirmModal from "../ConfirmModal.jsx";
 
 const GRAY_COLOR = "#3b3b3d"
 
@@ -48,14 +40,12 @@ const TICKET_TYPE= {
 }
 
 function EventTicket({ formFields, setFormFields, updateField, updateError}) {
-    // console.log("ticket ne")
-    // console.log(formFields.ticketType.value)
 
-
-    // const [tickets, setTickets] = useState(formFields.ticketType.value);
+    const [openConfirmModal, setOpenConfirmModal] = useState(false);
+    const [deletingIndex, setDeletingIndex] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [newTicket, setNewTicket] = useState({
-        id: "",
+        id: formFields.ticketType.value.length,
         name: {label: "Tên loại vé", value: "", error: ""},
         description: {label: "Mô tả loại vé", value: "", error: ""},
         price: {label: "Giá vé", value: "", error: ""},
@@ -66,7 +56,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
 
     const handleOpenDialog = () => {
         setNewTicket({
-            id: "",
+            id: formFields.ticketType.value.length,
             name: {label: "Tên loại vé", value: "", error: ""},
             description: {label: "Mô tả loại vé", value: "", error: ""},
             price: {label: "Giá vé", value: "", error: ""},
@@ -82,35 +72,48 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
     };
 
     const handleSaveTicket = () => {
-        updateField("ticketType", [... formFields.ticketType.value, newTicket]);
+        const errorMessage = checkAllFieldsValid(newTicket);
+        //còn lỗi thì không cho lưu đâu hẹ hẹ :>
+        if (errorMessage) {
+            messageService.showMessage(errorMessage, MESSAGE_TYPES.ERROR);
+            return;
+        }
+
+        const updatedTickets = [...formFields.ticketType.value];
+        const existingIndex = updatedTickets.findIndex(t => t.id === newTicket.id);
+
+        if (existingIndex !== -1) {
+            // Nếu đã tồn tại => cập nhật
+            updatedTickets[existingIndex] = newTicket;
+        } else {
+            // Nếu chưa có => thêm mới
+            updatedTickets.push(newTicket);
+        }
+
+        updateField("ticketType", updatedTickets);
         setOpenDialog(false);
     };
 
     const handleDeleteTicket = (index) => {
-        //cần confirm
-        const updated = formFields.ticketType.value.filter((_, i) => i !== index);
-        updateField("ticketType", updated);
+        setDeletingIndex(index);
+        setOpenConfirmModal(true);
     };
 
-    const updateNewTicketField = (fieldName, newValue) => {
-        setNewTicket((prev) => ({
-            ...prev,
-            [fieldName]: {
-                ...prev[fieldName],
-                value: newValue,
-            },
-        }));
-    };
+    const handleConfirmDeleteTicket = () => {
+        if (deletingIndex !== null) {
+            const updated = formFields.ticketType.value.filter((_, i) => i !== deletingIndex);
+            updateField("ticketType", updated);
+            setDeletingIndex(null);          // Reset lại index
+            setOpenConfirmModal(false);      // Đóng modal
+        }
+    }
 
-    const updateNewTicketError = (fieldName, errorMsg) => {
-        setNewTicket((prev) => ({
-            ...prev,
-            [fieldName]: {
-                ...prev[fieldName],
-                error: errorMsg,
-            },
-        }));
-    };
+    const handleEditTicket = (index) => {
+        const ticket = formFields.ticketType.value[index];
+        console.log("hé hé ticket" , ticket);
+        setNewTicket(ticket);
+        setOpenDialog(true);
+    }
 
     // VALIDATE SELLING TIME
     const validateEventStartTime = (startValue, endValue) => {
@@ -146,75 +149,6 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
         updateError("endSellingTicketTime", endError);
     };
 
-    // VALIDATE TICKET INFORMATION
-    const validateTicketName = (value) => {
-        const fieldName = newTicket.name.label;
-        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 100);
-        return error || null;
-    }
-    const validateTicketDescription = (value) => {
-        const fieldName = newTicket.description.label;
-        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 250);
-        return error || null;
-    }
-
-    // todo validate laij price
-    const validateTicketPrice = (value) => {
-        const fieldName = newTicket.price.label;
-        const error = checkRequiredInput(fieldName, value);
-        return error || null;
-    }
-
-
-    //VALIDATE TICKET QUANTITY
-    const validateTicketTotalQuantity = (total, max) => {
-        const fieldName = newTicket.totalQuantity.label;
-        const error = checkRequiredInput(fieldName, total)
-            || checkNumberGreaterThan(fieldName, total, max, newTicket.maximumOrderQuantity.label)
-        ;
-        return error || null;
-    }
-
-    const validateTicketMinimumOrderQuantity = (min, max) => {
-        const fieldName = newTicket.minimumOrderQuantity.label;
-
-        const error = checkRequiredInput(fieldName, min)
-            || checkNumberSmallerThan(fieldName, min, max, newTicket.maximumOrderQuantity.label);
-
-        return error || null;
-    }
-
-    const validateTicketMaximumOrderQuantity = (max, min, total) => {
-        const fieldName = newTicket.maximumOrderQuantity.label;
-
-        const error = checkRequiredInput(fieldName, max)
-            || checkNumberGreaterThan(fieldName, max, min, newTicket.minimumOrderQuantity.label)
-            || checkNumberSmallerThan(fieldName, max, total, newTicket.totalQuantity.label);
-
-        return error || null;
-    }
-
-    const handleTicketQuantityChange = (fieldName, newValue) => {
-
-        const minRaw = fieldName === "minimumOrderQuantity" ? newValue : newTicket.minimumOrderQuantity.value;
-        const maxRaw = fieldName === "maximumOrderQuantity" ? newValue : newTicket.maximumOrderQuantity.value;
-        const totalRaw = fieldName === "totalQuantity" ? newValue : newTicket.totalQuantity.value;
-
-        const min = Number(minRaw);
-        const max = Number(maxRaw);
-        const total = Number(totalRaw);
-
-        updateNewTicketField(fieldName, newValue);
-
-        const minError = validateTicketMinimumOrderQuantity(min, max);
-        const maxError = validateTicketMaximumOrderQuantity(max, min, total);
-        const totalError = validateTicketTotalQuantity(total, max);
-
-        updateNewTicketError("minimumOrderQuantity", minError);
-        updateNewTicketError("maximumOrderQuantity", maxError);
-        updateNewTicketError("totalQuantity", totalError);
-
-    }
 
 
     return (
@@ -290,7 +224,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                         </Box>
                         <Box>
                                 {/*todo edit ticket*/}
-                            <IconButton >
+                            <IconButton onClick={() => handleEditTicket(index)} >
                                 <Edit />
                             </IconButton>
                             <IconButton onClick={() => handleDeleteTicket(index)}>
@@ -312,102 +246,21 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                 </Box>
 
                 {/* Dialog thêm vé */}
-                <Dialog
-                    open={openDialog}
-                    onClose={handleCloseDialog}
-                    slotProps={{
-                        paper: {
-                            sx: {
-                                width: "90vw",          // gần full màn hình trên thiết bị nhỏ
-                                maxWidth: "800px",      // giới hạn ở màn to
-                            },
-                        },
-                    }}
-                >
-                    <DialogTitle>Thêm loại vé mới</DialogTitle>
-                    <DialogContent>
-                        <Stack direction={'row'} spacing={1} mt={2}>
-                            <ValidationTextField
-                                label={newTicket.name.label}
-                                fieldName="name"
-                                value={newTicket.name.value}
-                                error={newTicket.name.error}
-                                validatorFunction={validateTicketName}
-                                setValue={updateNewTicketField}
-                                setError={updateNewTicketError}
-                                isRequired={true}
-                                type="text"
-                            />
-
-                            <ValidationTextField
-                                label={newTicket.description.label}
-                                fieldName="description"
-                                value={newTicket.description.value}
-                                error={newTicket.description.error}
-                                validatorFunction={validateTicketDescription}
-                                setValue={updateNewTicketField}
-                                setError={updateNewTicketError}
-                                isRequired={true}
-                                type="text"
-                            />
-                        </Stack>
-
-                        <Stack direction={'row'} spacing={1} mt={2}>
-                            <ValidateNumberField
-                                isRequired={true}
-                                label={newTicket.price.label}
-                                fieldName="price"
-                                value={newTicket.price.value}
-                                error={newTicket.price.error}
-                                validatorFunction={validateTicketPrice}
-                                setValue={updateNewTicketField}
-                                setError={updateNewTicketError}
-                                minValue={0}
-                                maxValue={100000000}
-                            />
-
-                            <ValidateNumberField
-                                isRequired={true}
-                                label={newTicket.totalQuantity.label}
-                                fieldName="totalQuantity"
-                                value={newTicket.totalQuantity.value}
-                                error={newTicket.totalQuantity.error}
-                                minValue={1}
-                                maxValue={100000}
-                                onChange={val => handleTicketQuantityChange("totalQuantity", val)}
-                            />
-                        </Stack>
-                        <Stack direction={'row'} spacing={1} mt={2}>
-                            <ValidateNumberField
-                                isRequired={true}
-                                label={newTicket.minimumOrderQuantity.label}
-                                fieldName="minimumOrderQuantity"
-                                value={newTicket.minimumOrderQuantity.value}
-                                error={newTicket.minimumOrderQuantity.error}
-                                minValue={1}
-                                maxValue={100000}
-                                onChange={val => handleTicketQuantityChange("minimumOrderQuantity", val)}
-                            />
-                            <ValidateNumberField
-                                isRequired={true}
-                                label={newTicket.maximumOrderQuantity.label}
-                                fieldName="maximumOrderQuantity"
-                                value={newTicket.maximumOrderQuantity.value}
-                                error={newTicket.maximumOrderQuantity.error}
-                                minValue={1}
-                                maxValue={100000}
-                                onChange={(val) => handleTicketQuantityChange("maximumOrderQuantity", val)}
-                            />
-
-                        </Stack>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDialog}>Hủy</Button>
-                        {/*todo phải không lỗi mơới cho tạo vé*/}
-                        <Button onClick={handleSaveTicket} variant="contained" sx={{color: "white"}}>Lưu</Button>
-                    </DialogActions>
-                </Dialog>
+                <TicketModal
+                    openState={openDialog}
+                    handleCloseDialog={handleCloseDialog}
+                    handleSaveTicket={handleSaveTicket}
+                    ticket={newTicket}
+                    setTicket={setNewTicket}
+                />
             </Box>
+            <ConfirmModal
+                open={openConfirmModal}
+                setOpen={setOpenConfirmModal}
+                title={"Xác nhận xóa"}
+                handleConfirmSubmit={handleConfirmDeleteTicket}
+                content={"Bạn xác nhận muốn xóa loại vé này khỏi sự kiện?"}
+            />
         </Box>
     );
 }
