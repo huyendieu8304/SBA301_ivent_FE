@@ -3,7 +3,7 @@ import ValidationTextField from "../validateInput/ValidationTextField.jsx";
 import {
     checkDateAfter,
     checkDateBefore,
-    checkInputStringLength,
+    checkStringMaxLength,
     checkRequiredInput,
     checkUploadImage,
     checkValidDate
@@ -44,7 +44,6 @@ const DEFAULT_DESCRIPTION = "<p><strong>Giới\n" +
 
 function EventInfo({ formFields, setFormFields, categories, updateField, updateError}) {
 
-    console.log("eventInfo", formFields);
     const [wardList, setWardList] = useState([]);
 
     const categoryList = categories.map(category => ({
@@ -93,63 +92,48 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
     // VALIDATE FIELD
     const validateEventName = (value) => {
         const fieldName = formFields.name.label;
-        const error = checkRequiredInput(fieldName, value) || checkInputStringLength(value, fieldName, 200);
-        if (error) {
-            return error;
-        }
-        return null;
+        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 200);
+        return error || null;
+
     }
 
     const validateEventType = (value) => {
         const fieldName = formFields.isOnline.label;
         const error = checkRequiredInput(fieldName, value);
-        if (error) {
-            return error;
-        }
-        return null;
+        return error || null;
+
     }
 
     const validateEventProvince = (value) => {
         const fieldName = formFields.province.label;
         const error = checkRequiredInput(fieldName, value);
-        if (error) {
-            return error;
-        }
-        return null;
+        return error || null;
+
     }
     const validateEventWard = (value) => {
         const fieldName = formFields.ward.label;
         const error = checkRequiredInput(fieldName, value);
-        if (error) {
-            return error;
-        }
-        return null;
+        return error || null;
+
     }
 
     const validateEventLocation= (value) => {
         const fieldName = formFields.location.label;
         const error = checkRequiredInput(fieldName, value);
-        if (error) {
-            return error;
-        }
-        return null;
+        return error || null;
+
     }
     const validateEventCategory= (value) => {
         const fieldName = formFields.category.label;
         const error = checkRequiredInput(fieldName, value);
-        if (error) {
-            return error;
-        }
-        return null;
+        return error || null;
     }
 
     const validateEventDescription = (value) => {
         const fieldName = formFields.description.label;
         const error = checkRequiredInput(fieldName, value);
-        if (error) {
-            return error;
-        }
-        return null;
+        return error || null;
+
     }
 
     const validateEventStartTime = (startValue, endValue) => {
@@ -204,7 +188,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
 
     const validateOrganizerName = (value) => {
         const fieldName = formFields.organizerName.label;
-        const error = checkRequiredInput(fieldName, value) || checkInputStringLength(value, fieldName, 200);
+        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 200);
         if (error) {
             return error;
         }
@@ -213,7 +197,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
 
     const validateOrganizerInformation = (value) => {
         const fieldName = formFields.organizerInformation.label;
-        const error = checkRequiredInput(fieldName, value) || checkInputStringLength(value, fieldName, 250);
+        const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 250);
         if (error) {
             return error;
         }
@@ -319,20 +303,22 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                         fieldName="startTime"
                         value={formFields.startTime.value}
                         error={formFields.startTime.error}
-                        setValue={updateField}
-                        setError={updateError}
                         isRequired={true}
-                        validatorFunction={(val) => handleStartEndChange("startTime", val)}
+                        onChange={(val) => handleStartEndChange("startTime", val)}
+                        // setValue={updateField}
+                        // setError={updateError}
+                        // validatorFunction={(val) => handleStartEndChange("startTime", val)}
                     />
                     <ValidateDateTimePicker
                         label={formFields.endTime.label}
                         fieldName="endTime"
                         value={formFields.endTime.value}
                         error={formFields.endTime.error}
-                        setValue={updateField}
-                        setError={updateError}
                         isRequired={true}
-                        validatorFunction={(val) => handleStartEndChange("endTime", val)}
+                        onChange={(val) => handleStartEndChange("endTime", val)}
+                        // setValue={updateField}
+                        // setError={updateError}
+                        // validatorFunction={(val) => handleStartEndChange("endTime", val)}
                     />
 
                 </Stack>

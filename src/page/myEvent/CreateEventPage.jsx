@@ -81,7 +81,10 @@ function CreateEventPage(props) {
         bankAccountOwner: {label: "Chủ tài khoản", value: "", error: ""},
 
         category: {label: "Thể loại sự kiện", value: "", error: ""},
-        ticketType: {label: "Loại vé", value: "", error: ""},
+        ticketType: {label: "Loại vé", value: [], error: ""},
+
+    //     just for frontend
+        isFree: {label: "Sự kiện miễn phí", value: true, error: ""},
     });
 
     const [categories, setCategories] = useState(CATEGORY_TEMP);

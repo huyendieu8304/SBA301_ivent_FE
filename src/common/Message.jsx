@@ -12,6 +12,8 @@ export default class Messages {
     static MSG_E_00011 = "{0} phải được tải lên";
     static MSG_E_00012 = "{0} chỉ chấp nhận định dạng ảnh";
     static MSG_E_00013 = "{0} phải có dung lượng nhỏ hơn {1}Mb";
+    static MSG_E_00014 = "{0} phải lớn hơn {1}";
+    static MSG_E_00015 = "{0} phải nhỏ hơn {1}";
 
     static MSG_I_00001 = "Đăng nhập thành công";
     static MSG_I_00002 = "Đăng ký người dùng thành công";

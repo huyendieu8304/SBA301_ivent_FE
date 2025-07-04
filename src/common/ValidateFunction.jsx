@@ -65,6 +65,7 @@ export const checkStrLengthInRange = (
     maxLen,
 ) => {
     if (fieldValue.length > maxLen || fieldValue.length < minLen) {
+        //đang trả về sai message, ai dùng thì viết lại nhé
         return formatString(Messages.MSG_E_00004, fieldName, minLen, maxLen);
     }
     return null;
@@ -109,7 +110,7 @@ export const checkFullSizeKanaInput = (fieldName, fieldValue) => {
     return null;
 };
 
-//thực ra cái hàm này có thể check cả date time luôn, chỉ cần truyền dateFormats vào laf được
+//thực ra cái hàm này có thể check cả date time luôn, chỉ cần truyền dateFormats có định dạng time vào laf được
 export const checkValidDate = (fieldName, dateStr, dateFormats) => {
     const parsedDate = dayjs(dateStr, dateFormats, true);
     if (!parsedDate.isValid()) {
@@ -131,6 +132,8 @@ export const checkDateBefore = (fieldName, valueDate, maxDate, maxDateFieldName,
 };
 
 export const checkDateAfter = (fieldName, valueDate, minDate, minDateFieldName, dateFormats) => {
+    console.log("check date after " + minDateFieldName + "  " + minDate)
+
     const parsedValue = dayjs(valueDate, dateFormats, true);
     const parsedMin = dayjs(minDate, dateFormats, true);
 
@@ -156,9 +159,9 @@ export const isInSellingTicketPeriod = (startSellingTicketTime, endSellingTicket
     return now >= start && now <= end;
 };
 
-export const checkInputStringLength = (fieldValue, fieldName, limitedLength) => {
-    if (fieldValue.length > limitedLength) {
-        return formatString(Messages.MSG_E_00006, fieldName, limitedLength);
+export const checkStringMaxLength = (fieldValue, fieldName, maxLength) => {
+    if (fieldValue.length > maxLength) {
+        return formatString(Messages.MSG_E_00006, fieldName, maxLength);
     }
     return null;
 }
@@ -178,3 +181,18 @@ export const checkUploadImage = (fieldName, file, maxSizeMb) => {
     }
     return null;
 }
+
+export const checkNumberGreaterThan = (fieldName, fieldValue, minValue, minValueFieldName) => {
+    if (fieldValue < minValue) {
+        return formatString(Messages.MSG_E_00014, fieldName, minValueFieldName);
+    }
+    return null;
+}
+
+export const checkNumberSmallerThan = (fieldName, fieldValue, maxValue, maxValueFieldName) => {
+    if (fieldValue > maxValue) {
+        return formatString(Messages.MSG_E_00015, fieldName, maxValueFieldName);
+    }
+    return null;
+}
+

@@ -31,7 +31,7 @@ export const ValidateDateTimePicker = ({
             setValue(fieldName, null);
             return;
         }
-        const formattedValue = dayjs(newValue).format(DATETIME_FORMAT);
+        const formattedValue = dayjs(newValue);
         const errorMessage = validatorFunction(formattedValue);
         setValue(fieldName, newValue);
         setError(fieldName, errorMessage);
