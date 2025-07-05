@@ -26,6 +26,17 @@ const eventApi = {
             successHandler,
             errorHandler,
         ),
+    createEvent: (formData, successHandler, errorHandler) =>
+        callApi(
+            url.createEvent,
+            HTTP_METHOD.POST,
+            {},
+            formData,
+            true,
+            successHandler,
+            errorHandler,
+            true,
+        )
 };
 
 export default eventApi;

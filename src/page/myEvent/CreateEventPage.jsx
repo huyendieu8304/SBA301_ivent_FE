@@ -9,8 +9,12 @@ import EventInfo from "../../component/eventDetail/EventInfo.jsx";
 import EventPayment from "../../component/eventDetail/EventPayment.jsx";
 import LoadingComponent from "../../component/LoadingComponent.jsx";
 import categoryApi from "../../api/service/categoryApi.jsx";
+import dayjs from "dayjs";
+import {DATETIME_FORMAT, MESSAGE_TYPES} from "../../common/Constant.jsx";
+import {messageService} from "../../service/MessageService.jsx";
+import Messages from "../../common/Message.jsx";
+import eventApi from "../../api/service/eventApi.jsx";
 
-const GRAY_COLOR = "#3b3b3d"
 const steps = [
     {
         id: 0,
@@ -47,6 +51,7 @@ const CATEGORY_TEMP= [
 ];
 
 // todo tách ra cho từng page, sau mỗi page lại validate lại, tới tận cuối mới tạo form data
+//todo not free => musst have ticket
 //todo: sửa lại formfield
 function CreateEventPage(props) {
     const [activeStepId, setActiveStepId] = useState(0);
@@ -56,13 +61,13 @@ function CreateEventPage(props) {
     const theme = useTheme();
 
     const [formFields, setFormFields] = useState({
-        name: {fieldName: "name", label: "Tên sự kiện", value: "", error: ""},
-        isOnline: {fieldName: "isOnline",label: "Hình thức sự kiện", value: false, error: ""},
-        province: {fieldName: "province",label: "Tỉnh", value: "", error: ""},
+        name: {label: "Tên sự kiện", value: "", error: ""},
+        isOnline: {label: "Hình thức sự kiện", value: false, error: ""},
+        province: {label: "Tỉnh", value: "", error: ""},
         ward: {label: "Quận/Huyện", value: "", error: ""},
         location: {label: "Địa chỉ ", value: "", error: ""},
 
-        description: {fieldName: "description",label: "Mô tả sự kiện ", value: "", error: ""},
+        description: {label: "Mô tả sự kiện ", value: "", error: ""},
 
         startTime: {label: "Thời gian bắt đầu sự kiện", value: null, error: ""},
         endTime: {label: "Thời gian kết thúc sự kiện", value: null, error: ""},
@@ -89,8 +94,8 @@ function CreateEventPage(props) {
     });
 
     const [categories, setCategories] = useState(CATEGORY_TEMP);
-    //GET CATEGORY FROM BACKEND
-    // todo useEffect(() => {
+    //todo GET CATEGORY FROM BACKEND, put in event info
+    //  useEffect(() => {
     //     setIsLoading(true);
     //     categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
     // },[])
@@ -133,9 +138,60 @@ function CreateEventPage(props) {
     //SUBMIT FORM
     const handleSubmit = () => {
         const formData = new FormData();
-        formData.append("")
+        formData.append("name", formFields.name.value);
+        formData.append("description", formFields.description.value);
 
-        console.log("Submit form")
+        formData.append("isOnline", formFields.isOnline.value);
+        if (!formFields.isOnline.value) {
+            formData.append("province", formFields.province.value);
+            formData.append("ward", formFields.ward.value);
+        }
+        formData.append("location", formFields.location.value);
+
+        formData.append("startTime", dayjs(formFields.startTime.value).format(DATETIME_FORMAT));
+        formData.append("endTime", dayjs(formFields.endTime.value).format(DATETIME_FORMAT));
+
+        formData.append("eventLogoFile", formFields.eventLogoUri.value);
+        formData.append("bannerFile", formFields.bannerUri.value);
+
+        formData.append("organizerName", formFields.organizerName.value);
+        formData.append("organizerInformation", formFields.organizerInformation.value);
+        formData.append("organizerLogoFile", formFields.organizerLogoUri.value);
+
+        formData.append("bankName", formFields.bankName.value);
+        formData.append("bankBranch", formFields.bankBranch.value);
+        formData.append("bankAccountOwner", formFields.bankAccountOwner.value);
+        formData.append("bankNumber", formFields.bankNumber.value);
+
+        formData.append("categoryId", formFields.category.value);
+
+        if (!formFields.isFree.value) {
+            formData.append("startSellingTicketTime", dayjs(formFields.startSellingTicketTime.value).format(DATETIME_FORMAT));
+            formData.append("endSellingTicketTime", dayjs(formFields.endSellingTicketTime.value).format(DATETIME_FORMAT));
+            formFields.ticketType.value.forEach((ticket, index) => {
+                formData.append(`ticketTypes[${index}].name`, ticket.name.value);
+                formData.append(`ticketTypes[${index}].description`, ticket.description.value);
+                formData.append(`ticketTypes[${index}].price`, ticket.price.value);
+                formData.append(`ticketTypes[${index}].totalQuantity`, ticket.totalQuantity.value);
+                formData.append(`ticketTypes[${index}].minimumOrderQuantity`, ticket.minimumOrderQuantity.value);
+                formData.append(`ticketTypes[${index}].maximumOrderQuantity`, ticket.maximumOrderQuantity.value);
+            })
+        }
+        setIsLoading(true)
+        eventApi.createEvent(formData, createSuccessfully, createFail)
+    }
+
+    const createSuccessfully = (data) => {
+        messageService.showMessage(Messages.MSG_I_00008, MESSAGE_TYPES.INFO);
+        setIsLoading(false);
+        // todo navigate toi my events list
+    }
+
+    const createFail = (error) => {
+        if (error.response.data.httpStatusCode !== "OK") {
+            messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
+            setIsLoading(false);
+        }
     }
 
     //common update field value and error
