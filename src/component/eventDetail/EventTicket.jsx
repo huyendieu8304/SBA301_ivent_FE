@@ -118,7 +118,6 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
 
     const handleEditTicket = (index) => {
         const ticket = formFields.ticketType.value[index];
-        console.log("hé hé ticket" , ticket);
         setNewTicket(ticket);
         setOpenDialog(true);
     }
@@ -160,7 +159,6 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
 
 
     return (
-        // todo isFree đồ nữa, free thì thôi khỏi vé
         <Box sx={{
             marginTop: '20px',
         }}>

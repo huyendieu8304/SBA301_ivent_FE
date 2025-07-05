@@ -46,7 +46,8 @@ const CATEGORY_TEMP= [
     }
 ];
 
-
+// todo tách ra cho từng page, sau mỗi page lại validate lại, tới tận cuối mới tạo form data
+//todo: sửa lại formfield
 function CreateEventPage(props) {
     const [activeStepId, setActiveStepId] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
@@ -55,13 +56,13 @@ function CreateEventPage(props) {
     const theme = useTheme();
 
     const [formFields, setFormFields] = useState({
-        name: {label: "Tên sự kiện", value: "", error: ""},
-        isOnline: {label: "Hình thức sự kiện", value: false, error: ""},
-        province: {label: "Tỉnh", value: "", error: ""},
+        name: {fieldName: "name", label: "Tên sự kiện", value: "", error: ""},
+        isOnline: {fieldName: "isOnline",label: "Hình thức sự kiện", value: false, error: ""},
+        province: {fieldName: "province",label: "Tỉnh", value: "", error: ""},
         ward: {label: "Quận/Huyện", value: "", error: ""},
         location: {label: "Địa chỉ ", value: "", error: ""},
 
-        description: {label: "Mô tả sự kiện ", value: "", error: ""},
+        description: {fieldName: "description",label: "Mô tả sự kiện ", value: "", error: ""},
 
         startTime: {label: "Thời gian bắt đầu sự kiện", value: null, error: ""},
         endTime: {label: "Thời gian kết thúc sự kiện", value: null, error: ""},
@@ -131,6 +132,9 @@ function CreateEventPage(props) {
 
     //SUBMIT FORM
     const handleSubmit = () => {
+        const formData = new FormData();
+        formData.append("")
+
         console.log("Submit form")
     }
 
@@ -259,7 +263,12 @@ function CreateEventPage(props) {
             }
 
             {activeStepId === 2 &&
-                <EventPayment/>
+                <EventPayment
+                    formFields={formFields}
+                    setFormFields={setFormFields}
+                    updateField={updateField}
+                    updateError={updateError}
+                />
             }
 
         </>

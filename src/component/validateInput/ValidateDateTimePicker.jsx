@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {DATE_FORMAT, DATETIME_FORMAT} from "../../common/Constant.jsx";
+import {DATETIME_SIMPLE_FORMAT} from "../../common/Constant.jsx";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker, DateTimePicker} from "@mui/x-date-pickers";
@@ -40,7 +40,7 @@ export const ValidateDateTimePicker = ({
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
-                format={DATETIME_FORMAT}
+                format={DATETIME_SIMPLE_FORMAT}
                 name={fieldName}
                 label={
                     isRequired ? (
