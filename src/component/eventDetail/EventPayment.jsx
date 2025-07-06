@@ -3,7 +3,6 @@ import ValidationTextField from "../validateInput/ValidationTextField.jsx";
 import React from "react";
 import {InputLabel, Stack, Typography} from "@mui/material";
 import {checkRequiredInput} from "../../common/ValidateFunction.jsx";
-const GRAY_COLOR = "#3b3b3d"
 
 function EventPayment({ formFields, setFormFields, updateField, updateError}) {
      const validateEventBankName = (value) => {

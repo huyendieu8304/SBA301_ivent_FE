@@ -14,8 +14,11 @@ import {DATETIME_FORMAT, MESSAGE_TYPES} from "../../common/Constant.jsx";
 import {messageService} from "../../service/MessageService.jsx";
 import Messages from "../../common/Message.jsx";
 import eventApi from "../../api/service/eventApi.jsx";
+import {checkAllFieldsValid} from "../../common/ValidateFunction.jsx";
+import {useNavigate } from "react-router";
+import { useSearchParams } from "react-router-dom";
 
-const steps = [
+const STEPS = [
     {
         id: 0,
         label: 'Thông tin sự kiện',
@@ -51,12 +54,13 @@ const CATEGORY_TEMP= [
 ];
 
 // todo tách ra cho từng page, sau mỗi page lại validate lại, tới tận cuối mới tạo form data
-//todo not free => musst have ticket
-//todo: sửa lại formfield
+//todo not free => musst have ticket ở trang ticket
 function CreateEventPage(props) {
     const [activeStepId, setActiveStepId] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const [isLoading, setIsLoading] = useState(false);
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const theme = useTheme();
 
@@ -94,25 +98,36 @@ function CreateEventPage(props) {
     });
 
     const [categories, setCategories] = useState(CATEGORY_TEMP);
-    //todo GET CATEGORY FROM BACKEND, put in event info
-    //  useEffect(() => {
-    //     setIsLoading(true);
-    //     categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
-    // },[])
-    //
-    // const getCategoriesSuccess = (data) => {
-    //     setCategories(data)
-    //     setIsLoading(false);
-    // }
-    //
-    // const getCategoriesFail = (data) => {
-    //     console.log("get categories fail")
-    //     console.error(data)
-    //     setIsLoading(false);
-    // }
+    useEffect(() => {
+        setIsLoading(true);
+        categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
+    }, [])
+
+    const getCategoriesSuccess = (data) => {
+        setCategories(data)
+        setIsLoading(false);
+    }
+
+    const getCategoriesFail = (data) => {
+        console.log("get categories fail")
+        console.error(data)
+        setIsLoading(false);
+    }
 
 
+    useEffect(() => {
+        const stepParam = searchParams.get("step");
+        const foundStep = STEPS.find((step) => step.param === stepParam)
 
+        if (foundStep) {
+            setActiveStepId(foundStep.id);
+        } else {
+            // Không có stepParam hoặc không hợp lệ → reset về step 0 và cập nhật URL
+            setActiveStepId(0);
+            navigate(`?step=${STEPS[0].param}`, { replace: true });
+        }
+
+    }, [searchParams]);
 
     //FUNCTION FOR NAVIGATION
     const isStepSkipped = (step) => {
@@ -121,22 +136,35 @@ function CreateEventPage(props) {
 
     const handleNext = () => {
         // todo: check xem có chỗ nào lỗi không trước khi chuyển qua bước tiếp theo
-        //todo: cần xem mâu thuẫn giuwx mấy cái mà online thì ko cần wward, isFree thì ko cần ticket
+        const nextStep = activeStepId + 1;
         let newSkipped = skipped;
+        //nếu như quay lại trang mà mình đã từng tới xong next
+        //thì bỏ nó ra khỏi danh sách isSkipped
+        //vid dụ tới trang 3 rồi nhưng lại quay về trang 2 sửa
         if (isStepSkipped(activeStepId)) {
             newSkipped = new Set(newSkipped.values());
             newSkipped.delete(activeStepId);
         }
-        setActiveStepId((prevActiveStep) => prevActiveStep + 1);
+        setActiveStepId((nextStep));
         setSkipped(newSkipped);
+        navigate(`?step=${STEPS[nextStep].param}`);
     };
 
     const handleBack = () => {
-        setActiveStepId((prevActiveStep) => prevActiveStep - 1);
+        const prevStep = activeStepId - 1;
+        setActiveStepId((prevStep));
+        navigate(`?step=${STEPS[prevStep].param}`);
     };
 
     //SUBMIT FORM
     const handleSubmit = () => {
+        const errorMessage = checkAllFieldsValid(formFields);
+        //còn lỗi thì không cho lưu đâu hẹ hẹ :>
+        if (errorMessage) {
+            messageService.showMessage(errorMessage, MESSAGE_TYPES.ERROR);
+            return;
+        }
+
         const formData = new FormData();
         formData.append("name", formFields.name.value);
         formData.append("description", formFields.description.value);
@@ -250,7 +278,7 @@ function CreateEventPage(props) {
                         margin: '0 10px',
                     }}
                 >
-                    {steps.map((step, index) => {
+                    {STEPS.map((step, index) => {
                         const stepProps = {};
 
                         if (isStepSkipped(index)) {
@@ -287,7 +315,7 @@ function CreateEventPage(props) {
                 </Stepper>
 
                 <Button
-                    onClick={activeStepId === steps.length - 1 ? handleSubmit : handleNext}
+                    onClick={activeStepId === STEPS.length - 1 ? handleSubmit : handleNext}
                     variant="contained"
                     sx={{
                         color: 'white',
@@ -295,7 +323,7 @@ function CreateEventPage(props) {
                         width: '150px',
                     }}
                 >
-                    {activeStepId === steps.length - 1 ? 'Tạo sự kiện' : 'Tiếp tục'}
+                    {activeStepId === STEPS.length - 1 ? 'Tạo sự kiện' : 'Tiếp tục'}
                 </Button>
             </Stack>
 

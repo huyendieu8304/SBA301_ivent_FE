@@ -24,8 +24,6 @@ function TicketModal({
                          setTicket,
 }) {
 
-    // console.log("cái ticket truyền vào" + ticket);
-
     const updateNewTicketField = (fieldName, newValue) => {
         setTicket((prev) => ({
             ...prev,
@@ -59,7 +57,6 @@ function TicketModal({
         return error || null;
     }
 
-    // todo validate laij price, cho hienj format
     const validateTicketPrice = (value) => {
         const fieldName = ticket.price.label;
         const error = checkRequiredInput(fieldName, value);
@@ -209,7 +206,6 @@ function TicketModal({
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleCloseDialog}>Hủy</Button>
-                {/*todo phải không lỗi mơới cho tạo vé*/}
                 <Button onClick={handleSaveTicket} variant="contained" sx={{color: "white"}}>Lưu</Button>
             </DialogActions>
         </Dialog>

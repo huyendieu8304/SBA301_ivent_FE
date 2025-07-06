@@ -27,19 +27,6 @@ import {messageService} from "../../service/MessageService.jsx";
 import ConfirmModal from "../ConfirmModal.jsx";
 import ValidateRadioGroup from "../validateInput/ValidateRadioGroup.jsx";
 
-const GRAY_COLOR = "#3b3b3d"
-
-const TICKET_TYPE= {
-    id: "",
-    name: "",
-    description: "",
-    price: "",
-    totalQuantity: "",
-    minimumOrderQuantity: "",
-    maximumOrderQuantity: "",
-
-}
-
 function EventTicket({ formFields, setFormFields, updateField, updateError}) {
 
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
