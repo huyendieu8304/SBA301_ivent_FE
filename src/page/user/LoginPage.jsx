@@ -12,6 +12,8 @@ import Messages from "../../common/Message.jsx";
 import {MESSAGE_TYPES} from "../../common/Constant.jsx";
 import ValidatedIconTextField from "../../component/validateInput/ValidateIconTextField.jsx";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ConfirmModal from "../../component/ConfirmModal.jsx";
+import accountSettingApi from "../../api/service/accountSettingApi.jsx";
 
 const LoginPage = () => {
     const theme = useTheme();
@@ -20,6 +22,11 @@ const LoginPage = () => {
         email: {value: "", error: ""},
         password: {value: "", error: ""},
     });
+    const [forgotPassword, setForgotPassword] = useState({
+        email: "",
+        error: "",
+    })
+    const [isOpen, setIsOpen] = useState(false);
     const {login} = useAuth();
     const navigate = useNavigate();
 
@@ -76,7 +83,6 @@ const LoginPage = () => {
         setIsLoading(true);
         authSettingApi.login(body, loginSuccess, loginFailure);
     };
-
     const loginSuccess = (data) => {
         login(data.jwtToken);
         navigate("/");
@@ -89,8 +95,46 @@ const LoginPage = () => {
         messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
     }
 
+    const handleForgotPassword = () => {
+        const emailErr = validateEmail(forgotPassword.email);
+        setForgotPassword({...forgotPassword, error: emailErr});
+        if (emailErr) {
+            return;
+        }
+        const body = {
+            email: forgotPassword.email,
+        }
+        setIsLoading(true);
+        accountSettingApi.forgotPasswordRequest(body, sendForgotPasswordRequestSuccess, sendForgotPasswordRequestFail);
+    }
+    const sendForgotPasswordRequestSuccess = (data) => {
+        setIsLoading(false);
+        setIsOpen(false);
+        messageService.showMessage(Messages.MSG_I_00006, MESSAGE_TYPES.INFO);
+    }
+    const sendForgotPasswordRequestFail = (e) => {
+        setIsOpen(false);
+        setIsLoading(false);
+        messageService.showMessage(e.response.data.message, MESSAGE_TYPES.ERROR);
+    }
+
     return (
         <>
+            <ConfirmModal title={"Quên mật khẩu"} open={isOpen} setOpen={setIsOpen} hasCancel={true} handleConfirmSubmit={handleForgotPassword}
+                          content={
+                              <Stack direction="column" spacing={2}>
+                                  <Typography variant="subtitle1"> Hãy nhập email để nhận mã xác nhận </Typography>
+                                  <ValidationTextField label="Email" fieldName="email"
+                                                       value={forgotPassword.email}
+                                                       setValue={(fieldName, value) => setForgotPassword({...forgotPassword, email: value})}
+                                                       error={forgotPassword.error}
+                                                       setError={(fieldName, value) => setForgotPassword({...forgotPassword, error: value})}
+                                                       isRequired={true} size="small"
+                                                       type="text"
+                                                       validatorFunction={validateEmail}/>
+                              </Stack>
+                          }
+            />
             <Container maxWidth="xl" sx={{
                 display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
                 height: "fit-content",
@@ -128,8 +172,12 @@ const LoginPage = () => {
                                                  setValue={updateField} error={formFields.password.error}
                                                  setError={updateError} isRequired={true} size="small" type="password"
                                                  validatorFunction={validatePassword} endIcon={<VisibilityOffIcon/>}/>
+                            <Button variant="text" color="success" onClick={() => setIsOpen(true)}
+                                    sx={{textTransform: "none", justifyContent: "flex-start", marginTop: "8px !important", width: "fit-content"}}>
+                                Quên mật khẩu?
+                            </Button>
                         </Stack>
-                        <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "24px"}}
+                        <Button variant="contained" color="primary" sx={{textTransform: "none", margin: "8px 24px"}}
                                 onClick={submitForm}>
                             <Typography variant="body1" component="div"
                                         sx={{color: "white", textAlign: "center"}}>

@@ -20,6 +20,7 @@ export default class Messages {
     static MSG_I_00003 = "Xác thực thông tin thành công";
     static MSG_I_00004 = "Mã xác thực đã gửi thành công";
     static MSG_I_00005 = "Cập nhật thông tin thành công";
-
+    static MSG_I_00006 = "Yêu cầu đặt lại mật khẩu đã được gửi thành công";
+    static MSG_I_00007 = "Đặt lại mật khẩu thành công";
     static MSG_I_00008 = "Tạo sự kiện mới thành công";
 }

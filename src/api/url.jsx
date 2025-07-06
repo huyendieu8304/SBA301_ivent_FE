@@ -6,22 +6,30 @@ const PATH_CATEGORY = PATH_URL + "/category";
 const PATH_MY_EVENT = PATH_URL + "/event/my-event";
 
 export const url = {
+    //AUTHENTICATE + user information
     login: PATH_AUTH_URL + "/login",
     logout: PATH_AUTH_URL + "/logout",
     registerUser: PATH_URL + "/register-user",
     validateEmailToken: PATH_URL + "/validate-email-token",
     resendEmailToken: PATH_URL + "/resend-validate-email-token",
-
     userProfile: PATH_URL + "/profile",
     updateProfile: PATH_URL + "/update-profile",
+    forgotPasswordRequest: PATH_URL + "/forgot-password",
+    setPassword: PATH_URL + "/set-password",
 
+    //EVENT - USER dùng
     getMyEvents: (id, page = 0, size = 10) =>
         `${PATH_URL}/event/my_events/${id}?page=${page}&size=${size}`,
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,
     createEvent: PATH_MY_EVENT + "/create",
 
+    //EVENT - OPERATOR
     adminEvent : PATH_ADMIN + "/event",
     getAdminEventDetails: (id) => PATH_ADMIN + "/event"+ `/${id}`,
 
+    //USER - ADMIN
+
+
+    //COMMON
     getCategories: PATH_CATEGORY + "/",
 };

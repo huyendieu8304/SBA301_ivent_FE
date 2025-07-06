@@ -6,14 +6,20 @@ import {
     LazyOrganizerLayout,
     LazyAdminDashboard,
     LazyAdminEvent,
-    LazyAdminLayout, LazyEmailValidationTokenPage, LazyErrorPage,
+    LazyAdminLayout,
+    LazyEmailValidationTokenPage,
+    LazyErrorPage,
     LazyHomePage,
     LazyLoginPage,
-    LazyMainLayout, LazyNotFoundPage, LazyProfilePage,
+    LazyMainLayout,
+    LazyNotFoundPage,
+    LazyProfilePage,
     LazyRegisterAccountPage,
-    LazyCreateEventPage,
     LazyMyEvents,
-    LazyOAuth2RedirectPage
+    LazyOAuth2RedirectPage,
+    LazySimpleLayout,
+    LazyForgotPasswordPage,
+    LazyCreateEventPage,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -66,25 +72,9 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 {/* todo: cho nay bo trang my events (list) */}
-                {/*<Route path="/" element={<LazyAdminDashboard/>}/>*/}
-                {/*todo: uncomment below*/}
-                {/*<Route path="/create-event" element={<LazyCreateEventPage/>} />*/}
+                <Route path="/create-event" element={<LazyCreateEventPage/>} />
             </Route>
         </Route>
-
-        {/*todo: for test*/}
-        <Route
-            path="/organizer"
-            element={
-                <Suspense fallback={<LoadingComponent/>}>
-                    <LazyOrganizerLayout/>
-                </Suspense>
-            }
-        >
-            <Route path="create-event" element={<LazyCreateEventPage/>}/>
-        </Route>
-
-
 
         {/*WITHOUT ROLE*/}
         <Route
@@ -99,10 +89,21 @@ const routeDefinitions = createRoutesFromElements(
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
         </Route>
-        <Route path="/oauth2-redirect" element={<LazyOAuth2RedirectPage/>} />
-        <Route path="/validate/:token" element={<LazyEmailValidationTokenPage />} />
-        <Route path="/error" element={<LazyErrorPage />} />
-        <Route path="/*" element={<LazyNotFoundPage/>} />
+
+        {/*SIMPLE LAYOUT*/}
+        <Route
+            element={
+                <Suspense fallback={<LoadingComponent />}>
+                    <LazySimpleLayout />
+                </Suspense>
+            }
+        >
+            <Route path="/oauth2-redirect" element={<LazyOAuth2RedirectPage/>} />
+            <Route path="/reset-password/:token" element={<LazyForgotPasswordPage/>} />
+            <Route path="/validate/:token" element={<LazyEmailValidationTokenPage />} />
+            <Route path="/error" element={<LazyErrorPage />} />
+            <Route path="/*" element={<LazyNotFoundPage/>} />
+        </Route>
     </Route>
 );
 

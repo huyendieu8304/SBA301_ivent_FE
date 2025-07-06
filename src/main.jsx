@@ -23,6 +23,9 @@ theme = createTheme(
             primary: {
                 main: "#12B76A",
             },
+            success: {
+                main: "#0BA5EC",
+            },
             secondary: {
                 main: "#FFFFFF",
             },
