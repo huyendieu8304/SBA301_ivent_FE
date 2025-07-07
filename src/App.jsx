@@ -72,7 +72,7 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 {/* todo: cho nay bo trang my events (list) */}
-                <Route path="/create-event" element={<LazyCreateEventPage/>} />
+                <Route path="create-event" element={<LazyCreateEventPage/>} />
             </Route>
         </Route>
 

@@ -1,6 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useRef } from "react";
 import renderCellExpand from "./GridCellExpand.jsx";
+import { viVN as dataGridViVN } from '@mui/x-data-grid/locales';
 
 //css for table
 const dataGridStyle = {
@@ -57,9 +58,6 @@ const TableComponent = ({
             }
             rows={data}
             getRowId={Math.random}
-            slotProps={{
-                pagination: { labelRowsPerPage: "ページあたりの行数" },
-            }}
             initialState={{
                 ...data.initialState,
                 pagination: {
