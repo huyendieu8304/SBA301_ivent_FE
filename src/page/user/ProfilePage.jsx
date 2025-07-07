@@ -159,7 +159,7 @@ const ProfilePage = () => {
     const updateSuccess = (data) => {
         login(data.jwtToken);
         messageService.showMessage(Messages.MSG_I_00005, MESSAGE_TYPES.INFO);
-        navigate("/");
+        setIsLoading(false);
     }
 
     const updateFail = (error) => {

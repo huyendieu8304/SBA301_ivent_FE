@@ -6,7 +6,8 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import "dayjs/locale/vi";
-import {viVN} from '@mui/material/locale';
+import { viVN as coreViVN } from '@mui/material/locale';
+import { viVN as dataGridViVN } from '@mui/x-data-grid/locales';
 import {AuthProvider} from "./context/AuthContext.jsx";
 import MessageComponent from "./component/MessageComponent.jsx";
 
@@ -52,7 +53,8 @@ theme = createTheme(
             fontFamily: "Roboto, Helvetica, Arial, sans-serif, Comfortaa",
         },
     },
-    viVN,
+    coreViVN,
+    dataGridViVN
 );
 
 export default theme;
