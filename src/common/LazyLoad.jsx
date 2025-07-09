@@ -70,3 +70,11 @@ export const LazyOAuth2RedirectPage = React.lazy(
 export const LazyCreateEventPage = React.lazy(
     () => import("../page/myEvent/CreateEventPage.jsx"),
 )
+
+export const LazyBookingTicketPage = React.lazy(
+    () => import("../page/event/BookingTicket.jsx"),
+)
+
+export const LazyTransactionResultPage = React.lazy(
+    () => import("../page/event/TransactionResult.jsx"),
+)
