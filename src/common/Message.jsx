@@ -14,6 +14,7 @@ export default class Messages {
     static MSG_E_00013 = "{0} phải có dung lượng nhỏ hơn {1}Mb";
     static MSG_E_00014 = "{0} phải lớn hơn {1}";
     static MSG_E_00015 = "{0} phải nhỏ hơn {1}";
+    static MSG_E_00016 = "Giao dịch thất bại";
 
     static MSG_I_00001 = "Đăng nhập thành công";
     static MSG_I_00002 = "Đăng ký người dùng thành công";
@@ -23,4 +24,6 @@ export default class Messages {
     static MSG_I_00006 = "Yêu cầu đặt lại mật khẩu đã được gửi thành công";
     static MSG_I_00007 = "Đặt lại mật khẩu thành công";
     static MSG_I_00008 = "Tạo sự kiện mới thành công";
+    static MSG_I_00009 = "Giao dịch thành công";
+    static MSG_I_00010 = "Giao dịch đang chờ thanh toán";
 }

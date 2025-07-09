@@ -35,14 +35,15 @@ export const formatDateTimeFromISO = (isoString) => {
 };
 
 //remove .00 and insert . in each 3 digits
-export const formatMoney = (moneyString) => {
+export const formatMoney = (moneyInput) => {
+    const moneyString = String(moneyInput);
     const [integerPart, decimalPart] = moneyString.split(".");
     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     if (!decimalPart || decimalPart === "00") {
         return formattedInteger;
     }
     return `${formattedInteger}.${decimalPart}`;
-}
+};
 
 //input: "startTime": "2025-07-10T08:00:00",
 //     "endTime": "2025-07-10T17:00:00",

@@ -26,6 +26,16 @@ const eventApi = {
             successHandler,
             errorHandler,
         ),
+    getEventAndTicketTypeDetails: (id, successHandler, errorHandler) =>
+        callApi(
+            url.getEventAndTicketTypeDetails(id),
+            HTTP_METHOD.GET,
+            {},
+            {},
+            true,
+            successHandler,
+            errorHandler,
+        ),
     createEvent: (formData, successHandler, errorHandler) =>
         callApi(
             url.createEvent,
