@@ -72,7 +72,6 @@ function EventDetailsPage() {
                 background: 'linear-gradient(to bottom, #2b2b2e 0%, #000000 100%)'
                 // width: "100%",
             }}>
-                {/*todo:responsive*/}
                 <Container maxWidth={"lg"}>
                     <Stack
                         direction={{md: 'column', lg: 'row'}}
@@ -314,11 +313,11 @@ function EventDetailsPage() {
                                 Giới thiệu
                             </Typography>
                             <Divider/>
-                            <Typography variant="body1" sx={{
-                                marginTop: "24px",
-                            }}>
-                                {eventDetails.description}
-                            </Typography>
+                            <Typography
+                                variant="body1"
+                                sx={{ marginTop: "24px" }}
+                                dangerouslySetInnerHTML={{ __html: eventDetails.description }}
+                            />
                         </Stack>
                         {/*ticket types*/}
                         {eventDetails.ticketTypes?.length > 0 ? (

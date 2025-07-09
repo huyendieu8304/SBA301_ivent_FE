@@ -26,5 +26,4 @@ export const MESSAGE_TYPES = {
 
 export const DATE_FORMAT = "DD/MM/YYYY";
 export const DATETIME_SIMPLE_FORMAT = "DD/MM/YYYY HH:mm";
-//todo
 export const DATETIME_FORMAT = "YYYY-MM-DDTHH:mm:ss";

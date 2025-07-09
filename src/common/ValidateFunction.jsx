@@ -132,8 +132,6 @@ export const checkDateBefore = (fieldName, valueDate, maxDate, maxDateFieldName,
 };
 
 export const checkDateAfter = (fieldName, valueDate, minDate, minDateFieldName, dateFormats) => {
-    console.log("check date after " + minDateFieldName + "  " + minDate)
-
     const parsedValue = dayjs(valueDate, dateFormats, true);
     const parsedMin = dayjs(minDate, dateFormats, true);
 
@@ -150,14 +148,6 @@ export const checkPasswordAndRePasswordInput = (rePassword, password) => {
     }
     return null;
 }
-
-export const isInSellingTicketPeriod = (startSellingTicketTime, endSellingTicketTime) => {
-    const now = new Date();
-    const start = new Date(startSellingTicketTime);
-    const end = new Date(endSellingTicketTime);
-
-    return now >= start && now <= end;
-};
 
 export const checkStringMaxLength = (fieldValue, fieldName, maxLength) => {
     if (fieldValue.length > maxLength) {
@@ -202,19 +192,21 @@ export const checkAllFieldsValid = (anObject) => {
         // Bỏ qua các field không phải object (như id)
         if (typeof field !== 'object' || field === null) continue;
 
+        if (field.needToCheckBeForSubmit) {
         // Nếu có error thì trả về error luôn
-        if (field.error) {
-            return field.error;
-        }
+            if (field.error) {
+                return field.error;
+            }
 
-        // Nếu value không hợp lệ (trừ boolean false)
-        const isValueValid = (
-            typeof field.value === "boolean" ||
-            (field.value !== undefined && field.value !== null && field.value !== "")
-        );
+            // Nếu value không hợp lệ (trừ boolean false)
+            const isValueValid = (
+                typeof field.value === "boolean" ||
+                (field.value !== undefined && field.value !== null && field.value !== "")
+            );
 
-        if (!isValueValid) {
-            return formatString(Messages.MSG_E_00002, field.label || key);
+            if (!isValueValid) {
+                return formatString(Messages.MSG_E_00002, field.label || key);
+            }
         }
     }
 

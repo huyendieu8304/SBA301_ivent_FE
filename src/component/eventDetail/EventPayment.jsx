@@ -2,30 +2,38 @@ import Box from "@mui/material/Box";
 import ValidationTextField from "../validateInput/ValidationTextField.jsx";
 import React from "react";
 import {InputLabel, Stack, Typography} from "@mui/material";
-import {checkRequiredInput} from "../../common/ValidateFunction.jsx";
+import {checkRequiredInput, checkStringMaxLength} from "../../common/ValidateFunction.jsx";
 
 function EventPayment({ formFields, setFormFields, updateField, updateError}) {
      const validateEventBankName = (value) => {
          const fieldName = formFields.bankName.label;
-         const error = checkRequiredInput(fieldName, value);
+         const error = checkRequiredInput(fieldName, value)
+            || checkStringMaxLength(value, fieldName, 200)
+         ;
          return error || null;
      }
 
      const validateEventBankBranch = (value) => {
          const fieldName = formFields.bankBranch.label;
-         const error = checkRequiredInput(fieldName, value);
+         const error = checkRequiredInput(fieldName, value)
+            || checkStringMaxLength(value, fieldName, 200)
+         ;
          return error || null;
      }
 
      const validateEventBankNumber = (value) => {
          const fieldName = formFields.bankNumber.label;
-         const error = checkRequiredInput(fieldName, value);
+         const error = checkRequiredInput(fieldName, value)
+             || checkStringMaxLength(value, fieldName, 200)
+         ;
          return error || null;
      }
 
      const validateEventBankAccountOwner = (value) => {
          const fieldName = formFields.bankAccountOwner.label;
-         const error = checkRequiredInput(fieldName, value);
+         const error = checkRequiredInput(fieldName, value)
+            || checkRequiredInput(fieldName, value)
+         ;
          return error || null;
      }
 

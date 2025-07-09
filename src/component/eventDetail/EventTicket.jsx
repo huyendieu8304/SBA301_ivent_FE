@@ -33,13 +33,13 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
     const [deletingIndex, setDeletingIndex] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [newTicket, setNewTicket] = useState({
-        id: formFields.ticketType.value.length,
-        name: {label: "Tên loại vé", value: "", error: ""},
-        description: {label: "Mô tả loại vé", value: "", error: ""},
-        price: {label: "Giá vé", value: "", error: ""},
-        totalQuantity: {label: "Số lượng vé", value: "", error: ""},
-        minimumOrderQuantity: {label: "Lượng vé tối thiểu trong 1 đơn hàng", value: "", error: ""},
-        maximumOrderQuantity: {label: "Lượng vé tối đa trong 1 đơn hàng", value: "", error: ""},
+        id: formFields.ticketType?.value? formFields.ticketType.value.length : 0,
+        name: {needToCheckBeForSubmit: true, label: "Tên loại vé", value: "", error: ""},
+        description: {needToCheckBeForSubmit: true, label: "Mô tả loại vé", value: "", error: ""},
+        price: {needToCheckBeForSubmit: true, label: "Giá vé", value: "", error: ""},
+        totalQuantity: {needToCheckBeForSubmit: true, label: "Số lượng vé", value: "", error: ""},
+        minimumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối thiểu trong 1 đơn hàng", value: "", error: ""},
+        maximumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối đa trong 1 đơn hàng", value: "", error: ""},
     });
 
     const validateIsFree = (value) => {
@@ -52,12 +52,12 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
     const handleOpenDialog = () => {
         setNewTicket({
             id: formFields.ticketType.value.length,
-            name: {label: "Tên loại vé", value: "", error: ""},
-            description: {label: "Mô tả loại vé", value: "", error: ""},
-            price: {label: "Giá vé", value: "", error: ""},
-            totalQuantity: {label: "Số lượng vé", value: "", error: ""},
-            minimumOrderQuantity: {label: "Lượng vé tối thiểu trong 1 đơn hàng", value: "", error: ""},
-            maximumOrderQuantity: {label: "Lượng vé tối đa trong 1 đơn hàng", value: "", error: ""},
+            name: {needToCheckBeForSubmit: true, label: "Tên loại vé", value: "", error: ""},
+            description: {needToCheckBeForSubmit: true, label: "Mô tả loại vé", value: "", error: ""},
+            price: {needToCheckBeForSubmit: true, label: "Giá vé", value: "", error: ""},
+            totalQuantity: {needToCheckBeForSubmit: true, label: "Số lượng vé", value: "", error: ""},
+            minimumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối thiểu trong 1 đơn hàng", value: "", error: ""},
+            maximumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối đa trong 1 đơn hàng", value: "", error: ""},
         });
         setOpenDialog(true);
     };
@@ -220,7 +220,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                         </span>
                     </InputLabel>
 
-                    {formFields.ticketType?.value.map((ticket, index) => (
+                    {formFields.ticketType?.value?.map((ticket, index) => (
                         <Paper
                             key={index}
                             sx={{

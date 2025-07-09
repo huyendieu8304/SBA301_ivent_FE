@@ -54,7 +54,6 @@ const CATEGORY_TEMP= [
 ];
 
 // todo tách ra cho từng page, sau mỗi page lại validate lại, tới tận cuối mới tạo form data
-//todo not free => musst have ticket ở trang ticket
 function CreateEventPage(props) {
     const [activeStepId, setActiveStepId] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
@@ -65,37 +64,69 @@ function CreateEventPage(props) {
     const theme = useTheme();
 
     const [formFields, setFormFields] = useState({
-        name: {label: "Tên sự kiện", value: "", error: ""},
-        isOnline: {label: "Hình thức sự kiện", value: false, error: ""},
-        province: {label: "Tỉnh", value: "", error: ""},
-        ward: {label: "Quận/Huyện", value: "", error: ""},
-        location: {label: "Địa chỉ ", value: "", error: ""},
+        name: {needToCheckBeForSubmit: true, label: "Tên sự kiện", value: "", error: ""},
+        isOnline: {needToCheckBeForSubmit: true, label: "Hình thức sự kiện", value: false, error: ""},
+        province: {needToCheckBeForSubmit: true, label: "Tỉnh", value: "", error: ""},
+        ward: {needToCheckBeForSubmit: true, label: "Quận/Huyện", value: "", error: ""},
+        location: {needToCheckBeForSubmit: true, label: "Địa chỉ ", value: "", error: ""},
 
-        description: {label: "Mô tả sự kiện ", value: "", error: ""},
+        description: {needToCheckBeForSubmit: true, label: "Mô tả sự kiện ", value: "", error: ""},
 
-        startTime: {label: "Thời gian bắt đầu sự kiện", value: null, error: ""},
-        endTime: {label: "Thời gian kết thúc sự kiện", value: null, error: ""},
-        startSellingTicketTime: {label: "Thời gian bắt đầu bán vé", value: null, error: ""},
-        endSellingTicketTime: {label: "Thời gian kết thúc bán vé", value: null, error: ""},
+        startTime: {needToCheckBeForSubmit: true, label: "Thời gian bắt đầu sự kiện", value: null, error: ""},
+        endTime: {needToCheckBeForSubmit: true, label: "Thời gian kết thúc sự kiện", value: null, error: ""},
+        startSellingTicketTime: {needToCheckBeForSubmit: true,label: "Thời gian bắt đầu bán vé", value: null, error: ""},
+        endSellingTicketTime: {needToCheckBeForSubmit: true, label: "Thời gian kết thúc bán vé", value: null, error: ""},
 
-        eventLogoUri: {label: "Logo sự kiện", value: null, error: ""},
-        bannerUri: {label: "Banner sự kiện", value: null, error: ""},
+        eventLogoUri: {needToCheckBeForSubmit: true, label: "Logo sự kiện", value: null, error: ""},
+        bannerUri: {needToCheckBeForSubmit: true, label: "Banner sự kiện", value: null, error: ""},
 
-        organizerName: {label: "Tên ban tổ chức", value: "", error: ""},
-        organizerInformation: {label: "Thông tin ban tổ chức", value: "", error: ""},
-        organizerLogoUri: {label: "Logo ban tổ chức", value: null, error: ""},
+        organizerName: {needToCheckBeForSubmit: true, label: "Tên ban tổ chức", value: "", error: ""},
+        organizerInformation: {needToCheckBeForSubmit: true, label: "Thông tin ban tổ chức", value: "", error: ""},
+        organizerLogoUri: {needToCheckBeForSubmit: true, label: "Logo ban tổ chức", value: null, error: ""},
 
-        bankName: {label: "Tên ngân hàng", value: "", error: ""},
-        bankBranch: {label: "Chi nhánh", value: "", error: ""},
-        bankNumber: {label: "Số tài khoản", value: "", error: ""},
-        bankAccountOwner: {label: "Chủ tài khoản", value: "", error: ""},
+        bankName: {needToCheckBeForSubmit: true, label: "Tên ngân hàng", value: "", error: ""},
+        bankBranch: {needToCheckBeForSubmit: true, label: "Chi nhánh", value: "", error: ""},
+        bankNumber: {needToCheckBeForSubmit: true, label: "Số tài khoản", value: "", error: ""},
+        bankAccountOwner: {needToCheckBeForSubmit: true, label: "Chủ tài khoản", value: "", error: ""},
 
-        category: {label: "Thể loại sự kiện", value: "", error: ""},
-        ticketType: {label: "Loại vé", value: [], error: ""},
+        category: {needToCheckBeForSubmit: true, label: "Thể loại sự kiện", value: "", error: ""},
+        ticketType: {needToCheckBeForSubmit: true, label: "Loại vé", value: [], error: ""},
 
     //     just for frontend
-        isFree: {label: "Sự kiện miễn phí", value: false, error: ""},
+        isFree: {needToCheckBeForSubmit: true, label: "Sự kiện miễn phí", value: false, error: ""},
     });
+
+    useEffect(() => {
+        setFormFields((prev) => ({
+            ...prev,
+            province: {
+                ...prev.province,
+                needToCheckBeForSubmit: !prev.isOnline.value,
+            },
+            ward: {
+                ...prev.ward,
+                needToCheckBeForSubmit: !prev.isOnline.value,
+            },
+        }));
+    }, [formFields.isOnline.value]);
+
+    useEffect(() => {
+        setFormFields((prev) => ({
+            ...prev,
+            startSellingTicketTime: {
+                ...prev.startSellingTicketTime,
+                needToCheckBeForSubmit: !prev.isFree.value,
+            },
+            endSellingTicketTime: {
+                ...prev.endSellingTicketTime,
+                needToCheckBeForSubmit: !prev.isFree.value,
+            },
+            ticketType: {
+                ...prev.ticketType,
+                needToCheckBeForSubmit: !prev.isFree.value,
+            },
+        }));
+    }, [formFields.isFree.value]);
 
     const [categories, setCategories] = useState(CATEGORY_TEMP);
     useEffect(() => {
@@ -166,6 +197,23 @@ function CreateEventPage(props) {
         }
 
         const formData = new FormData();
+        if (!formFields.isFree.value) {
+            if (!formFields.ticketType.value || formFields.ticketType.value.length === 0 ) {
+                messageService.showMessage(Messages.MSG_E_00017, MESSAGE_TYPES.ERROR);
+                return;
+            }
+            formData.append("startSellingTicketTime", dayjs(formFields.startSellingTicketTime.value).format(DATETIME_FORMAT));
+            formData.append("endSellingTicketTime", dayjs(formFields.endSellingTicketTime.value).format(DATETIME_FORMAT));
+            formFields.ticketType.value.forEach((ticket, index) => {
+                formData.append(`ticketTypes[${index}].name`, ticket.name.value);
+                formData.append(`ticketTypes[${index}].description`, ticket.description.value);
+                formData.append(`ticketTypes[${index}].price`, ticket.price.value);
+                formData.append(`ticketTypes[${index}].totalQuantity`, ticket.totalQuantity.value);
+                formData.append(`ticketTypes[${index}].minimumOrderQuantity`, ticket.minimumOrderQuantity.value);
+                formData.append(`ticketTypes[${index}].maximumOrderQuantity`, ticket.maximumOrderQuantity.value);
+            })
+        }
+
         formData.append("name", formFields.name.value);
         formData.append("description", formFields.description.value);
 
@@ -193,18 +241,6 @@ function CreateEventPage(props) {
 
         formData.append("categoryId", formFields.category.value);
 
-        if (!formFields.isFree.value) {
-            formData.append("startSellingTicketTime", dayjs(formFields.startSellingTicketTime.value).format(DATETIME_FORMAT));
-            formData.append("endSellingTicketTime", dayjs(formFields.endSellingTicketTime.value).format(DATETIME_FORMAT));
-            formFields.ticketType.value.forEach((ticket, index) => {
-                formData.append(`ticketTypes[${index}].name`, ticket.name.value);
-                formData.append(`ticketTypes[${index}].description`, ticket.description.value);
-                formData.append(`ticketTypes[${index}].price`, ticket.price.value);
-                formData.append(`ticketTypes[${index}].totalQuantity`, ticket.totalQuantity.value);
-                formData.append(`ticketTypes[${index}].minimumOrderQuantity`, ticket.minimumOrderQuantity.value);
-                formData.append(`ticketTypes[${index}].maximumOrderQuantity`, ticket.maximumOrderQuantity.value);
-            })
-        }
         setIsLoading(true)
         eventApi.createEvent(formData, createSuccessfully, createFail)
     }

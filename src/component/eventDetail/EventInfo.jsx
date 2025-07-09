@@ -119,7 +119,9 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
 
     const validateEventLocation= (value) => {
         const fieldName = formFields.location.label;
-        const error = checkRequiredInput(fieldName, value);
+        const error = checkRequiredInput(fieldName, value)
+            || checkStringMaxLength(value, fieldName, 250)
+        ;
         return error || null;
 
     }

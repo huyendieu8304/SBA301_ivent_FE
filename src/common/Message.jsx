@@ -15,6 +15,7 @@ export default class Messages {
     static MSG_E_00014 = "{0} phải lớn hơn {1}";
     static MSG_E_00015 = "{0} phải nhỏ hơn {1}";
     static MSG_E_00016 = "Giao dịch thất bại";
+    static MSG_E_00017 = "Sự kiện không miễn phí phải có ít nhất 1 loại vé";
 
     static MSG_I_00001 = "Đăng nhập thành công";
     static MSG_I_00002 = "Đăng ký người dùng thành công";
