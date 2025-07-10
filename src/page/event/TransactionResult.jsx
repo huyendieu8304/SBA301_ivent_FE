@@ -90,6 +90,14 @@ const TransactionResult = () => {
                         </Typography>
                         <MascotSvg/>
                     </Stack>
+                    <Typography variant="h5" component="div" color="primary"
+                                sx={{
+                                    fontWeight: "bold",
+                                    textAlign: "center",
+                                    marginBottom: 2
+                                }}>
+                        Sự kiện: {data[0]?.eventName}
+                    </Typography>
                     <TableContainer component={Paper} sx={{width: "90%"}}>
                         <Table sx={{width: "100%"}} aria-label="simple table">
                             <TableHead>
@@ -99,6 +107,7 @@ const TransactionResult = () => {
                                     <TableCell align="center">Giá tiền mỗi vé</TableCell>
                                     <TableCell align="center">Trạng thái giao dịch</TableCell>
                                     <TableCell align="center">Mã giao dịch</TableCell>
+                                    <TableCell align="center">Mã QR</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -135,6 +144,11 @@ const TransactionResult = () => {
                                             />
                                         </TableCell>
                                         <TableCell align="center">{row.transactionId}</TableCell>
+                                        <TableCell align="center">
+                                            <a href={row.qrCodeUrl} target="_blank" rel="noopener noreferrer">
+                                                Xem QR
+                                            </a>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
