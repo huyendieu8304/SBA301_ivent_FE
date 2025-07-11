@@ -145,9 +145,11 @@ const TransactionResult = () => {
                                         </TableCell>
                                         <TableCell align="center">{row.transactionId}</TableCell>
                                         <TableCell align="center">
-                                            <a href={row.qrCodeUrl} target="_blank" rel="noopener noreferrer">
-                                                Xem QR
-                                            </a>
+                                            {row.qrCodeUrl &&
+                                                <a href={row.qrCodeUrl} target="_blank" rel="noopener noreferrer">
+                                                    Xem QR
+                                                </a>
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 ))}
