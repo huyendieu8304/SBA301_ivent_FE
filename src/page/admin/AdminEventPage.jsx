@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
-import eventApi from "../../api/service/eventAdminApi";
+import eventApi from "../../api/service/./operatorApi.jsx";
 import {useNavigate} from "react-router";
 import dayjs from "dayjs";
-import {Box, Card, CardContent, Chip, Container, Typography, useTheme} from "@mui/material";
+import {Box, Button, Card, CardContent, Chip, Container, Typography, useTheme} from "@mui/material";
 import TableComponent from "../../component/TableComponent";
 import LoadingComponent from "../../component/LoadingComponent";
 
@@ -17,17 +17,68 @@ const EventListPage = () => {
         { field: 'province', headerName: 'Địa điểm', width: 300, flex: 1, align: "center"},
         { field: 'startTime', headerName: 'Ngày bắt đầu', width: 300, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
         { field: 'endTime', headerName: 'Ngày kết thúc', width: 300, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
-        { field: 'status', headerName: 'Trạng thái', width: 160, flex: 1, align: "center",
-        renderCell: (params) => (
-            <Box sx={{height: '100%'}}>
-                {params.value === "APPROVED" ? (<Chip label="Approved" sx={{backgroundColor: theme.palette.primary.main, color: "white", fontWeight: "bold"}}/>) : (<Chip label="Denied"  sx={{backgroundColor: "red", color: "white", fontWeight: "bold"}}/>)}
-            </Box>
-        )}
+        {
+            field: 'status',
+            headerName: 'Trạng thái',
+            width: 160,
+            flex: 1,
+            align: "left",
+            headerAlign: "left",
+            renderCell: (params) => (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',        // căn giữa theo chiều dọc
+                        justifyContent: 'flex-start',// căn trái theo chiều ngang
+                        height: '100%',
+                        width: '100%',
+                        pl: 1
+                    }}
+                >
+                    <Chip
+                        label={params.value === "APPROVED" ? "Approved" : "Denied"}
+                        sx={{
+                            backgroundColor: params.value === "APPROVED" ? theme.palette.primary.main : "red",
+                            color: "white",
+                            fontWeight: "bold"
+                        }}
+                    />
+                </Box>
+            )
+        }
+,
+        {
+            field: 'actions',
+            headerName: 'Chi tiết',
+            width: 120,
+            sortable: false,
+            filterable: false,
+            disableColumnMenu: true,
+            align: "center",
+            headerAlign: "center",
+            renderCell: (params) => (
+                <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => handleDetailClick(params.row)}
+                    sx={{ textTransform: "none" }}
+                >
+                    Chi tiết
+                </Button>
+            )
+        }
+
+
     ];
+
+
     useEffect(() => {
         setIsLoading(true);
-        eventApi.getAllAdminEvents(getDataSuccess,getDataFail)
+        eventApi.getAllOperatorEvents(getDataSuccess,getDataFail)
     }, []);
+    const handleDetailClick = (row) => {
+        navigate(`/operator/events/${row.id}`);
+    }
 
     const getDataSuccess = (data) => {
         setEvents(data);

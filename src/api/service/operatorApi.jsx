@@ -2,10 +2,10 @@ import {HTTP_METHOD} from "../../common/Constant.jsx";
 import {callApi} from "../CallApi.jsx";
 import {url} from "../url.jsx";
 
-const eventAdminApi = {
-    getAllAdminEvents: (successHandler, errorHandler) =>
+const operatorApi = {
+    getAllOperatorEvents: (successHandler, errorHandler) =>
     callApi(
-        url.adminEvent,
+        url.operatorEvent,
         HTTP_METHOD.GET,
         {},
         {},
@@ -25,4 +25,4 @@ const eventAdminApi = {
     ),
 };
 
-export default eventAdminApi;
+export default operatorApi;
