@@ -92,7 +92,7 @@ const MainLayout = () => {
                                             Tạo sự kiện
                                         </Typography>
                                     </Button>
-                                    <Button sx={{textTransform: "none", borderColor: "white", padding: 0}}>
+                                    <Button sx={{textTransform: "none", borderColor: "white", padding: 0}} onClick={()=> navigate("/my-bought-tickets")}>
                                         <Stack direction="row" spacing={0.5} justifyContent="center"
                                                alignItems="center">
                                             <TicketIconSvg style={{color: "white", fontSize: "20px"}}/>

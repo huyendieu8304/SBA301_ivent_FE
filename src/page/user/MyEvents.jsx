@@ -11,8 +11,8 @@ import {
 import {useAuth} from "../../context/AuthContext.jsx";
 import eventApi from "../../api/service/eventApi.jsx";
 import LoadingComponent from "../../component/LoadingComponent.jsx";
-import dayjs from "dayjs";
 import TableComponent from "../../component/TableComponent.jsx";
+import {formatVNDateFromISO} from "../../common/FormatFunction.jsx";
 
 const MyEvents = () => {
     const theme = useTheme();
@@ -49,7 +49,7 @@ const MyEvents = () => {
             field: 'startTime',
             headerName: 'Ngày bắt đầu',
             width: 260,
-            valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'),
+            valueGetter: (params) => formatVNDateFromISO(params),
             flex: 1,
             align: "center"
         },
@@ -57,7 +57,7 @@ const MyEvents = () => {
             field: 'endTime',
             headerName: 'Ngày kết thúc',
             width: 260,
-            valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'),
+            valueGetter: (params) => formatVNDateFromISO(params),
             flex: 1,
             align: "center"
         },
@@ -65,7 +65,7 @@ const MyEvents = () => {
             field: 'createdAt',
             headerName: 'Ngày tạo',
             width: 260,
-            valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'),
+            valueGetter: (params) => formatVNDateFromISO(params),
             flex: 1,
             align: "center"
         },
