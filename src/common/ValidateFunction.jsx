@@ -65,6 +65,7 @@ export const checkStrLengthInRange = (
     maxLen,
 ) => {
     if (fieldValue.length > maxLen || fieldValue.length < minLen) {
+        //đang trả về sai message, ai dùng thì viết lại nhé
         return formatString(Messages.MSG_E_00004, fieldName, minLen, maxLen);
     }
     return null;
@@ -109,11 +110,35 @@ export const checkFullSizeKanaInput = (fieldName, fieldValue) => {
     return null;
 };
 
+//thực ra cái hàm này có thể check cả date time luôn, chỉ cần truyền dateFormats có định dạng time vào laf được
 export const checkValidDate = (fieldName, dateStr, dateFormats) => {
     const parsedDate = dayjs(dateStr, dateFormats, true);
     if (!parsedDate.isValid()) {
         return formatString(Messages.MSG_E_00003, fieldName, dateFormats);
     }
+    return null;
+};
+
+
+export const checkDateBefore = (fieldName, valueDate, maxDate, maxDateFieldName, dateFormats) => {
+    const parsedValue = dayjs(valueDate, dateFormats, true);
+    const parsedMax = dayjs(maxDate, dateFormats, true);
+
+    if (parsedValue.isAfter(parsedMax)) {
+        return formatString(Messages.MSG_E_00010, fieldName, maxDateFieldName );
+    }
+
+    return null;
+};
+
+export const checkDateAfter = (fieldName, valueDate, minDate, minDateFieldName, dateFormats) => {
+    const parsedValue = dayjs(valueDate, dateFormats, true);
+    const parsedMin = dayjs(minDate, dateFormats, true);
+
+    if (!parsedValue.isAfter(parsedMin)) {
+        return formatString(Messages.MSG_E_00009, fieldName, minDateFieldName);
+    }
+
     return null;
 };
 
@@ -124,10 +149,67 @@ export const checkPasswordAndRePasswordInput = (rePassword, password) => {
     return null;
 }
 
-export const isInSellingTicketPeriod = (startSellingTicketTime, endSellingTicketTime) => {
-    const now = new Date();
-    const start = new Date(startSellingTicketTime);
-    const end = new Date(endSellingTicketTime);
+export const checkStringMaxLength = (fieldValue, fieldName, maxLength) => {
+    if (fieldValue.length > maxLength) {
+        return formatString(Messages.MSG_E_00006, fieldName, maxLength);
+    }
+    return null;
+}
 
-    return now >= start && now <= end;
+export const checkUploadImage = (fieldName, file, maxSizeMb) => {
+    if (!file) {
+        return formatString(Messages.MSG_E_00011, fieldName);
+    }
+    // Kiểm tra MIME type
+    if (!file.type.startsWith("image/")) {
+        return formatString(Messages.MSG_E_00012, fieldName);
+    }
+    //kiểm tra kiích thước ảnh
+    const maxSizeBytes = maxSizeMb * 1024 * 1024;
+    if (file.size > maxSizeBytes) {
+        return formatString(Messages.MSG_E_00013, fieldName, maxSizeMb);
+    }
+    return null;
+}
+
+export const checkNumberGreaterThan = (fieldName, fieldValue, minValue, minValueFieldName) => {
+    if (fieldValue < minValue) {
+        return formatString(Messages.MSG_E_00014, fieldName, minValueFieldName);
+    }
+    return null;
+}
+
+export const checkNumberSmallerThan = (fieldName, fieldValue, maxValue, maxValueFieldName) => {
+    if (fieldValue > maxValue) {
+        return formatString(Messages.MSG_E_00015, fieldName, maxValueFieldName);
+    }
+    return null;
+}
+
+//for checking ticket and event
+export const checkAllFieldsValid = (anObject) => {
+    for (const [key, field] of Object.entries(anObject)) {
+        // Bỏ qua các field không phải object (như id)
+        if (typeof field !== 'object' || field === null) continue;
+
+        if (field.needToCheckBeForSubmit) {
+        // Nếu có error thì trả về error luôn
+            if (field.error) {
+                return field.error;
+            }
+
+            // Nếu value không hợp lệ (trừ boolean false)
+            const isValueValid = (
+                typeof field.value === "boolean" ||
+                (field.value !== undefined && field.value !== null && field.value !== "")
+            );
+
+            if (!isValueValid) {
+                return formatString(Messages.MSG_E_00002, field.label || key);
+            }
+        }
+    }
+
+    // Nếu mọi thứ đều ổn
+    return null;
 };

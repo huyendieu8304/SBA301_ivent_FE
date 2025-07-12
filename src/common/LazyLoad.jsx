@@ -24,7 +24,7 @@ export const LazyAdminEvent = React.lazy(
 );
 
 export const LazyEmailValidationTokenPage = React.lazy(
-    () => import("../page/EmailValidationTokenPage.jsx"),
+    () => import("../page/user/EmailValidationTokenPage.jsx"),
 );
 
 export const LazyErrorPage = React.lazy(
@@ -43,6 +43,38 @@ export const LazyAdminLayout = React.lazy(
     () => import("../layout/AdminLayout.jsx"),
 );
 
-export const LayzyEventDetailsPage = React.lazy(
-    () => import("../page/EventDetailsPage.jsx"),
+export const LazySimpleLayout = React.lazy(
+    () => import("../layout/SimpleLayout.jsx"),
+);
+
+export const LazyForgotPasswordPage = React.lazy(
+    () => import("../page/user/ForgotPasswordPage.jsx"),
+);
+
+export const LazyMyEvents = React.lazy(
+    () => import("../page/user/MyEvents.jsx")
+);
+
+export const LazyEventDetailsPage = React.lazy(
+    () => import("../page/event/EventDetailsPage.jsx"),
+)
+
+export const LazyOrganizerLayout = React.lazy(
+    () => import("../layout/OrganizerLayout.jsx"),
+)
+
+export const LazyOAuth2RedirectPage = React.lazy(
+    () => import("../page/user/OAuth2RedirectPage.jsx"),
+);
+
+export const LazyCreateEventPage = React.lazy(
+    () => import("../page/myEvent/CreateEventPage.jsx"),
+)
+
+export const LazyBookingTicketPage = React.lazy(
+    () => import("../page/event/BookingTicket.jsx"),
+)
+
+export const LazyTransactionResultPage = React.lazy(
+    () => import("../page/event/TransactionResult.jsx"),
 )

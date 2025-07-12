@@ -1,26 +1,54 @@
 import {TextField} from "@mui/material";
 
-const ValidationTextField = ({
+const ValidateNumberField = ({
+                                 isRequired = false,
                                  label,
                                  fieldName,
                                  value,
                                  setValue,
                                  error,
                                  setError,
-                                 isRequired = false,
                                  isDisabled = false,
                                  size = "medium",
-                                 type = "text",
+                                 type = "number",
                                  validatorFunction = (e) => {""},
+                                minValue = 0,
+                                maxValue = 100000,
                                 sx,
+                                onChange,
                              }) => {
     const handleChange = (e) => {
-        setValue(fieldName, e.target.value);
+        const value = e.target.value;
+        let newValue = Number(value);
+        //kiểm soát min max
+        if (newValue < minValue) {
+            newValue = minValue;
+        }
+        if (value > maxValue) {
+            newValue = maxValue;
+        }
+
+        //nếu có truyền vào onchange riêng
+        if(onChange) {
+            onChange(newValue);
+            return;
+        }
+
+        setValue(fieldName, newValue);
     };
 
     const handleBlur = (e) => {
+        const value = e.target.value;
+        let newValue = Number(value);
+
+        //nếu có truyền vào onchange riêng
+        if(onChange) {
+            onChange(newValue);
+            return;
+        }
+
         let errorMsg;
-        errorMsg = validatorFunction(e.target.value);
+        errorMsg = validatorFunction( e.target.value);
         setError(fieldName, errorMsg || "");
     };
 
@@ -48,4 +76,4 @@ const ValidationTextField = ({
         />
     )
 }
-export default ValidationTextField;
+export default ValidateNumberField;

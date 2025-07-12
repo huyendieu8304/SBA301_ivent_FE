@@ -43,9 +43,6 @@ const accountSettingApi = {
             successHandler,
             errorHandler,
             false,
-            {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
-            }
         ),
     updateProfile: (body, successHandler, errorHandler) =>
         callApi(
@@ -57,6 +54,26 @@ const accountSettingApi = {
             successHandler,
             errorHandler,
             true,
+        ),
+    forgotPasswordRequest: (body, successHandler, errorHandler) =>
+        callApi(
+            url.forgotPasswordRequest,
+            HTTP_METHOD.POST,
+            {},
+            body,
+            false,
+            successHandler,
+            errorHandler,
+        ),
+    setPassword: (body, successHandler, errorHandler) =>
+        callApi(
+            url.setPassword,
+            HTTP_METHOD.POST,
+            {},
+            body,
+            false,
+            successHandler,
+            errorHandler,
         ),
 };
 

@@ -57,11 +57,11 @@ const ProfilePage = () => {
     }, [])
 
     const getDataSuccess = (data) => {
-        updateField("email", data.email);
-        updateField("fullName", data.fullName);
-        updateField("phone", data.phone);
-        updateField("dob", dayjs(data.dob));
-        updateField("gender", data.gender);
+        updateField("email", data.email ?? "");
+        updateField("fullName", data.fullName ?? "");
+        updateField("phone", data.phone ?? "");
+        updateField("dob", data.dob ? dayjs(data.dob) : null);
+        updateField("gender", data.gender ?? "");
         setSubInformation({
             createdAt: formatVNDateFromISO(data.createdAt),
             updatedAt: formatVNDateFromISO(data.updatedAt),
@@ -159,7 +159,7 @@ const ProfilePage = () => {
     const updateSuccess = (data) => {
         login(data.jwtToken);
         messageService.showMessage(Messages.MSG_I_00005, MESSAGE_TYPES.INFO);
-        navigate("/");
+        setIsLoading(false);
     }
 
     const updateFail = (error) => {

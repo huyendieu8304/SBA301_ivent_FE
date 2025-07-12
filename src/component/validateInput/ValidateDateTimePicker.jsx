@@ -1,12 +1,12 @@
-import React from "react";
-import {TextField} from "@mui/material";
 import dayjs from "dayjs";
+import {DATETIME_SIMPLE_FORMAT} from "../../common/Constant.jsx";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {DATE_FORMAT} from "../../common/Constant.jsx";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DatePicker} from "@mui/x-date-pickers";
+import {DatePicker, DateTimePicker} from "@mui/x-date-pickers";
+import {TextField} from "@mui/material";
+import React from "react";
 
-export const ValidateDatePicker = ({
+export const ValidateDateTimePicker = ({
                                        fieldName,
                                        label,
                                        value,
@@ -16,15 +16,22 @@ export const ValidateDatePicker = ({
                                        size = "medium",
                                        isRequired = false,
                                        validatorFunction,
+                                           onChange,
                                    }) => {
 
-    const handleDateChange = (newValue) => {
+    const handleDateTimeChange = (newValue) => {
+        // Nếu có onChange từ ngoài truyền vào thì ưu tiên
+        if (onChange) {
+            onChange(newValue);
+            return;
+        }
+
         if (!newValue) {
             setError(fieldName, validatorFunction(newValue));
             setValue(fieldName, null);
             return;
         }
-        const formattedValue = dayjs(newValue).format(DATE_FORMAT);
+        const formattedValue = dayjs(newValue);
         const errorMessage = validatorFunction(formattedValue);
         setValue(fieldName, newValue);
         setError(fieldName, errorMessage);
@@ -32,8 +39,8 @@ export const ValidateDatePicker = ({
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-                format={DATE_FORMAT}
+            <DateTimePicker
+                format={DATETIME_SIMPLE_FORMAT}
                 name={fieldName}
                 label={
                     isRequired ? (
@@ -45,7 +52,7 @@ export const ValidateDatePicker = ({
                     )
                 }
                 value={value}
-                onChange={handleDateChange}
+                onChange={handleDateTimeChange}
                 textField={(params) => <TextField {...params} />}
                 slotProps={{
                     textField: {
@@ -58,4 +65,4 @@ export const ValidateDatePicker = ({
             />
         </LocalizationProvider>
     );
-};
+}

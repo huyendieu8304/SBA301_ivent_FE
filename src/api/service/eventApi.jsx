@@ -2,7 +2,20 @@ import {callApi} from "../CallApi.jsx";
 import {HTTP_METHOD} from "../../common/Constant.jsx";
 import {url} from "../url.jsx";
 
-const eventApi={
+const eventApi = {
+    getMyEvents: (id, page, size, name, successHandler, errorHandler) =>
+        callApi(
+            url.getMyEvents(id, page, size),
+            HTTP_METHOD.GET,
+            {
+                name: name?.trim() || undefined,
+            },
+            {},
+            true,
+            successHandler,
+            errorHandler
+        ),
+
     getEventDetails: (id, successHandler, errorHandler) =>
         callApi(
             url.getEventDetails(id),
@@ -12,8 +25,28 @@ const eventApi={
             false,
             successHandler,
             errorHandler,
+        ),
+    getEventAndTicketTypeDetails: (id, successHandler, errorHandler) =>
+        callApi(
+            url.getEventAndTicketTypeDetails(id),
+            HTTP_METHOD.GET,
+            {},
+            {},
+            true,
+            successHandler,
+            errorHandler,
+        ),
+    createEvent: (formData, successHandler, errorHandler) =>
+        callApi(
+            url.createEvent,
+            HTTP_METHOD.POST,
+            {},
+            formData,
+            true,
+            successHandler,
+            errorHandler,
+            true,
         )
-}
-
+};
 
 export default eventApi;

@@ -25,8 +25,6 @@ const BUTTON_STATE = {
         isGreyButton: true,
         buttonText: "Sự kiện đã kết thúc"
     }
-
-
 }
 
 function BuyTicketButton({
