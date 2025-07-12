@@ -63,7 +63,10 @@ const AvatarMenu = ({setIsLoading}) => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                 >
-                    <MenuItem>
+                    <MenuItem onClick={() => {
+                        handleCloseUserMenu();
+                        navigate("/my-bought-tickets");
+                    }}>
                         <Typography sx={{
                             textAlign: 'center',
                             color: theme.palette.primary.main,

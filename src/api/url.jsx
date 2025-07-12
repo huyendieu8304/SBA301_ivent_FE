@@ -27,6 +27,10 @@ export const url = {
     getMyEventDetail: (id) => `${PATH_MY_EVENT}/${id}`,
     updateMyEventDetail: PATH_MY_EVENT,
 
+    getMyTickets: (accountId, page = 0, size = 10) =>
+        `${PATH_URL}/ticket/my_tickets/${accountId}?page=${page}&size=${size}`,
+    getTicketDetail: (paymentId) =>
+        `${PATH_URL}/ticket/detail/${paymentId}`,
     //EVENT - OPERATOR
     adminEvent : PATH_ADMIN + "/event",
     getAdminEventDetails: (id) => PATH_ADMIN + "/event"+ `/${id}`,
