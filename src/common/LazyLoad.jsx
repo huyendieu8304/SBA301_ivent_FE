@@ -78,3 +78,7 @@ export const LazyBookingTicketPage = React.lazy(
 export const LazyTransactionResultPage = React.lazy(
     () => import("../page/event/TransactionResult.jsx"),
 )
+
+export const LazyMyEventDetailPage = React.lazy(
+    () => import("../page/myEvent/MyEventDetailPage.jsx"),
+)

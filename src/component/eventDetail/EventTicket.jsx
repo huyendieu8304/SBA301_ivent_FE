@@ -27,19 +27,24 @@ import {messageService} from "../../service/MessageService.jsx";
 import ConfirmModal from "../ConfirmModal.jsx";
 import ValidateRadioGroup from "../validateInput/ValidateRadioGroup.jsx";
 
-function EventTicket({ formFields, setFormFields, updateField, updateError}) {
+function EventTicket({
+                         isDisabled = false,
+                         formFields,
+                         setFormFields,
+                         updateField,
+                         updateError}) {
 
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
     const [deletingIndex, setDeletingIndex] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [newTicket, setNewTicket] = useState({
         id: formFields.ticketType?.value? formFields.ticketType.value.length : 0,
-        name: {needToCheckBeForSubmit: true, label: "Tên loại vé", value: "", error: ""},
-        description: {needToCheckBeForSubmit: true, label: "Mô tả loại vé", value: "", error: ""},
-        price: {needToCheckBeForSubmit: true, label: "Giá vé", value: "", error: ""},
-        totalQuantity: {needToCheckBeForSubmit: true, label: "Số lượng vé", value: "", error: ""},
-        minimumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối thiểu trong 1 đơn hàng", value: "", error: ""},
-        maximumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối đa trong 1 đơn hàng", value: "", error: ""},
+        name: {needToCheckBeForSubmit: true, value: "", error: ""},
+        description: {needToCheckBeForSubmit: true, value: "", error: ""},
+        price: {needToCheckBeForSubmit: true, value: "", error: ""},
+        totalQuantity: {needToCheckBeForSubmit: true, value: "", error: ""},
+        minimumOrderQuantity: {needToCheckBeForSubmit: true, value: "", error: ""},
+        maximumOrderQuantity: {needToCheckBeForSubmit: true, value: "", error: ""},
     });
 
     const validateIsFree = (value) => {
@@ -52,12 +57,12 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
     const handleOpenDialog = () => {
         setNewTicket({
             id: formFields.ticketType.value.length,
-            name: {needToCheckBeForSubmit: true, label: "Tên loại vé", value: "", error: ""},
-            description: {needToCheckBeForSubmit: true, label: "Mô tả loại vé", value: "", error: ""},
-            price: {needToCheckBeForSubmit: true, label: "Giá vé", value: "", error: ""},
-            totalQuantity: {needToCheckBeForSubmit: true, label: "Số lượng vé", value: "", error: ""},
-            minimumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối thiểu trong 1 đơn hàng", value: "", error: ""},
-            maximumOrderQuantity: {needToCheckBeForSubmit: true, label: "Lượng vé tối đa trong 1 đơn hàng", value: "", error: ""},
+            name: {needToCheckBeForSubmit: true, value: "", error: ""},
+            description: {needToCheckBeForSubmit: true, value: "", error: ""},
+            price: {needToCheckBeForSubmit: true, value: "", error: ""},
+            totalQuantity: {needToCheckBeForSubmit: true, value: "", error: ""},
+            minimumOrderQuantity: {needToCheckBeForSubmit: true, value: "", error: ""},
+            maximumOrderQuantity: {needToCheckBeForSubmit: true, value: "", error: ""},
         });
         setOpenDialog(true);
     };
@@ -171,6 +176,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                     ]}
                     size="medium"
                     isRequired={true}
+                    isDisabled={isDisabled}
                     defaultValue={false}
                 />
             </Box>
@@ -192,6 +198,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                     <Stack direction={'row'} spacing={1} mt={1}>
                         <ValidateDateTimePicker
                             isRequired={true}
+                            isDisabled={isDisabled}
                             label={formFields.startSellingTicketTime.label}
                             fieldName="startSellingTicketTime"
                             value={formFields.startSellingTicketTime.value}
@@ -203,6 +210,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                         />
                         <ValidateDateTimePicker
                             isRequired={true}
+                            isDisabled={isDisabled}
                             label={formFields.endSellingTicketTime.label}
                             fieldName="endSellingTicketTime"
                             value={formFields.endSellingTicketTime.value}
@@ -246,23 +254,26 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                                 <IconButton onClick={() => handleEditTicket(index)} >
                                     <Edit />
                                 </IconButton>
-                                <IconButton onClick={() => handleDeleteTicket(index)}>
+                                <IconButton
+                                    disabled={isDisabled}
+                                    onClick={() => handleDeleteTicket(index)}>
                                     <Delete />
                                 </IconButton>
                             </Box>
                         </Paper>
                     ))}
 
-                    <Box display="flex" justifyContent="center">
-                        <Button
-                            variant="outlined"
-                            startIcon={<Add />}
-                            onClick={handleOpenDialog}
-                        >
-                            Tạo loại vé mới
-                        </Button>
-
-                    </Box>
+                    {!isDisabled && (
+                        <Box display="flex" justifyContent="center">
+                            <Button
+                                variant="outlined"
+                                startIcon={<Add/>}
+                                onClick={handleOpenDialog}
+                            >
+                                Tạo loại vé mới
+                            </Button>
+                        </Box>
+                    )}
 
                     {/* Dialog thêm vé */}
                     <TicketModal
@@ -271,6 +282,7 @@ function EventTicket({ formFields, setFormFields, updateField, updateError}) {
                         handleSaveTicket={handleSaveTicket}
                         ticket={newTicket}
                         setTicket={setNewTicket}
+                        isDisabled={isDisabled}
                     />
                     <ConfirmModal
                         open={openConfirmModal}

@@ -19,7 +19,10 @@ import {
     LazyOAuth2RedirectPage,
     LazySimpleLayout,
     LazyForgotPasswordPage,
-    LazyCreateEventPage, LazyBookingTicketPage, LazyTransactionResultPage,
+    LazyCreateEventPage,
+    LazyBookingTicketPage,
+    LazyTransactionResultPage,
+    LazyMyEventDetailPage,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -72,6 +75,7 @@ const routeDefinitions = createRoutesFromElements(
             >
                 {/* todo: cho nay bo trang my events (list) */}
                 <Route path="create-event" element={<LazyCreateEventPage/>} />
+                <Route path="event-detail/:eventId" element={<LazyMyEventDetailPage/>} />
             </Route>
             <Route
                 element={
@@ -83,6 +87,20 @@ const routeDefinitions = createRoutesFromElements(
                 <Route path="/booking/:eventId" element={<LazyBookingTicketPage/>} />
                 <Route path="/transaction-result" element={<LazyTransactionResultPage/>} />
             </Route>
+        </Route>
+
+        {/*todo for test, delete the fragment below*/}
+        <Route
+            path="organizer"
+            element={
+                <Suspense fallback={<LoadingComponent />}>
+                    <LazyOrganizerLayout />
+                </Suspense>
+            }
+        >
+                <Route path="event-detail" element={<LazyMyEventDetailPage/>} />
+                {/*<Route path="event-detail/:eventId" element={<LazyMyEventDetailPage/>} />*/}
+
         </Route>
 
         {/*WITHOUT ROLE*/}

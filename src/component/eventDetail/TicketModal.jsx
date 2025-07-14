@@ -22,7 +22,8 @@ function TicketModal({
                          handleSaveTicket,
                          ticket,
                          setTicket,
-}) {
+                         isDisabled = false,
+                     }) {
 
     const updateNewTicketField = (fieldName, newValue) => {
         setTicket((prev) => ({
@@ -47,18 +48,18 @@ function TicketModal({
 
     // VALIDATE TICKET INFORMATION
     const validateTicketName = (value) => {
-        const fieldName = ticket.name.label;
+        const fieldName = "Tên loại vé";
         const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 100);
         return error || null;
     }
     const validateTicketDescription = (value) => {
-        const fieldName = ticket.description.label;
+        const fieldName = "Mô tả loại vé";
         const error = checkRequiredInput(fieldName, value) || checkStringMaxLength(value, fieldName, 250);
         return error || null;
     }
 
     const validateTicketPrice = (value) => {
-        const fieldName = ticket.price.label;
+        const fieldName = "Giá vé";
         const error = checkRequiredInput(fieldName, value);
         return error || null;
     }
@@ -66,28 +67,28 @@ function TicketModal({
 
     //VALIDATE TICKET QUANTITY
     const validateTicketTotalQuantity = (total, max) => {
-        const fieldName = ticket.totalQuantity.label;
+        const fieldName = "Số lượng vé";
         const error = checkRequiredInput(fieldName, total)
-            || checkNumberGreaterThan(fieldName, total, max, ticket.maximumOrderQuantity.label)
+            || checkNumberGreaterThan(fieldName, total, max, "Lượng vé tối đa trong 1 đơn hàng")
         ;
         return error || null;
     }
 
     const validateTicketMinimumOrderQuantity = (min, max) => {
-        const fieldName = ticket.minimumOrderQuantity.label;
+        const fieldName = "Lượng vé tối thiểu trong 1 đơn hàng";
 
         const error = checkRequiredInput(fieldName, min)
-            || checkNumberSmallerThan(fieldName, min, max, ticket.maximumOrderQuantity.label);
+            || checkNumberSmallerThan(fieldName, min, max, "Lượng vé tối đa trong 1 đơn hàng");
 
         return error || null;
     }
 
     const validateTicketMaximumOrderQuantity = (max, min, total) => {
-        const fieldName = ticket.maximumOrderQuantity.label;
+        const fieldName = "Lượng vé tối đa trong 1 đơn hàng";
 
         const error = checkRequiredInput(fieldName, max)
-            || checkNumberGreaterThan(fieldName, max, min, ticket.minimumOrderQuantity.label)
-            || checkNumberSmallerThan(fieldName, max, total, ticket.totalQuantity.label);
+            || checkNumberGreaterThan(fieldName, max, min, "Lượng vé tối thiểu trong 1 đơn hàng")
+            || checkNumberSmallerThan(fieldName, max, total, "Số lượng vé");
 
         return error || null;
     }
@@ -132,7 +133,7 @@ function TicketModal({
             <DialogContent>
                 <Stack direction={'row'} spacing={1} mt={2}>
                     <ValidationTextField
-                        label={ticket.name.label}
+                        label="Tên loại vé"
                         fieldName="name"
                         value={ticket.name.value}
                         error={ticket.name.error}
@@ -140,11 +141,12 @@ function TicketModal({
                         setValue={updateNewTicketField}
                         setError={updateNewTicketError}
                         isRequired={true}
+                        isDisabled={isDisabled}
                         type="text"
                     />
 
                     <ValidationTextField
-                        label={ticket.description.label}
+                        label="Mô tả loại vé"
                         fieldName="description"
                         value={ticket.description.value}
                         error={ticket.description.error}
@@ -152,13 +154,15 @@ function TicketModal({
                         setValue={updateNewTicketField}
                         setError={updateNewTicketError}
                         isRequired={true}
+                        isDisabled={isDisabled}
                         type="text"
                     />
                 </Stack>
                 <Stack direction={'row'} spacing={1} mt={2}>
                     <ValidateNumberField
                         isRequired={true}
-                        label={ticket.price.label}
+                        isDisabled={isDisabled}
+                        label="Giá vé"
                         fieldName="price"
                         value={ticket.price.value}
                         error={ticket.price.error}
@@ -171,7 +175,8 @@ function TicketModal({
 
                     <ValidateNumberField
                         isRequired={true}
-                        label={ticket.totalQuantity.label}
+                        isDisabled={isDisabled}
+                        label="Số lượng vé"
                         fieldName="totalQuantity"
                         value={ticket.totalQuantity.value}
                         error={ticket.totalQuantity.error}
@@ -183,7 +188,8 @@ function TicketModal({
                 <Stack direction={'row'} spacing={1} mt={2}>
                     <ValidateNumberField
                         isRequired={true}
-                        label={ticket.minimumOrderQuantity.label}
+                        isDisabled={isDisabled}
+                        label="Lượng vé tối thiểu trong 1 đơn hàng"
                         fieldName="minimumOrderQuantity"
                         value={ticket.minimumOrderQuantity.value}
                         error={ticket.minimumOrderQuantity.error}
@@ -193,7 +199,8 @@ function TicketModal({
                     />
                     <ValidateNumberField
                         isRequired={true}
-                        label={ticket.maximumOrderQuantity.label}
+                        isDisabled={isDisabled}
+                        label="Lượng vé tối đa trong 1 đơn hàng"
                         fieldName="maximumOrderQuantity"
                         value={ticket.maximumOrderQuantity.value}
                         error={ticket.maximumOrderQuantity.error}
