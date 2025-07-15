@@ -39,7 +39,6 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
-                <Route path="/my-events" element={<LazyMyEvents/>} />
             </Route>
         </Route>
 
@@ -73,7 +72,7 @@ const routeDefinitions = createRoutesFromElements(
                     </Suspense>
                 }
             >
-                {/* todo: cho nay bo trang my events (list) */}
+                <Route path="my-events" element={<LazyMyEvents/>} />
                 <Route path="create-event" element={<LazyCreateEventPage/>} />
                 <Route path="event-detail/:eventId" element={<LazyMyEventDetailPage/>} />
             </Route>

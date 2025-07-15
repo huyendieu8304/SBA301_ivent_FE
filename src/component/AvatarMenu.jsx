@@ -74,7 +74,7 @@ const AvatarMenu = ({setIsLoading}) => {
                     </MenuItem>
                     <MenuItem onClick={() => {
                         handleCloseUserMenu(); 
-                        navigate("/my-events"); 
+                        navigate("/organizer/my-events");
                     }}>
                         <Typography
                             sx={{

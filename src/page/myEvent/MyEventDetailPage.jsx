@@ -488,8 +488,6 @@ function CreateEventPage(props) {
                     </Button>
                 </Box>
             }
-
-
         </>
     );
 }
