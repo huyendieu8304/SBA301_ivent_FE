@@ -23,7 +23,8 @@ import {
     LazyBookingTicketPage,
     LazyTransactionResultPage,
     LazyMyEventDetailPage,
-    LazyTicketDetail
+    LazyTicketDetail,
+    LazyMyBoughtTickets
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
