@@ -20,7 +20,7 @@ import LoadingComponent from "../component/LoadingComponent.jsx";
 
 const drawerWidth = 240;
 
-const AdminLayout = () => {
+const OperatorLayout = () => {
     const [pageTitle, setPageTitle] = useState("");
     const {authorities} = useAuth();
     const theme = useTheme();
@@ -105,38 +105,47 @@ const AdminLayout = () => {
                     <Divider />
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/admin">
+                            <ListItemButton component={Link} to="/operator">
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
                                 <ListItemText primary="Thống kê" />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/admin/event">
+                            <ListItemButton component={Link} to="/operator/event">
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
                                 <ListItemText primary="Quản lý sự kiện" />
                             </ListItemButton>
                         </ListItem>
 
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/admin/users">
+                            <ListItemButton component={Link} to="/operator/approve">
                                 <ListItemIcon><MailIcon /></ListItemIcon>
-                                <ListItemText primary="Quản lý người dùng" />
+                                <ListItemText primary="Phê duyệt sự kiện" />
                             </ListItemButton>
                         </ListItem>
                     </List>
 
                     <Divider />
                     <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/operator/profile">
+                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemText primary="Thông tin tài khoản" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/operator/event">
+                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemText primary="Danh sách sự kiện" />
+                            </ListItemButton>
+                        </ListItem>
+
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/logout">
+                                <ListItemIcon><MailIcon /></ListItemIcon>
+                                <ListItemText primary="Đăng xuất" />
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </Drawer>
                 <Box
@@ -164,4 +173,4 @@ const AdminLayout = () => {
     );
 };
 
-export default AdminLayout;
+export default OperatorLayout;

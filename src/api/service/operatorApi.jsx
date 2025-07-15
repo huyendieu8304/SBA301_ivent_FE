@@ -15,7 +15,7 @@ const operatorApi = {
     ),
     getEventDetailsById: (id, successHandler, errorHandler) =>
     callApi(
-        url.getEventDetails(id),
+        url.operatorEventDetails(id),
         HTTP_METHOD.GET,
         {},
         {},
@@ -23,6 +23,16 @@ const operatorApi = {
         successHandler,
         errorHandler,
     ),
+    getPendingEvent: (successHandler, errorHandler) =>
+        callApi(
+            url.pendingEvent,
+            HTTP_METHOD.GET,
+            {},
+            {},
+            true,
+            successHandler,
+            errorHandler,
+        ),
 };
 
 export default operatorApi;

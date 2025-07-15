@@ -106,7 +106,7 @@ const dataset = [
     },
 ];
 
-const AdminDashboard = () => {
+const Dashboard = () => {
     const {setPageTitle} = useOutletContext();
     useEffect(() => {
         setPageTitle("Dashboard");
@@ -174,4 +174,4 @@ const AdminDashboard = () => {
     )
 }
 
-export default AdminDashboard;
+export default Dashboard;

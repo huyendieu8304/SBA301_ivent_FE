@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import eventApi from "../../api/service/./operatorApi.jsx";
 import {useNavigate} from "react-router";
 import dayjs from "dayjs";
-import {Box, Button, Card, CardContent, Chip, Container, Typography, useTheme} from "@mui/material";
+import {Box, Button, Card, CardContent, Chip, Container, TextField, Typography, useTheme} from "@mui/material";
 import TableComponent from "../../component/TableComponent";
 import LoadingComponent from "../../component/LoadingComponent";
 
@@ -46,7 +46,7 @@ const EventListPage = () => {
                 </Box>
             )
         }
-,
+        ,
         {
             field: 'actions',
             headerName: 'Chi tiết',
@@ -74,8 +74,9 @@ const EventListPage = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        eventApi.getAllOperatorEvents(getDataSuccess,getDataFail)
+        eventApi.getPendingEvent(getDataSuccess,getDataFail)
     }, []);
+
     const handleDetailClick = (row) => {
         navigate(`/operator/events/${row.id}`);
     }
@@ -95,6 +96,14 @@ const EventListPage = () => {
             }
         })
     }
+    // const fetchEvents = (name = "") => {
+    //     setIsLoading(true);
+    //     eventApi.getAllOperatorEvents(accountId, page, size, name, getDataSuccess, getDataFail);
+    // };
+    // const handleSearchSubmit = (e) => {
+    //     e.preventDefault();
+    //     fetchEvents(eventName);
+    // };
 
     return (
         <>
@@ -103,8 +112,24 @@ const EventListPage = () => {
                 <Card sx={{ borderRadius: 2 }}>
                     <CardContent>
                         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-                           Tất cả Sự kiện
+                            Tất cả Sự kiện
                         </Typography>
+                        {/*<form onSubmit={handleSearchSubmit}>*/}
+                        {/*    <Box display="flex" alignItems="center" gap={2} mb={2}>*/}
+                        {/*        <TextField*/}
+                        {/*            label="Nhập tên sự kiện"*/}
+                        {/*            variant="outlined"*/}
+                        {/*            value={eventName}*/}
+                        {/*            onChange={(e) => setEventName(e.target.value)}*/}
+                        {/*            size="small"*/}
+                        {/*            sx={{width: 300}}*/}
+                        {/*        />*/}
+                        {/*        <Button type="submit" variant="contained" color="primary" size="medium"*/}
+                        {/*                sx={{color: "white", fontWeight: "bold", textTransform: "none"}}>*/}
+                        {/*            Tìm kiếm*/}
+                        {/*        </Button>*/}
+                        {/*    </Box>*/}
+                        {/*</form>*/}
                         <TableComponent columns={columns} data={events} handleClickRow={() => {}}/>
                     </CardContent>
                 </Card>

@@ -16,11 +16,14 @@ export const LazyProfilePage = React.lazy(
     () => import("../page/user/ProfilePage.jsx"),
 );
 
-export const LazyAdminDashboard = React.lazy(
-    () => import("../page/admin/AdminDashboard.jsx"),
+export const LazyOperatorDashboard = React.lazy(
+    () => import("../page/operator/./Dashboard"),
 );
-export const LazyAdminEvent = React.lazy(
-    () => import("../page/admin/AdminEventPage.jsx"),
+export const LazyOperatorEvent = React.lazy(
+    () => import("../page/operator/EventPage.jsx"),
+);
+export const LazyOperatorEventPending = React.lazy(
+    () => import("../page/operator/PendingPage.jsx"),
 );
 
 export const LazyEmailValidationTokenPage = React.lazy(
@@ -39,8 +42,8 @@ export const LazyMainLayout = React.lazy(
     () => import("../layout/MainLayout.jsx"),
 );
 
-export const LazyAdminLayout = React.lazy(
-    () => import("../layout/AdminLayout.jsx"),
+export const LazyOperatorLayout = React.lazy(
+    () => import("../layout/./OperatorLayout"),
 );
 
 export const LazySimpleLayout = React.lazy(

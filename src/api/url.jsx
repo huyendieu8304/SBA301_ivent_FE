@@ -5,8 +5,8 @@ const PATH_ADMIN = PATH_URL + "/admin";
 const PATH_CATEGORY = PATH_URL + "/category";
 const PATH_MY_EVENT = PATH_URL + "/event/my-event";
 const PATH_PAYMENT = PATH_URL + "/payment";
-
 const PATH_OPERATOR = PATH_URL + "/operator";
+
 export const url = {
     //AUTHENTICATE + user information
     login: PATH_AUTH_URL + "/login",
@@ -27,17 +27,15 @@ export const url = {
     createEvent: PATH_MY_EVENT + "/create",
 
     //EVENT - OPERATOR
-    adminEvent : PATH_ADMIN + "/event",
-    getAdminEventDetails: (id) => PATH_ADMIN + "/event"+ `/${id}`,
-
+    operatorEvent : PATH_OPERATOR + "/event",
+    operatorEventDetails: (id) => PATH_OPERATOR +`/${id}`,
+    pendingEvent: PATH_OPERATOR +"/approve",
     //USER - ADMIN
 
     //PAYMENT
     payment: PATH_PAYMENT+"/vn-pay",
     getPaymentDetails: (txnRefCode) => PATH_PAYMENT + `/get-payment-details/${txnRefCode}`,
-    operatorEvent : PATH_OPERATOR + "/event",
-    getOperatorEventDetails: (id) => PATH_OPERATOR + "/event"+ `/${id}`,
-};
+
 
     //COMMON
     getCategories: PATH_CATEGORY + "/",
