@@ -15,25 +15,7 @@ import {messageService} from "../../service/MessageService.jsx";
 import Messages from "../../common/Message.jsx";
 import eventApi from "../../api/service/eventApi.jsx";
 import {checkAllFieldsValid} from "../../common/ValidateFunction.jsx";
-import {useNavigate } from "react-router";
-import { useSearchParams } from "react-router-dom";
-import loginPage from "../user/LoginPage.jsx";
-
-const STEPS = [
-    {
-        id: 0,
-        label: 'Thông tin sự kiện',
-        param: "info"
-    }, {
-        id: 1,
-        label: 'Loại vé',
-        param: "ticket"
-    }, {
-        id: 2,
-        label: 'Thông tin thanh toán',
-        param: "payment"
-    }
-];
+import {useNavigate, useParams} from "react-router";
 
 const CATEGORY_TEMP= [
     {
@@ -54,78 +36,11 @@ const CATEGORY_TEMP= [
     }
 ];
 
-
-const TEMP_EVENT = {
-    "id": "04bd9cef-4d34-11f0-9cac-0242ac140002",
-    "name": "Hội chợ Việc Làm 2025",
-    "isOnline": null,
-    "province": "Thành phố Hà Nội",
-    "ward": "Phường Phúc Xá",
-    "location": "Trường ĐH Quốc gia",
-    // "description": "<p> Hội chợ giúp sinh viên kết nối với nhà tuyển dụng. </p>",
-    "description": null,
-    "startTime": "2025-07-10T08:00:00",
-    "endTime": "2025-07-10T17:00:00",
-    "startSellingTicketTime": "2025-06-01T00:00:00",
-    "endSellingTicketTime": "2025-07-09T23:59:59",
-    "eventLogoUri": "https://salt.tkbcdn.com/ts/ds/fa/28/59/2ad9a7ae8820f111273c640531ad4fcf.jpg",
-    "bannerUri": "https://salt.tkbcdn.com/ts/ds/57/04/b1/bd123932d98c10ea3ede92bb548ca047.png",
-    "organizerName": "Bộ GD & ĐT",
-    "organizerInformation": "Tổ chức bởi Bộ Giáo dục và các doanh nghiệp liên kết",
-    "organizerLogoUri": "https://salt.tkbcdn.com/ts/ds/fa/28/59/2ad9a7ae8820f111273c640531ad4fcf.jpg",
-    "bankName": "BIDV",
-    "bankBranch": "Chi nhánh Cầu Giấy",
-    "bankNumber": "88889999",
-    "bankAccountOwner": "B? GD & ÐT",
-    "categoryId": "4",
-    "ticketTypes": [
-        {
-            "id": "1",
-            "name": "Vé phổ thông",
-            "description": "Vé phổ thông",
-            "totalQuantity": 50,
-            "remain": 50,
-            "minimumOrderQuantity": 3,
-            "maximumOrderQuantity": 5,
-            "price": "100000.00"
-        },
-        {
-            "id": "2",
-            "name": "Vé hạng 3",
-            "description": "Vé hạng 3",
-            "totalQuantity": 40,
-            "remain": 40,
-            "minimumOrderQuantity": 1,
-            "maximumOrderQuantity": 5,
-            "price": "200000.00"
-        },
-        {
-            "id": "3",
-            "name": "Vé hạng 2",
-            "description": "Vé hạng 2",
-            "totalQuantity": 30,
-            "remain": 30,
-            "minimumOrderQuantity": 1,
-            "maximumOrderQuantity": 5,
-            "price": "300000.00"
-        },
-        {
-            "id": "4",
-            "name": "Vé hạng nhất",
-            "description": "Vé hạng nhất",
-            "totalQuantity": 20,
-            "remain": 20,
-            "minimumOrderQuantity": 1,
-            "maximumOrderQuantity": 5,
-            "price": "400000.00"
-        }
-    ],
-    // "status": "APPROVED"
-    "status": "PENDING"
-};
-
 function mapEventResponseToFormFields(eventResponse) {
+    const isFree = eventResponse.ticketTypes.length === 0;
+
     return {
+        id: eventResponse.id || "",
         name: {
             needToCheckBeForSubmit: true,
             label: "Tên sự kiện",
@@ -139,13 +54,13 @@ function mapEventResponseToFormFields(eventResponse) {
             error: ""
         },
         province: {
-            needToCheckBeForSubmit: true,
+            needToCheckBeForSubmit: !eventResponse.isOnline,
             label: "Tỉnh",
             value: eventResponse.province || "",
             error: ""
         },
         ward: {
-            needToCheckBeForSubmit: true,
+            needToCheckBeForSubmit: !eventResponse.isOnline,
             label: "Quận/Huyện",
             value: eventResponse.ward || "",
             error: ""
@@ -175,13 +90,13 @@ function mapEventResponseToFormFields(eventResponse) {
             error: ""
         },
         startSellingTicketTime: {
-            needToCheckBeForSubmit: true,
+            needToCheckBeForSubmit: !isFree,
             label: "Thời gian bắt đầu bán vé",
             value: eventResponse.startSellingTicketTime || null,
             error: ""
         },
         endSellingTicketTime: {
-            needToCheckBeForSubmit: true,
+            needToCheckBeForSubmit: !isFree,
             label: "Thời gian kết thúc bán vé",
             value: eventResponse.endSellingTicketTime || null,
             error: ""
@@ -247,7 +162,7 @@ function mapEventResponseToFormFields(eventResponse) {
             error: ""
         },
         ticketType: {
-            needToCheckBeForSubmit: true,
+            needToCheckBeForSubmit: !isFree,
             label: "Loại vé",
             value: (eventResponse.ticketTypes || []).map((ticket, index) => ({
                 id: index,
@@ -294,13 +209,13 @@ function mapEventResponseToFormFields(eventResponse) {
     };
 }
 
-//todo test lại create event
-
 function CreateEventPage(props) {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const {eventId} = useParams();
 
     const [formFields, setFormFields] = useState({
+        id: "",
         name: {needToCheckBeForSubmit: true, label: "Tên sự kiện", value: "", error: ""},
         isOnline: {needToCheckBeForSubmit: true, label: "Hình thức sự kiện", value: false, error: ""},
         province: {needToCheckBeForSubmit: true, label: "Tỉnh", value: "", error: ""},
@@ -368,103 +283,117 @@ function CreateEventPage(props) {
     }, [formFields.isFree.value]);
 
     const [categories, setCategories] = useState(CATEGORY_TEMP);
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
-    // }, [])
-    //
-    // const getCategoriesSuccess = (data) => {
-    //     setCategories(data)
-    //     setIsLoading(false);
-    // }
-    //
-    // const getCategoriesFail = (data) => {
-    //     console.log("get categories fail")
-    //     console.error(data)
-    //     setIsLoading(false);
-    // }
-
     useEffect(() => {
-        setFormFields(mapEventResponseToFormFields(TEMP_EVENT));
+        setIsLoading(true);
+        categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
+    }, [])
+
+    const getCategoriesSuccess = (data) => {
+        setCategories(data)
+        setIsLoading(false);
+    }
+
+    const getCategoriesFail = (data) => {
+        console.log("get categories fail")
+        console.error(data)
+        setIsLoading(false);
+    }
+
+    //get event's details
+    useEffect(() => {
+        setIsLoading(true);
+        eventApi.getMyEventDetails(eventId, getEventDetailSuccess, getEventDetailFail);
     }, []);
+
+    const getEventDetailSuccess = (data) => {
+        setFormFields(mapEventResponseToFormFields(data));
+        setIsLoading(false);
+    }
+
+    const getEventDetailFail = (error) => {
+        if (error.response.data.httpStatusCode !== "OK") {
+            messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
+            setIsLoading(false);
+        }
+    }
 
     //SUBMIT FORM
     const handleUpdateEvent = () => {
-        console.log(formFields);
+        const errorMessage = checkAllFieldsValid(formFields);
+        //còn lỗi thì không cho lưu đâu hẹ hẹ :>
+        if (errorMessage) {
+            messageService.showMessage(errorMessage, MESSAGE_TYPES.ERROR);
+            return;
+        }
 
-        // const errorMessage = checkAllFieldsValid(formFields);
-        // //còn lỗi thì không cho lưu đâu hẹ hẹ :>
-        // if (errorMessage) {
-        //     messageService.showMessage(errorMessage, MESSAGE_TYPES.ERROR);
-        //     return;
-        // }
-        //
-        // const formData = new FormData();
-        // if (!formFields.isFree.value) {
-        //     if (!formFields.ticketType.value || formFields.ticketType.value.length === 0 ) {
-        //         messageService.showMessage(Messages.MSG_E_00017, MESSAGE_TYPES.ERROR);
-        //         return;
-        //     }
-        //     formData.append("startSellingTicketTime", dayjs(formFields.startSellingTicketTime.value).format(DATETIME_FORMAT));
-        //     formData.append("endSellingTicketTime", dayjs(formFields.endSellingTicketTime.value).format(DATETIME_FORMAT));
-        //     formFields.ticketType.value.forEach((ticket, index) => {
-        //         formData.append(`ticketTypes[${index}].id`, ticket.id.value);
-        //         formData.append(`ticketTypes[${index}].name`, ticket.name.value);
-        //         formData.append(`ticketTypes[${index}].description`, ticket.description.value);
-        //         formData.append(`ticketTypes[${index}].price`, ticket.price.value);
-        //         formData.append(`ticketTypes[${index}].totalQuantity`, ticket.totalQuantity.value);
-        //         formData.append(`ticketTypes[${index}].minimumOrderQuantity`, ticket.minimumOrderQuantity.value);
-        //         formData.append(`ticketTypes[${index}].maximumOrderQuantity`, ticket.maximumOrderQuantity.value);
-        //     })
-        // }
-        //
-        // formData.append("name", formFields.name.value);
-        // formData.append("description", formFields.description.value);
-        //
-        // formData.append("isOnline", formFields.isOnline.value);
-        // if (!formFields.isOnline.value) {
-        //     formData.append("province", formFields.province.value);
-        //     formData.append("ward", formFields.ward.value);
-        // }
-        // formData.append("location", formFields.location.value);
-        //
-        // formData.append("startTime", dayjs(formFields.startTime.value).format(DATETIME_FORMAT));
-        // formData.append("endTime", dayjs(formFields.endTime.value).format(DATETIME_FORMAT));
-        //
-        // const eventLogo = formFields.eventLogoUri.value;
-        // if (eventLogo && eventLogo instanceof File && eventLogo.size > 0) {
-        //     formData.append("eventLogoFile", eventLogo);
-        // }
-        // const eventBanner = formFields.bannerUri.value;
-        // if (eventBanner && eventBanner instanceof File && eventBanner.size > 0) {
-        //     formData.append("bannerFile", eventBanner);
-        // }
-        //
-        // formData.append("organizerName", formFields.organizerName.value);
-        // formData.append("organizerInformation", formFields.organizerInformation.value);
-        // const organizerLogo = formFields.organizerLogoUri.value;
-        // if (organizerLogo && organizerLogo instanceof File && organizerLogo.size > 0) {
-        //     formData.append("organizerLogoFile", organizerLogo);
-        // }
-        //
-        // formData.append("bankName", formFields.bankName.value);
-        // formData.append("bankBranch", formFields.bankBranch.value);
-        // formData.append("bankAccountOwner", formFields.bankAccountOwner.value);
-        // formData.append("bankNumber", formFields.bankNumber.value);
-        //
-        // formData.append("categoryId", formFields.category.value);
-        //
-        // setIsLoading(true)
-        // eventApi.createEvent(formData, createSuccessfully, createFail)
+        const formData = new FormData();
+        if (!formFields.isFree.value) {
+            if (!formFields.ticketType.value || formFields.ticketType.value.length === 0 ) {
+                messageService.showMessage(Messages.MSG_E_00017, MESSAGE_TYPES.ERROR);
+                return;
+            }
+            formData.append("startSellingTicketTime", dayjs(formFields.startSellingTicketTime.value).format(DATETIME_FORMAT));
+            formData.append("endSellingTicketTime", dayjs(formFields.endSellingTicketTime.value).format(DATETIME_FORMAT));
+            formFields.ticketType.value.forEach((ticket, index) => {
+                formData.append(`ticketTypes[${index}].id`, ticket.id.value);
+                formData.append(`ticketTypes[${index}].name`, ticket.name.value);
+                formData.append(`ticketTypes[${index}].description`, ticket.description.value);
+                formData.append(`ticketTypes[${index}].price`, ticket.price.value);
+                formData.append(`ticketTypes[${index}].totalQuantity`, ticket.totalQuantity.value);
+                formData.append(`ticketTypes[${index}].minimumOrderQuantity`, ticket.minimumOrderQuantity.value);
+                formData.append(`ticketTypes[${index}].maximumOrderQuantity`, ticket.maximumOrderQuantity.value);
+            })
+        }
+
+        formData.append("id", formFields.id);
+
+        formData.append("name", formFields.name.value);
+        formData.append("description", formFields.description.value);
+
+        formData.append("isOnline", formFields.isOnline.value);
+        if (!formFields.isOnline.value) {
+            formData.append("province", formFields.province.value);
+            formData.append("ward", formFields.ward.value);
+        }
+        formData.append("location", formFields.location.value);
+
+        formData.append("startTime", dayjs(formFields.startTime.value).format(DATETIME_FORMAT));
+        formData.append("endTime", dayjs(formFields.endTime.value).format(DATETIME_FORMAT));
+
+        const eventLogo = formFields.eventLogoUri.value;
+        if (eventLogo && eventLogo instanceof File && eventLogo.size > 0) {
+            formData.append("eventLogoFile", eventLogo);
+        }
+        const eventBanner = formFields.bannerUri.value;
+        if (eventBanner && eventBanner instanceof File && eventBanner.size > 0) {
+            formData.append("bannerFile", eventBanner);
+        }
+
+        formData.append("organizerName", formFields.organizerName.value);
+        formData.append("organizerInformation", formFields.organizerInformation.value);
+        const organizerLogo = formFields.organizerLogoUri.value;
+        if (organizerLogo && organizerLogo instanceof File && organizerLogo.size > 0) {
+            formData.append("organizerLogoFile", organizerLogo);
+        }
+
+        formData.append("bankName", formFields.bankName.value);
+        formData.append("bankBranch", formFields.bankBranch.value);
+        formData.append("bankAccountOwner", formFields.bankAccountOwner.value);
+        formData.append("bankNumber", formFields.bankNumber.value);
+
+        formData.append("categoryId", formFields.category.value);
+
+        setIsLoading(true)
+        eventApi.updateMyEventDetails(formData, updateSuccessfully, updateFail)
     }
 
-    const createSuccessfully = (data) => {
-        messageService.showMessage(Messages.MSG_I_00008, MESSAGE_TYPES.INFO);
+    const updateSuccessfully = (data) => {
+        messageService.showMessage(Messages.MSG_I_00011, MESSAGE_TYPES.INFO);
         setIsLoading(false);
         // todo navigate toi my events list
     }
 
-    const createFail = (error) => {
+    const updateFail = (error) => {
         if (error.response.data.httpStatusCode !== "OK") {
             messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
             setIsLoading(false);

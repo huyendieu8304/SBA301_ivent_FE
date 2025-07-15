@@ -46,7 +46,28 @@ const eventApi = {
             successHandler,
             errorHandler,
             true,
-        )
+        ),
+    getMyEventDetails: (id, successHandler, errorHandler) =>
+        callApi(
+            url.getMyEventDetail(id),
+            HTTP_METHOD.GET,
+            {},
+            {},
+            true,
+            successHandler,
+            errorHandler,
+        ),
+    updateMyEventDetails: (formdata, successHandler, errorHandler) =>
+        callApi(
+            url.updateMyEventDetail,
+            HTTP_METHOD.PUT,
+            {},
+            formdata,
+            true,
+            successHandler,
+            errorHandler,
+            true
+        ),
 };
 
 export default eventApi;

@@ -24,6 +24,8 @@ export const url = {
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,
     getEventAndTicketTypeDetails: (id) => PATH_URL+`/event/event-and-ticket-details/${id}`,
     createEvent: PATH_MY_EVENT + "/create",
+    getMyEventDetail: (id) => `${PATH_MY_EVENT}/${id}`,
+    updateMyEventDetail: PATH_MY_EVENT,
 
     //EVENT - OPERATOR
     adminEvent : PATH_ADMIN + "/event",

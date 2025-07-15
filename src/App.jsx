@@ -89,20 +89,6 @@ const routeDefinitions = createRoutesFromElements(
             </Route>
         </Route>
 
-        {/*todo for test, delete the fragment below*/}
-        <Route
-            path="organizer"
-            element={
-                <Suspense fallback={<LoadingComponent />}>
-                    <LazyOrganizerLayout />
-                </Suspense>
-            }
-        >
-                <Route path="event-detail" element={<LazyMyEventDetailPage/>} />
-                {/*<Route path="event-detail/:eventId" element={<LazyMyEventDetailPage/>} />*/}
-
-        </Route>
-
         {/*WITHOUT ROLE*/}
         <Route
             element={
