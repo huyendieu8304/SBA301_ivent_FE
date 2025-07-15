@@ -4,7 +4,13 @@ import React from "react";
 import {InputLabel, Stack, Typography} from "@mui/material";
 import {checkRequiredInput, checkStringMaxLength} from "../../common/ValidateFunction.jsx";
 
-function EventPayment({ formFields, setFormFields, updateField, updateError}) {
+function EventPayment({
+                          isDisabled = false,
+                          formFields,
+                          setFormFields,
+                          updateField,
+                          updateError
+}) {
      const validateEventBankName = (value) => {
          const fieldName = formFields.bankName.label;
          const error = checkRequiredInput(fieldName, value)
@@ -54,7 +60,7 @@ function EventPayment({ formFields, setFormFields, updateField, updateError}) {
             >
                 <InputLabel sx={{marginLeft: "4px"}}>
                         <span style={{color: "#027A48"}}>
-                            Thời gian bán vé <span style={{color: "red"}}>*</span>
+                            Thông tin thanh toán <span style={{color: "red"}}>*</span>
                         </span>
                 </InputLabel>
                 <Typography variant="body2" color="textSecondary">
@@ -71,6 +77,7 @@ function EventPayment({ formFields, setFormFields, updateField, updateError}) {
                     setValue={updateField}
                     setError={updateError}
                     isRequired={true}
+                    isDisabled={isDisabled}
                     type="text"
                 />
                 <ValidationTextField
@@ -82,6 +89,7 @@ function EventPayment({ formFields, setFormFields, updateField, updateError}) {
                     setValue={updateField}
                     setError={updateError}
                     isRequired={true}
+                    isDisabled={isDisabled}
                     type="text"
                 />
                 <ValidationTextField
@@ -93,6 +101,7 @@ function EventPayment({ formFields, setFormFields, updateField, updateError}) {
                     setValue={updateField}
                     setError={updateError}
                     isRequired={true}
+                    isDisabled={isDisabled}
                     type="text"
                 />
                 <ValidationTextField
@@ -104,6 +113,7 @@ function EventPayment({ formFields, setFormFields, updateField, updateError}) {
                     setValue={updateField}
                     setError={updateError}
                     isRequired={true}
+                    isDisabled={isDisabled}
                     type="text"
                 />
             </Stack>

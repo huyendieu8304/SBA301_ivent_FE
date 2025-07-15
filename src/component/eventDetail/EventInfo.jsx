@@ -42,7 +42,14 @@ const DEFAULT_DESCRIPTION = "<p><strong>Giới\n" +
     "<p><strong>Điều khoản và điều kiện:</strong></p><p>[TnC] sự kiện</p><p>Lưu ý về điều khoản trẻ em</p><p>Lưu ý về điều\n" +
     "    khoản VAT</p>"
 
-function EventInfo({ formFields, setFormFields, categories, updateField, updateError}) {
+function EventInfo({
+                       isDisabled = false,
+                       formFields,
+                       setFormFields,
+                       categories,
+                       updateField,
+                       updateError
+}) {
 
     const [wardList, setWardList] = useState([]);
 
@@ -256,7 +263,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                             error={formFields.eventLogoUri.error}
                             setError={updateError}
                             isRequired={true}
-                            isDisabled={false}
+                            isDisabled={isDisabled}
                             validatorFunction={validateEventLogo}
                         />
                     </Box>
@@ -281,7 +288,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                             error={formFields.bannerUri.error}
                             setError={updateError}
                             isRequired={true}
-                            isDisabled={false}
+                            isDisabled={isDisabled}
                             validatorFunction={validateEventBanner}
                         />
                     </Box>
@@ -296,6 +303,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     setValue={updateField}
                     setError={updateError}
                     isRequired={true}
+                    isDisabled={isDisabled}
                     type="text"
                 />
 
@@ -306,6 +314,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                         value={formFields.startTime.value}
                         error={formFields.startTime.error}
                         isRequired={true}
+                        isDisabled={isDisabled}
                         onChange={(val) => handleStartEndChange("startTime", val)}
                         // setValue={updateField}
                         // setError={updateError}
@@ -317,6 +326,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                         value={formFields.endTime.value}
                         error={formFields.endTime.error}
                         isRequired={true}
+                        isDisabled={isDisabled}
                         onChange={(val) => handleStartEndChange("endTime", val)}
                         // setValue={updateField}
                         // setError={updateError}
@@ -350,6 +360,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                         ]}
                         size="medium"
                         isRequired={true}
+                        isDisabled={isDisabled}
                         defaultValue={false}
                     />
                 </Box>
@@ -365,6 +376,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                             setError={updateError}
                             listOptions={PROVINCE_LIST}
                             isRequired={true}
+                            isDisabled={isDisabled}
                         />
                         <ValidateSelect
                             label={formFields.ward.label}
@@ -376,6 +388,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                             setError={updateError}
                             listOptions={wardList}
                             isRequired={true}
+                            isDisabled={isDisabled}
                         />
                     </Stack>
                 )}
@@ -388,6 +401,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     setValue={updateField}
                     setError={updateError}
                     isRequired={true}
+                    isDisabled={isDisabled}
                     type="text"
                 />
 
@@ -411,6 +425,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                     setError={updateError}
                     listOptions={categoryList}
                     isRequired={true}
+                    isDisabled={isDisabled}
                 />
             </Box>
             {/*description*/}
@@ -425,12 +440,13 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                 <ValidateRichTextEditor
                     label={formFields.description.label}
                     fieldName="description"
-                    value={DEFAULT_DESCRIPTION}
+                    value={formFields.description.value || DEFAULT_DESCRIPTION}
                     error={formFields.description.error}
                     validatorFunction={validateEventDescription}
                     setValue={updateField}
                     setError={updateError}
                     isRequired={true}
+                    isDisabled={isDisabled}
                 />
             </Box>
             {/*organizer*/}
@@ -466,7 +482,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                             error={formFields.organizerLogoUri.error}
                             setError={updateError}
                             isRequired={true}
-                            isDisabled={false}
+                            isDisabled={isDisabled}
                             validatorFunction={validateOrganizerLogo}
                         />
                     </Box>
@@ -487,6 +503,7 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                             setValue={updateField}
                             setError={updateError}
                             isRequired={true}
+                            isDisabled={isDisabled}
                             type="text"
                             sx={{
                                 marginBottom: '10px',
@@ -502,8 +519,8 @@ function EventInfo({ formFields, setFormFields, categories, updateField, updateE
                             setValue={updateField}
                             setError={updateError}
                             isRequired={true}
+                            isDisabled={isDisabled}
                             type="text"
-
                         />
                     </Box>
 

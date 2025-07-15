@@ -82,7 +82,9 @@ const MainLayout = () => {
                                 </Paper>
                                 <Stack direction="row" spacing={3}>
                                     <Button variant="outlined"
-                                            sx={{textTransform: "none", borderColor: "white", borderRadius: "10px"}}>
+                                            sx={{textTransform: "none", borderColor: "white", borderRadius: "10px"}}
+                                        onClick={() => navigate("/organizer/create-event")}
+                                    >
                                         <Typography
                                             variant="subtitle1"
                                             sx={{color: "white", fontFamily: 'Arial', fontSize: "14px"}}

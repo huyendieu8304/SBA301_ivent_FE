@@ -10,7 +10,8 @@ const ValidateRichTextEditor = ({
                                     setValue,
                                     setError,
                                     validatorFunction,
-                                    isRequired,
+                                    isRequired = false,
+                                    isDisabled = false,
                                 }) => {
 
     const richTextRef = useRef();
@@ -35,7 +36,8 @@ const ValidateRichTextEditor = ({
             <RichTextComponent
                 ref={richTextRef}
                 onChangeDebounced={handleDebouncedChange}
-                defaultValue={value}
+                value={value}
+                isDisabled={isDisabled}
             />
             <FormHelperText sx={{
                 color: "#d32f2f",

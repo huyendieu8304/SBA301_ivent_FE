@@ -11,6 +11,7 @@ function ValidateSelect({
                             listOptions,
                             size = "small",
                             isRequired = false,
+                            isDisabled = false,
                             validatorFunction,
                         }) {
 
@@ -35,6 +36,7 @@ function ValidateSelect({
                 )}
             </InputLabel>
             <Select
+                disabled={isDisabled}
                 // variant="standard"
                 value={value}
                 label={label}

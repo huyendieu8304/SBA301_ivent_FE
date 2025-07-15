@@ -27,4 +27,5 @@ export default class Messages {
     static MSG_I_00008 = "Tạo sự kiện mới thành công";
     static MSG_I_00009 = "Giao dịch thành công";
     static MSG_I_00010 = "Giao dịch đang chờ thanh toán";
+    static MSG_I_00011 = "Cập nhật sự kiện thành công";
 }

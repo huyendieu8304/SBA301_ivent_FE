@@ -166,7 +166,7 @@ function CreateEventPage(props) {
     };
 
     const handleNext = () => {
-        // todo: check xem có chỗ nào lỗi không trước khi chuyển qua bước tiếp theo
+        // todo: check xem có chỗ nào lỗi không trước khi chuyển qua step tiếp theo
         const nextStep = activeStepId + 1;
         let newSkipped = skipped;
         //nếu như quay lại trang mà mình đã từng tới xong next
@@ -248,7 +248,7 @@ function CreateEventPage(props) {
     const createSuccessfully = (data) => {
         messageService.showMessage(Messages.MSG_I_00008, MESSAGE_TYPES.INFO);
         setIsLoading(false);
-        // todo navigate toi my events list
+        navigate("/organizer/my-events");
     }
 
     const createFail = (error) => {

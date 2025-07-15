@@ -22,6 +22,10 @@ import {
     LazyOperatorLayout,
     LazyOperatorEvent,
     LazyOperatorDashboard, LazyOperatorEventPending,
+    LazyCreateEventPage,
+    LazyBookingTicketPage,
+    LazyTransactionResultPage,
+    LazyMyEventDetailPage,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -38,7 +42,6 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
-                <Route path="/my-events" element={<LazyMyEvents/>} />
             </Route>
         </Route>
 
@@ -73,8 +76,9 @@ const routeDefinitions = createRoutesFromElements(
                     </Suspense>
                 }
             >
-                {/* todo: cho nay bo trang my events (list) */}
+                <Route path="my-events" element={<LazyMyEvents/>} />
                 <Route path="create-event" element={<LazyCreateEventPage/>} />
+                <Route path="event-detail/:eventId" element={<LazyMyEventDetailPage/>} />
             </Route>
             <Route
                 element={
