@@ -18,13 +18,17 @@ export const url = {
     updateProfile: PATH_URL + "/update-profile",
     forgotPasswordRequest: PATH_URL + "/forgot-password",
     setPassword: PATH_URL + "/set-password",
-
+    changePassword: PATH_URL + "/change-password",
     //EVENT - USER dùng
     getMyEvents: (id, page = 0, size = 10) =>
         `${PATH_URL}/event/my_events/${id}?page=${page}&size=${size}`,
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,
     getEventAndTicketTypeDetails: (id) => PATH_URL+`/event/event-and-ticket-details/${id}`,
     createEvent: PATH_MY_EVENT + "/create",
+    getMyTickets: (accountId, page = 0, size = 10) =>
+        `${PATH_URL}/ticket/my_tickets/${accountId}?page=${page}&size=${size}`,
+    getTicketDetail: (paymentId) =>
+        `${PATH_URL}/ticket/detail/${paymentId}`,
     getMyEventDetail: (id) => `${PATH_MY_EVENT}/${id}`,
     updateMyEventDetail: PATH_MY_EVENT,
 

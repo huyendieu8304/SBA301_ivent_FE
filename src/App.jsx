@@ -22,7 +22,11 @@ import {
     LazyCreateEventPage,
     LazyBookingTicketPage,
     LazyTransactionResultPage,
-    LazyMyEventDetailPage, LazyEventDetail,
+    LazyTicketDetail,
+    LazyMyEventDetailPage,
+    LazyMyBoughtTickets,
+    LazyChangePasswordPage,
+    LazyEventDetail,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -39,11 +43,12 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
+                <Route path="/change-password" element={<LazyChangePasswordPage/>} />
             </Route>
         </Route>
 
-        {/*WITH ONLY OPERATOR ROLE*/}
-        <Route element={<ProtectedRoute allowedRole={[ROLES.OPERATOR]} />}>
+        {/*WITH ONLY ADMIN ROLE*/}
+        <Route  path="/admin" element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
             <Route
                 element={
                     <Suspense fallback={<LoadingComponent />}>
@@ -91,6 +96,8 @@ const routeDefinitions = createRoutesFromElements(
             >
                 <Route path="/booking/:eventId" element={<LazyBookingTicketPage/>} />
                 <Route path="/transaction-result" element={<LazyTransactionResultPage/>} />
+                <Route path="/my-bought-tickets" element={<LazyMyBoughtTickets />} />
+                <Route path="/detail/:paymentId" element={<LazyTicketDetail />} />
             </Route>
         </Route>
 
