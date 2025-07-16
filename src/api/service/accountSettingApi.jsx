@@ -75,6 +75,16 @@ const accountSettingApi = {
             successHandler,
             errorHandler,
         ),
+    changePassword: (body, successHandler, errorHandler) =>
+        callApi(
+            url.changePassword,
+            HTTP_METHOD.POST,
+            {},
+            body,
+            true,
+            successHandler,
+            errorHandler,
+        ),
 };
 
 export default accountSettingApi;

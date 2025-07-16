@@ -64,7 +64,7 @@ const ConfirmModal = ({
                 </IconButton>
             )}
 
-            <DialogContent sx={{ padding: "16px 24px !important" }}>
+            <DialogContent sx={{ padding: "16px 24px !important", fontFamily: theme.typography.fontFamily }}>
                 {/*<DialogContentText id="alert-dialog-description">*/}
                     {content}
                 {/*</DialogContentText>*/}

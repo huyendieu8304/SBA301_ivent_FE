@@ -142,9 +142,9 @@ export const checkDateAfter = (fieldName, valueDate, minDate, minDateFieldName, 
     return null;
 };
 
-export const checkPasswordAndRePasswordInput = (rePassword, password) => {
-    if (password !== rePassword) {
-        return Messages.MSG_E_00004;
+export const checkPasswordAndRePasswordInput = (fieldName, value, relatedFieldName, relatedValue) => {
+    if (value !== relatedValue) {
+        return formatString(Messages.MSG_E_00004, fieldName, relatedFieldName);
     }
     return null;
 }

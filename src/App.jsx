@@ -22,7 +22,7 @@ import {
     LazyCreateEventPage,
     LazyBookingTicketPage,
     LazyTransactionResultPage,
-    LazyMyEventDetailPage,
+    LazyMyEventDetailPage, LazyChangePasswordPage,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -39,6 +39,7 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
+                <Route path="/change-password" element={<LazyChangePasswordPage/>} />
             </Route>
         </Route>
 

@@ -17,6 +17,7 @@ export const url = {
     updateProfile: PATH_URL + "/update-profile",
     forgotPasswordRequest: PATH_URL + "/forgot-password",
     setPassword: PATH_URL + "/set-password",
+    changePassword: PATH_URL + "/change-password",
 
     //EVENT - USER dùng
     getMyEvents: (id, page = 0, size = 10) =>
