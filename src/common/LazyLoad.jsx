@@ -61,6 +61,9 @@ export const LazyMyEvents = React.lazy(
 export const LazyEventDetailsPage = React.lazy(
     () => import("../page/event/EventDetailsPage.jsx"),
 )
+export const LazyEventDetail = React.lazy(
+    () => import("../page/operator/EventDetail.jsx"),
+)
 
 export const LazyOrganizerLayout = React.lazy(
     () => import("../layout/OrganizerLayout.jsx"),

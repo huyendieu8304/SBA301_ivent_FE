@@ -24,27 +24,49 @@ const EventListPage = () => {
             flex: 1,
             align: "left",
             headerAlign: "left",
-            renderCell: (params) => (
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',        // căn giữa theo chiều dọc
-                        justifyContent: 'flex-start',// căn trái theo chiều ngang
-                        height: '100%',
-                        width: '100%',
-                        pl: 1
-                    }}
-                >
-                    <Chip
-                        label={params.value === "APPROVED" ? "Approved" : "Denied"}
+            renderCell: (params) => {
+                let label = "";
+                let color = "";
+
+                switch (params.value) {
+                    case "APPROVED":
+                        label = "Approved";
+                        color = theme.palette.primary.main;
+                        break;
+                    case "REJECTED":
+                        label = "Denied";
+                        color = "red";
+                        break;
+                    case "PENDING":
+                    default:
+                        label = "Pending";
+                        color = "orange";
+                        break;
+                }
+
+                return (
+                    <Box
                         sx={{
-                            backgroundColor: params.value === "APPROVED" ? theme.palette.primary.main : "red",
-                            color: "white",
-                            fontWeight: "bold"
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            height: '100%',
+                            width: '100%',
+                            pl: 1
                         }}
-                    />
-                </Box>
-            )
+                    >
+                        <Chip
+                            label={label}
+                            sx={{
+                                backgroundColor: color,
+                                color: "white",
+                                fontWeight: "bold"
+                            }}
+                        />
+                    </Box>
+                );
+            }
+
         }
         ,
         {
@@ -78,7 +100,7 @@ const EventListPage = () => {
     }, []);
 
     const handleDetailClick = (row) => {
-        navigate(`/operator/events/${row.id}`);
+        navigate(`/operator/${row.id}`);
     }
 
     const getDataSuccess = (data) => {

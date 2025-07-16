@@ -32,6 +32,7 @@ export const url = {
     operatorEvent : PATH_OPERATOR + "/event",
     operatorEventDetails: (id) => PATH_OPERATOR +`/${id}`,
     pendingEvent: PATH_OPERATOR +"/approve",
+    updateEventStatus: (id, status) => `/${id}/status?status=${status}`,
     //USER - ADMIN
 
     //PAYMENT

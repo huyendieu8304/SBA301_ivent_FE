@@ -16,16 +16,13 @@ import {
     LazyOAuth2RedirectPage,
     LazySimpleLayout,
     LazyForgotPasswordPage,
-    LazyCreateEventPage,
-    LazyBookingTicketPage,
-    LazyTransactionResultPage,
     LazyOperatorLayout,
     LazyOperatorEvent,
     LazyOperatorDashboard, LazyOperatorEventPending,
     LazyCreateEventPage,
     LazyBookingTicketPage,
     LazyTransactionResultPage,
-    LazyMyEventDetailPage,
+    LazyMyEventDetailPage, LazyEventDetail,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -56,6 +53,10 @@ const routeDefinitions = createRoutesFromElements(
             >
                 {/* Trang event table */}
                 <Route
+                    path="/operator"
+                    element={<LazyOperatorDashboard />}
+                />
+                <Route
                     path="/event"
                     element={<LazyOperatorEvent />}
                 />
@@ -63,6 +64,7 @@ const routeDefinitions = createRoutesFromElements(
                     path="/approve"
                     element={<LazyOperatorEventPending />}
                 />
+                <Route path="/operator/:id" element={<LazyEventDetail/>} />
             </Route>
 
         </Route>

@@ -33,6 +33,17 @@ const operatorApi = {
             successHandler,
             errorHandler,
         ),
+    updateEventStatus: (id, status, reason, successHandler, errorHandler) =>
+        callApi(
+            url.updateEventStatus(id, status),
+            HTTP_METHOD.PUT,
+            {},
+            reason || "",                         // Nếu có lý do thì truyền, không thì truyền chuỗi rỗng
+            true,
+            successHandler,
+            errorHandler,
+            true,
+        )
 };
 
 export default operatorApi;
