@@ -24,7 +24,6 @@ import {
     LazyTransactionResultPage,
     LazyTicketDetail,
     LazyMyEventDetailPage,
-    LazyTicketDetail,
     LazyMyBoughtTickets
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
