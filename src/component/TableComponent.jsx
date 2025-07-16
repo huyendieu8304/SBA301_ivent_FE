@@ -1,7 +1,7 @@
-import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect, useRef } from "react";
+import {DataGrid} from "@mui/x-data-grid";
+import React from "react";
 import renderCellExpand from "./GridCellExpand.jsx";
-import { viVN as dataGridViVN } from '@mui/x-data-grid/locales';
+import {PAGE_SIZE_OPTIONS} from "../common/Constant.jsx";
 
 //css for table
 const dataGridStyle = {
@@ -35,16 +35,24 @@ const translateColumn = (listColumn) => {
     });
 };
 const TableComponent = ({
-                         columns,
-                         data,
-                         handleClickRow,
-                         pageSizeOptions = [10, 20, 35],
-                         hideFooter = false,
-                         showCellVerticalBorder = false,
-                         showColumnVerticalBorder = false,
-                     }) => {
+                            columns,
+                            rows,
+                            handleClickRow,
+                            handlePaginationChange,
+                            totalRowCount,
+                            page,
+                            pageSize,
+                            hideFooter = false,
+                            showCellVerticalBorder = false,
+                            showColumnVerticalBorder = false,
+                        }) => {
     return (
         <DataGrid
+            pagination
+            paginationMode="server"
+            rowCount={totalRowCount}
+            page={page}
+            pageSize={pageSize}
             hideFooter={hideFooter}
             showCellVerticalBorder={showCellVerticalBorder}
             showColumnVerticalBorder={showColumnVerticalBorder}
@@ -53,18 +61,22 @@ const TableComponent = ({
             disableColumnMenu={true}
             unstable_rowSpanning={false}
             columns={translateColumn(columns)}
+            //chạy khi ta nhấn chuột vào dòng
             onRowClick={(params, event, details) =>
                 handleClickRow(params, event, details)
             }
-            rows={data}
+            //chạy khi ta thay đổi page hoặc pageSize
+            onPaginationModelChange={({ page, pageSize }) =>
+                handlePaginationChange(page, pageSize)
+            }
+            rows={rows}
             getRowId={Math.random}
             initialState={{
-                ...data.initialState,
                 pagination: {
-                    paginationModel: { pageSize: pageSizeOptions[0] },
+                    paginationModel: {pageSize: pageSize},
                 },
             }}
-            pageSizeOptions={pageSizeOptions}
+            pageSizeOptions={PAGE_SIZE_OPTIONS}
             sx={{
                 ...dataGridStyle,
             }}
