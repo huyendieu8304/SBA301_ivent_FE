@@ -89,3 +89,7 @@ export const LazyTicketDetail = React.lazy(
 export const LazyMyEventDetailPage = React.lazy(
     () => import("../page/myEvent/MyEventDetailPage.jsx"),
 )
+
+export const LazyChangePasswordPage = React.lazy(
+    () => import("../page/user/ChangePasswordPage.jsx"),
+)

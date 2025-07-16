@@ -98,6 +98,15 @@ const AvatarMenu = ({setIsLoading}) => {
                             Tài khoản
                         </Typography>
                     </MenuItem>
+                    <MenuItem onClick={() => navigate("/change-password")}>
+                        <Typography sx={{
+                            textAlign: 'center',
+                            color: theme.palette.primary.main,
+                            margin: "0 6px"
+                        }}>
+                            Đổi mật khẩu
+                        </Typography>
+                    </MenuItem>
                     <MenuItem onClick={handleLogout}>
                         <Typography sx={{
                             textAlign: 'center',
