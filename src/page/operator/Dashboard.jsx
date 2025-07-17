@@ -1,150 +1,118 @@
 import {useOutletContext} from "react-router";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {BarChart} from '@mui/x-charts/BarChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { LineChart } from '@mui/x-charts/LineChart';
-import {Box, Card, CardContent, Container, Stack} from "@mui/material";
-
-const chartSetting = {
-    yAxis: [
-        {
-            label: 'rainfall (mm)',
-            width: 60,
-        },
-    ],
-    height: 300,
-};
+import {Box, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
+import operatorApi from "../../api/service/operatorApi.jsx";
+import LoadingComponent from "../../component/LoadingComponent.jsx";
+import {messageService} from "../../service/MessageService.jsx";
+import {MESSAGE_TYPES} from "../../common/Constant.jsx";
 
 function valueFormatter(value) {
     return `${value}mm`;
 }
 
-const dataset = [
-    {
-        london: 59,
-        paris: 57,
-        newYork: 86,
-        seoul: 21,
-        month: 'Jan',
-    },
-    {
-        london: 50,
-        paris: 52,
-        newYork: 78,
-        seoul: 28,
-        month: 'Feb',
-    },
-    {
-        london: 47,
-        paris: 53,
-        newYork: 106,
-        seoul: 41,
-        month: 'Mar',
-    },
-    {
-        london: 54,
-        paris: 56,
-        newYork: 92,
-        seoul: 73,
-        month: 'Apr',
-    },
-    {
-        london: 57,
-        paris: 69,
-        newYork: 92,
-        seoul: 99,
-        month: 'May',
-    },
-    {
-        london: 60,
-        paris: 63,
-        newYork: 103,
-        seoul: 144,
-        month: 'June',
-    },
-    {
-        london: 59,
-        paris: 60,
-        newYork: 105,
-        seoul: 319,
-        month: 'July',
-    },
-    {
-        london: 65,
-        paris: 60,
-        newYork: 106,
-        seoul: 249,
-        month: 'Aug',
-    },
-    {
-        london: 51,
-        paris: 51,
-        newYork: 95,
-        seoul: 131,
-        month: 'Sept',
-    },
-    {
-        london: 60,
-        paris: 65,
-        newYork: 97,
-        seoul: 55,
-        month: 'Oct',
-    },
-    {
-        london: 67,
-        paris: 64,
-        newYork: 76,
-        seoul: 48,
-        month: 'Nov',
-    },
-    {
-        london: 61,
-        paris: 70,
-        newYork: 103,
-        seoul: 25,
-        month: 'Dec',
-    },
-];
+function getFullMonthData(months) {
+    return Array.from({ length: 12 }, (_, i) => {
+        const month = (i + 1).toString();
+        const found = months.find(item => item.label === month);
+        return found ? found.count : 0;
+    });
+}
 
 const Dashboard = () => {
     const {setPageTitle} = useOutletContext();
+    const theme = useTheme();
+    const [isLoading, setIsLoading] = useState(false);
+    const [provinceStatistic, setProvinceStatistic] = useState([]);
+    const [statusStatistic, setStatusStatistic] = useState([]);
+    const [monthStatistic, setMonthStatistic] = useState([]);
+    const [categoryStatistic, setCategoryStatistic] = useState([]);
+
     useEffect(() => {
         setPageTitle("Dashboard");
+        setIsLoading(true);
+        operatorApi.getProvinceStatistic((data) => getDataSuccess(data, "province"), getDataFail);
+        operatorApi.getStatusStatistic((data) => getDataSuccess(data, "status"), getDataFail);
+        operatorApi.getMonthStatistic((data) => getDataSuccess(data, "month"), getDataFail);
+        operatorApi.getCategoryStatistic((data) => getDataSuccess(data, "category"), getDataFail);
     }, []);
+
+    const getDataSuccess = (data, type) => {
+        setIsLoading(false);
+        if(type === "province") {
+            setProvinceStatistic(data);
+        }
+        if(type === "status") {
+            setStatusStatistic(data.map(item => ({id: item.label, value: item.count, label: item.label})));
+        }
+        if(type === "month") {
+            setMonthStatistic(getFullMonthData(data));
+        }
+        if(type === "category") {
+            setCategoryStatistic(data.map(item => ({id: item.label, value: item.count, label: item.label})));
+        }
+    }
+
+    const getDataFail = (e) => {
+        setIsLoading(false);
+        console.log(e);
+        messageService.showMessage(e.response.data.message, MESSAGE_TYPES.ERROR);
+    }
+
     return (
         <>
             <Container maxWidth="lg">
                 <Stack direction="column" spacing={2}>
-                    <Box sx={{width: "100%"}}>
-                        <Card variant="outlined">
-                            <CardContent sx={{backgroundColor: 'white'}}>
-                                <BarChart
-                                    dataset={dataset}
-                                    xAxis={[{dataKey: 'month'}]}
-                                    series={[
-                                        {dataKey: 'london', label: 'London', valueFormatter},
-                                        {dataKey: 'paris', label: 'Paris', valueFormatter},
-                                        {dataKey: 'newYork', label: 'New York', valueFormatter},
-                                        {dataKey: 'seoul', label: 'Seoul', valueFormatter},
-                                    ]}
-                                    {...chartSetting}
-                                />
-                            </CardContent>
-                        </Card>
-                    </Box>
                     <Stack direction="row" spacing={2}>
                         <Box sx={{width: "50%"}}>
                             <Card variant="outlined">
                                 <CardContent sx={{backgroundColor: 'white'}}>
-                                    <PieChart
+                                    <Typography variant="h5" component="div"
+                                                sx={{fontWeight: "bold", color: theme.palette.primary.main, textAlign: "center", marginBottom: 2}}>
+                                        Thống kê tỉnh thành
+                                    </Typography>
+                                    <BarChart
+                                        xAxis={[{ scaleType: 'band', data: provinceStatistic.map(p => p.label) }]}
+                                        series={[{ data: provinceStatistic.map(p => p.count), label: 'Số sự kiện' }]}
+                                        width={600}
+                                        height={400}
+                                    />
+                                </CardContent>
+                            </Card>
+                        </Box>
+                        <Box sx={{width: "50%"}}>
+                            <Card variant="outlined">
+                                <CardContent sx={{backgroundColor: 'white'}}>
+                                    <Typography variant="h5" component="div"
+                                                sx={{fontWeight: "bold", color: theme.palette.primary.main, textAlign: "center", marginBottom: 2}}>
+                                        Thống kê theo tháng
+                                    </Typography>
+                                    <LineChart
+                                        xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }]}
                                         series={[
                                             {
-                                                data: [
-                                                    { id: 0, value: 10, label: 'series A' },
-                                                    { id: 1, value: 15, label: 'series B' },
-                                                    { id: 2, value: 20, label: 'series C' },
-                                                ],
+                                                data: monthStatistic,
                                             },
+                                        ]}
+                                        height={400}
+                                    />
+                                </CardContent>
+                            </Card>
+                        </Box>
+                    </Stack>
+                    <Stack direction="row" spacing={2}>
+                        <Box sx={{width: "50%"}}>
+                            <Card variant="outlined">
+                                <CardContent sx={{backgroundColor: 'white'}}>
+                                    <Typography variant="h5" component="div"
+                                                sx={{fontWeight: "bold", color: theme.palette.primary.main, textAlign: "center", marginBottom: 2}}>
+                                        Thống kê trạng thái
+                                    </Typography>
+                                    <PieChart
+                                        series={[
+                                            {data: statusStatistic,},
                                         ]}
                                         width={200}
                                         height={200}
@@ -155,14 +123,16 @@ const Dashboard = () => {
                         <Box sx={{width: "50%"}}>
                             <Card variant="outlined">
                                 <CardContent sx={{backgroundColor: 'white'}}>
-                                    <LineChart
-                                        xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+                                    <Typography variant="h5" component="div"
+                                                sx={{fontWeight: "bold", color: theme.palette.primary.main, textAlign: "center", marginBottom: 2}}>
+                                        Thống kê danh mục
+                                    </Typography>
+                                    <PieChart
                                         series={[
-                                            {
-                                                data: [2, 5.5, 2, 8.5, 1.5, 5],
-                                            },
+                                            {data: categoryStatistic,},
                                         ]}
-                                        height={300}
+                                        width={200}
+                                        height={200}
                                     />
                                 </CardContent>
                             </Card>
@@ -170,6 +140,7 @@ const Dashboard = () => {
                     </Stack>
                 </Stack>
             </Container>
+            {isLoading && <LoadingComponent/>}
         </>
     )
 }

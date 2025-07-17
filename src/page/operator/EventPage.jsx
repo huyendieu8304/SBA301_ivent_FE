@@ -88,7 +88,7 @@ const EventListPage = () => {
                 <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => handleDetailClick(params.row.id)}
+                    onClick={() => handleDetailClick(params.row.eventId)}
                     sx={{ textTransform: "none" }}
                 >
                     Chi tiết
@@ -105,27 +105,11 @@ const EventListPage = () => {
         eventApi.getAllOperatorEvents(getDataSuccess,getDataFail)
     }, []);
 
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        setPage(0);
-        setSize(10);
-        setIsSearching(true);
-    };
-    const handlePaginationChange = (newPage, newSize) => {
-        setPage(newPage);
-        setSize(newSize);
-        setIsSearching(true);
-    }
-
-    const handleDetailClick = (row) => {
-        navigate(`/operator/${row.id}`);
-    }
-    const handleClickRow = (event) => {
-        navigate(`/operator/${event.row.id}`);
-    };
 
     const getDataSuccess = (data) => {
         setEvents(data);
+        setPage(d.pageable.pageNumber + 1);
+        setSize(d.pageable.pageSize);
         setIsLoading(false);
     }
 
@@ -138,6 +122,22 @@ const EventListPage = () => {
                 code: error.status,
             }
         })
+    }
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        setPage(0);
+        setSize(10);
+        setIsSearching(true);
+    };
+    const handlePaginationChange = (newPage, newSize) => {
+        setPage(newPage);
+        setSize(newSize);
+        setIsSearching(true);
+    }
+
+    const handleDetailClick = (eventId) => {
+        navigate(`/operator/${eventId}`);
     }
     // const fetchEvents = (name = "") => {
     //     setIsLoading(true);
