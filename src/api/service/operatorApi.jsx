@@ -23,7 +23,7 @@ const operatorApi = {
         successHandler,
         errorHandler,
     ),
-    getPendingEvent: (successHandler, errorHandler) =>
+    getPendingEvent: ( page, size, successHandler, errorHandler) =>
         callApi(
             url.pendingEvent,
             HTTP_METHOD.GET,
@@ -33,6 +33,18 @@ const operatorApi = {
             successHandler,
             errorHandler,
         ),
+    // getMyTickets: (accountId, page, size, eventName, successHandler, errorHandler) =>
+    //     callApi(
+    //         url.getMyTickets(accountId, page, size),
+    //         HTTP_METHOD.GET,
+    //         {
+    //             eventName: eventName?.trim() || undefined
+    //         },
+    //         {},
+    //         true,
+    //         successHandler,
+    //         errorHandler
+    //     )
     updateEventStatus: (id, status, reason, successHandler, errorHandler) =>
         callApi(
             url.updateEventStatus(id, status),

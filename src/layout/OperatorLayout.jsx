@@ -17,16 +17,34 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import AvatarMenu from "../component/AvatarMenu.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
+import authSettingApi from "../api/service/authSettingApi.jsx";
 
 const drawerWidth = 240;
 
 const OperatorLayout = () => {
     const [pageTitle, setPageTitle] = useState("");
-    const {authorities} = useAuth();
+    const {authorities, logout} = useAuth();
     const theme = useTheme();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const handleLogout = () => {
+        authSettingApi.logout(LogoutSuccess, LogoutFail);
+        setIsLoading(true);
+    }
+    const LogoutSuccess = (data) => {
+        logout();
+        console.log(data);
+    }
 
+    const LogoutFail = (e) => {
+        console.log(e);
+        navigate("/error", {
+            state: {
+                message: e.response.data.message,
+                code: e.status,
+            }
+        })
+    }
     return (
         <>
             <Box sx={{ display: 'flex', minHeight: "100dvh", margin: 0, padding: 0 }}>
@@ -111,14 +129,14 @@ const OperatorLayout = () => {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/operator/event">
+                            <ListItemButton component={Link} to="/event">
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
                                 <ListItemText primary="Quản lý sự kiện" />
                             </ListItemButton>
                         </ListItem>
 
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/operator/approve">
+                            <ListItemButton component={Link} to="/approve">
                                 <ListItemIcon><MailIcon /></ListItemIcon>
                                 <ListItemText primary="Phê duyệt sự kiện" />
                             </ListItemButton>
@@ -134,14 +152,14 @@ const OperatorLayout = () => {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/operator/event">
+                            <ListItemButton component={Link} to="/event">
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
                                 <ListItemText primary="Danh sách sự kiện" />
                             </ListItemButton>
                         </ListItem>
 
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/logout">
+                            <ListItemButton onClick={handleLogout}>
                                 <ListItemIcon><MailIcon /></ListItemIcon>
                                 <ListItemText primary="Đăng xuất" />
                             </ListItemButton>

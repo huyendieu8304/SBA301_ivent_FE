@@ -249,39 +249,6 @@ function EventDetail(props) {
         status: "",
     });
 
-    //for validate before send
-    useEffect(() => {
-        setFormFields((prev) => ({
-            ...prev,
-            province: {
-                ...prev.province,
-                needToCheckBeForSubmit: !prev.isOnline.value,
-            },
-            ward: {
-                ...prev.ward,
-                needToCheckBeForSubmit: !prev.isOnline.value,
-            },
-        }));
-    }, [formFields.isOnline.value]);
-
-    useEffect(() => {
-        setFormFields((prev) => ({
-            ...prev,
-            startSellingTicketTime: {
-                ...prev.startSellingTicketTime,
-                needToCheckBeForSubmit: !prev.isFree.value,
-            },
-            endSellingTicketTime: {
-                ...prev.endSellingTicketTime,
-                needToCheckBeForSubmit: !prev.isFree.value,
-            },
-            ticketType: {
-                ...prev.ticketType,
-                needToCheckBeForSubmit: !prev.isFree.value,
-            },
-        }));
-    }, [formFields.isFree.value]);
-
     const [categories, setCategories] = useState(CATEGORY_TEMP);
     useEffect(() => {
         setIsLoading(true);
@@ -380,27 +347,18 @@ function EventDetail(props) {
 
             <EventInfo
                 formFields={formFields}
-                setFormFields={setFormFields}
                 categories={categories}
-                updateField={updateField}
-                updateError={updateError}
-                isDisabled={isDisabled}
+                isDisabled={true}
             />
 
             <EventTicket
                 formFields={formFields}
-                setFormFields={setFormFields}
-                updateField={updateField}
-                updateError={updateError}
-                isDisabled={isDisabled}
+                isDisabled={true}
             />
 
             <EventPayment
                 formFields={formFields}
-                setFormFields={setFormFields}
-                updateField={updateField}
-                updateError={updateError}
-                isDisabled={isDisabled}
+                isDisabled={true}
             />
 
             {formFields.status === "PENDING" && (

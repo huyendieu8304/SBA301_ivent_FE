@@ -48,7 +48,7 @@ const routeDefinitions = createRoutesFromElements(
         </Route>
 
         {/*WITH ONLY ADMIN ROLE*/}
-        <Route  path="/admin" element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
+        <Route  element={<ProtectedRoute allowedRole={[ROLES.OPERATOR]} />}>
             <Route
                 element={
                     <Suspense fallback={<LoadingComponent />}>

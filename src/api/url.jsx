@@ -32,10 +32,10 @@ export const url = {
     getMyEventDetail: (id) => `${PATH_MY_EVENT}/${id}`,
     updateMyEventDetail: PATH_MY_EVENT,
 
-    //EVENT - OPERATOR
+    //EVENT - OPERATOR  
     operatorEvent : PATH_OPERATOR + "/event",
     operatorEventDetails: (id) => PATH_OPERATOR +`/${id}`,
-    pendingEvent: PATH_OPERATOR +"/approve",
+    pendingEvent: ( page = 0, size = 10) => `${PATH_OPERATOR}/approve/?page=${page}&size=${size}`,
     updateEventStatus: (id, status) => `/${id}/status?status=${status}`,
     //USER - ADMIN
 

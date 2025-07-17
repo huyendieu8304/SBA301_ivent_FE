@@ -5,10 +5,16 @@ import dayjs from "dayjs";
 import {Box, Button, Card, CardContent, Chip, Container, TextField, Typography, useTheme} from "@mui/material";
 import TableComponent from "../../component/TableComponent";
 import LoadingComponent from "../../component/LoadingComponent";
+import {useAuth} from "../../context/AuthContext.jsx";
+import {PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
 
 const EventListPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
+    const [data, setData] = useState(null);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(1));
+    const [eventName, setEventName] = useState("");
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -82,7 +88,7 @@ const EventListPage = () => {
                 <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => handleDetailClick(params.row)}
+                    onClick={() => handleDetailClick(params.row.id)}
                     sx={{ textTransform: "none" }}
                 >
                     Chi tiết
@@ -98,9 +104,25 @@ const EventListPage = () => {
         setIsLoading(true);
         eventApi.getAllOperatorEvents(getDataSuccess,getDataFail)
     }, []);
-    const handleDetailClick = (row) => {
-        navigate(`/operator/events/${row.id}`);
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        setPage(0);
+        setSize(10);
+        setIsSearching(true);
+    };
+    const handlePaginationChange = (newPage, newSize) => {
+        setPage(newPage);
+        setSize(newSize);
+        setIsSearching(true);
     }
+
+    const handleDetailClick = (row) => {
+        navigate(`/operator/${row.id}`);
+    }
+    const handleClickRow = (event) => {
+        navigate(`/operator/${event.row.id}`);
+    };
 
     const getDataSuccess = (data) => {
         setEvents(data);
@@ -135,23 +157,20 @@ const EventListPage = () => {
                         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
                            Tất cả Sự kiện
                         </Typography>
-                        {/*<form onSubmit={handleSearchSubmit}>*/}
-                        {/*    <Box display="flex" alignItems="center" gap={2} mb={2}>*/}
-                        {/*        <TextField*/}
-                        {/*            label="Nhập tên sự kiện"*/}
-                        {/*            variant="outlined"*/}
-                        {/*            value={eventName}*/}
-                        {/*            onChange={(e) => setEventName(e.target.value)}*/}
-                        {/*            size="small"*/}
-                        {/*            sx={{width: 300}}*/}
-                        {/*        />*/}
-                        {/*        <Button type="submit" variant="contained" color="primary" size="medium"*/}
-                        {/*                sx={{color: "white", fontWeight: "bold", textTransform: "none"}}>*/}
-                        {/*            Tìm kiếm*/}
-                        {/*        </Button>*/}
-                        {/*    </Box>*/}
-                        {/*</form>*/}
-                        <TableComponent columns={columns} data={events} handleClickRow={() => {}}/>
+                        <form onSubmit={handleSearchSubmit}>
+                            <Box display="flex" alignItems="center" gap={2} mb={2}>
+                                <TextField label="Tìm theo tên sự kiện" variant="outlined" value={eventName}
+                                           onChange={(e) => setEventName(e.target.value)} size="small" sx={{width: 300}}/>
+                                <Button type="submit" variant="contained" color="primary" size="medium"
+                                        sx={{color: "white", textTransform: 'none'}}>
+                                    Tìm kiếm
+                                </Button>
+                            </Box>
+                        </form>
+                        <TableComponent columns={columns} rows={data?.content || []} page={page} pageSize={size}
+                                        totalRowCount={data?.totalElements || 0}
+                                        handleClickRow={(id) => console.log("Click row id:", id)}
+                                        handlePaginationChange={handlePaginationChange}/>
                     </CardContent>
                 </Card>
                 {isLoading && <LoadingComponent />}
