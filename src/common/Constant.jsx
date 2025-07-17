@@ -15,6 +15,7 @@ export const HTTP_METHOD = {
 export const ROLES = {
     ADMIN: "ROLE_ADMIN",
     USER: "ROLE_USER",
+    OPERATOR: "ROLE_OPERATOR",
 };
 
 export const MESSAGE_TYPES = {

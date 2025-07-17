@@ -5,6 +5,7 @@ const PATH_ADMIN = PATH_URL + "/admin";
 const PATH_CATEGORY = PATH_URL + "/category";
 const PATH_MY_EVENT = PATH_URL + "/event/my-event";
 const PATH_PAYMENT = PATH_URL + "/payment";
+const PATH_OPERATOR = PATH_URL + "/operator";
 
 export const url = {
     //AUTHENTICATE + user information
@@ -31,15 +32,21 @@ export const url = {
     getMyEventDetail: (id) => `${PATH_MY_EVENT}/${id}`,
     updateMyEventDetail: PATH_MY_EVENT,
 
-    //EVENT - OPERATOR
-    adminEvent : PATH_ADMIN + "/event",
-    getAdminEventDetails: (id) => PATH_ADMIN + "/event"+ `/${id}`,
-
+    //EVENT - OPERATOR  
+    operatorEvent : ( page = 0, size = 10)=> `${PATH_OPERATOR}/event/?page=${page}&size=${size}`,
+    operatorEventDetails: (eventId) => PATH_OPERATOR +`/${eventId}`,
+    pendingEvent: ( page = 0, size = 10) => `${PATH_OPERATOR}/approve/?page=${page}&size=${size}`,
+    updateEventStatus: (eventId, status) => `/${eventId}/status?status=${status}`,
+    getProvinceStatistic: PATH_OPERATOR + "/by-province",
+    getStatusStatistic: PATH_OPERATOR + "/by-status",
+    getMonthStatistic: PATH_OPERATOR + "/by-month",
+    getCategoryStatistic: PATH_OPERATOR + "/by-category",
     //USER - ADMIN
 
     //PAYMENT
     payment: PATH_PAYMENT+"/vn-pay",
     getPaymentDetails: (txnRefCode) => PATH_PAYMENT + `/get-payment-details/${txnRefCode}`,
+
 
     //COMMON
     getCategories: PATH_CATEGORY + "/",

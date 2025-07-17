@@ -4,9 +4,6 @@ import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
     LazyEventDetailsPage,
     LazyOrganizerLayout,
-    LazyAdminDashboard,
-    LazyAdminEvent,
-    LazyAdminLayout,
     LazyEmailValidationTokenPage,
     LazyErrorPage,
     LazyHomePage,
@@ -19,13 +16,17 @@ import {
     LazyOAuth2RedirectPage,
     LazySimpleLayout,
     LazyForgotPasswordPage,
+    LazyOperatorLayout,
+    LazyOperatorEvent,
+    LazyOperatorDashboard, LazyOperatorEventPending,
     LazyCreateEventPage,
     LazyBookingTicketPage,
     LazyTransactionResultPage,
     LazyTicketDetail,
     LazyMyEventDetailPage,
     LazyMyBoughtTickets,
-    LazyChangePasswordPage
+    LazyChangePasswordPage,
+    LazyEventDetail,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -47,24 +48,30 @@ const routeDefinitions = createRoutesFromElements(
         </Route>
 
         {/*WITH ONLY ADMIN ROLE*/}
-        <Route  path="/admin" element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
+        <Route  element={<ProtectedRoute allowedRole={[ROLES.OPERATOR]} />}>
             <Route
                 element={
                     <Suspense fallback={<LoadingComponent />}>
-                        <LazyAdminLayout />
+                        <LazyOperatorLayout />
                     </Suspense>
                 }
             >
-                {/* Tự chuyển về /admin/event */}
-                <Route index element={<LazyAdminDashboard />} />
-
                 {/* Trang event table */}
                 <Route
-                    path="event"
-                    element={<LazyAdminEvent />}
+                    path="/operator"
+                    element={<LazyOperatorDashboard />}
                 />
-
+                <Route
+                    path="/event"
+                    element={<LazyOperatorEvent />}
+                />
+                <Route
+                    path="/approve"
+                    element={<LazyOperatorEventPending />}
+                />
+                <Route path="/operator/:eventId" element={<LazyEventDetail/>} />
             </Route>
+
         </Route>
 
         {/*WITH ONLY USER ROLE*/}
