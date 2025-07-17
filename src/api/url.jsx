@@ -33,10 +33,14 @@ export const url = {
     updateMyEventDetail: PATH_MY_EVENT,
 
     //EVENT - OPERATOR  
-    operatorEvent : PATH_OPERATOR + "/event",
-    operatorEventDetails: (id) => PATH_OPERATOR +`/${id}`,
+    operatorEvent : ( page = 0, size = 10)=> `${PATH_OPERATOR}/event/?page=${page}&size=${size}`,
+    operatorEventDetails: (eventId) => PATH_OPERATOR +`/${eventId}`,
     pendingEvent: ( page = 0, size = 10) => `${PATH_OPERATOR}/approve/?page=${page}&size=${size}`,
-    updateEventStatus: (id, status) => `/${id}/status?status=${status}`,
+    updateEventStatus: (eventId, status) => `/${eventId}/status?status=${status}`,
+    getProvinceStatistic: PATH_OPERATOR + "/by-province",
+    getStatusStatistic: PATH_OPERATOR + "/by-status",
+    getMonthStatistic: PATH_OPERATOR + "/by-month",
+    getCategoryStatistic: PATH_OPERATOR + "/by-category",
     //USER - ADMIN
 
     //PAYMENT
