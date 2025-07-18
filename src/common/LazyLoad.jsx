@@ -47,6 +47,11 @@ export const LazySimpleLayout = React.lazy(
     () => import("../layout/SimpleLayout.jsx"),
 );
 
+export const LazySearchLayout = React.lazy(
+    () => import("../layout/SearchLayout.jsx"),
+);
+
+
 export const LazyForgotPasswordPage = React.lazy(
     () => import("../page/user/ForgotPasswordPage.jsx"),
 );

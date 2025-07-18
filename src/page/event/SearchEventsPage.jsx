@@ -1,6 +1,6 @@
 import FakeData from "../../FakeData.jsx";
 import EventCard from "../../component/EventCard.jsx";
-import {Box, Container, ImageList} from "@mui/material";
+import {Box, Container, ImageList, Typography} from "@mui/material";
 import SearchDates from "../../component/SearchDates.jsx";
 import SearchFilter from "../../component/SearchFilter.jsx";
 import {useSearchParams} from "react-router-dom";
@@ -8,9 +8,10 @@ import {useEffect, useRef, useState} from "react";
 import categoryApi from "../../api/service/categoryApi.jsx";
 import AddressData from "../../AddressData.js";
 import eventApi from "../../api/service/eventApi.jsx";
+import {Outlet} from "react-router";
 
 
-const CATEGORY_TEMP= [
+const CATEGORY_TEMP = [
     {
         "id": "1",
         "name": "Nh?c s?ng"
@@ -51,7 +52,7 @@ function SearchEventsPage() {
     const [page, setPage] = useState(1);
     const pageRef = useRef(page);
     const isFetchingRef = useRef(false);
-
+    const year = new Date().getFullYear();
 
     //GET CATEGORY
     const [categories, setCategories] = useState(CATEGORY_TEMP);
@@ -106,7 +107,7 @@ function SearchEventsPage() {
         } else {
             setSearchResult(prev => [...prev, ...data]);
         }
-        setHasMore(data.length ===  DEFAULT_PAGE_SIZE); // Nếu ít hơn => không còn nữa
+        setHasMore(data.length === DEFAULT_PAGE_SIZE); // Nếu ít hơn => không còn nữa
         isFetchingRef.current = false; //Đánh dấu đã fetch xong
         setIsLoading(false);
     }
@@ -121,11 +122,9 @@ function SearchEventsPage() {
     useEffect(() => {
         const container = scrollContainerRef.current;
         if (!container) return;
-
         const handleScroll = () => {
             const container = scrollContainerRef.current;
             if (!container) return;
-
             if (
                 container.scrollTop + container.clientHeight >= container.scrollHeight - 100 &&
                 hasMore &&
@@ -136,52 +135,68 @@ function SearchEventsPage() {
                 setPage(prev => prev + 1);
             }
         };
-
         container.addEventListener("scroll", handleScroll);
         return () => container.removeEventListener("scroll", handleScroll);
     }, [hasMore, isLoading, searchParams]);
 
     return (
-        <Container maxWidth={"lg"}>
-            <Box>
-                {/*//todo css lại*/}
-                {/*todo link với trang home*/}
-                <SearchDates
-                    searchParams={searchParams}
-                    setSearchParams={setSearchParams}
-                />
-                <SearchFilter
-                    searchParams={searchParams}
-                    setSearchParams={setSearchParams}
-                    provinceList={PROVINCE_LIST}
-                    categories={categories}
-                />
-            </Box>
-
-            {/*todo trường hợp không có result*/}
-            {searchResult && (
-                <div
-                    ref={scrollContainerRef}
-                     style={{ height: "80vh", overflowY: "auto" }}
+        <>
+            <Box ref={scrollContainerRef} sx={{height: "91.5vh", overflowY: "auto"}}>
+                <Container maxWidth={"lg"}
+                           sx={{minHeight: "85vh", padding: "24px"}}
                 >
-                    <ImageList
-                        // sx={{
-                        //     overflowY: "auto"
-                        // }}
-                        // ref={scrollContainerRef}
-                        sx={{width: "100%"}}
-                        cols={4}
-                        rowHeight="auto"
-                        variant="standard"
-                        gap={20}
-                    >
-                        {searchResult.map((item, index) => (
-                            <EventCard event={item}  key={`${item.id}-${index}`}/>
-                        ))}
-                    </ImageList>
-                </div>
-            )}
-        </Container>
+                    <Box>
+                        {/*//todo css lại*/}
+                        {/*todo link với trang home*/}
+                        <SearchDates
+                            searchParams={searchParams}
+                            setSearchParams={setSearchParams}
+                        />
+                        <SearchFilter
+                            searchParams={searchParams}
+                            setSearchParams={setSearchParams}
+                            provinceList={PROVINCE_LIST}
+                            categories={categories}
+                        />
+                    </Box>
+
+                    {/*todo trường hợp không có result*/}
+                    {searchResult && (
+                        <ImageList
+                            // sx={{
+                            //     overflowY: "auto"
+                            // }}
+                            // ref={scrollContainerRef}
+                            sx={{width: "100%"}}
+                            cols={4}
+                            rowHeight="auto"
+                            variant="standard"
+                            gap={20}
+                        >
+                            {searchResult.map((item, index) => (
+                                <EventCard event={item} key={`${item.id}-${index}`}/>
+                            ))}
+                        </ImageList>
+                    )}
+                </Container>
+                <Box
+                    component="footer"
+                    sx={{
+                        height: "6.5vh",
+                        backgroundColor: "#1D1D1D",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "inset 0 1px 0 rgba(0, 0, 0, 0.1)",
+                    }}
+                >
+                    <Typography variant="body2" sx={{color: "#B3B3B3", margin: 0}} gutterBottom>
+                        © {year} Bản quyền thuộc công ty ivent
+                    </Typography>
+                </Box>
+            </Box>
+        </>
     );
 }
 

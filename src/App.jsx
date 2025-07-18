@@ -23,7 +23,7 @@ import {
     LazyBookingTicketPage,
     LazyTransactionResultPage,
     LazyMyEventDetailPage,
-    LazySearchEventsPage,
+    LazySearchEventsPage, LazySearchLayout,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -97,11 +97,19 @@ const routeDefinitions = createRoutesFromElements(
                 </Suspense>
             }
         >
-            <Route path="/search" element={<LazySearchEventsPage/>} />
             <Route path="/event/:id" element={<LazyEventDetailsPage/>} />
             <Route path="/" element={<LazyHomePage/>} />
             <Route path="/login" element={<LazyLoginPage/>} />
             <Route path="/register" element={<LazyRegisterAccountPage/>} />
+        </Route>
+        <Route
+            element={
+                <Suspense fallback={<LoadingComponent />}>
+                    <LazySearchLayout />
+                </Suspense>
+            }
+        >
+            <Route path="/search" element={<LazySearchEventsPage/>} />
         </Route>
 
         {/*SIMPLE LAYOUT*/}
