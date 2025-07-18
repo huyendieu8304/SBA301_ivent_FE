@@ -13,13 +13,22 @@ function ValidateSelect({
                             isRequired = false,
                             isDisabled = false,
                             validatorFunction,
+                            onChange,
                         }) {
 
     const handleChange = (e) => {
+        if(onChange) {
+            onChange(e.target.value);
+            return;
+        }
         setValue(fieldName, e.target.value);
     }
 
     const handleBlur = (e) => {
+        if(onChange) {
+            onChange(e.target.value);
+            return;
+        }
         const errorMsg = validatorFunction(e.target.value);
         setError(fieldName, errorMsg ||"");
     }

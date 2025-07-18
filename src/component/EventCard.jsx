@@ -48,7 +48,7 @@ const EventCard = ({event}) => {
                         textOverflow: "ellipsis",
                     }}
                 >
-                    {`Chỉ từ ${event.minTicketPrice} VNĐ`}
+                    {event.isOnline ? "Sự kiện online" : `${event.province}, ${event.ward}`}
                 </Typography>
 
                 <Typography

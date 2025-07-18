@@ -209,7 +209,7 @@ function mapEventResponseToFormFields(eventResponse) {
     };
 }
 
-function CreateEventPage(props) {
+function MyEventDetailPage(props) {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const {eventId} = useParams();
@@ -492,4 +492,4 @@ function CreateEventPage(props) {
     );
 }
 
-export default CreateEventPage;
+export default MyEventDetailPage;

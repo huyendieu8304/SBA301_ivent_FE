@@ -68,6 +68,17 @@ const eventApi = {
             errorHandler,
             true
         ),
+    searchEventDetails: (params, successHandler, errorHandler) =>
+        callApi(
+            url.searchEvent,
+            HTTP_METHOD.GET,
+            params,
+            {},
+            false,
+            successHandler,
+            errorHandler,
+            false,
+        )
 };
 
 export default eventApi;

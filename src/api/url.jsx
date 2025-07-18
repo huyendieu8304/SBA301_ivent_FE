@@ -19,6 +19,7 @@ export const url = {
     setPassword: PATH_URL + "/set-password",
 
     //EVENT - USER dùng
+    searchEvent: PATH_EVENT_PUBLIC_URL + "/search",
     getMyEvents: (id, page = 0, size = 10) =>
         `${PATH_URL}/event/my_events/${id}?page=${page}&size=${size}`,
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,

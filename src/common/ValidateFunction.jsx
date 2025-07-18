@@ -119,7 +119,7 @@ export const checkValidDate = (fieldName, dateStr, dateFormats) => {
     return null;
 };
 
-
+//thực ra cái này là check cả datetime phải after nhé, chuws neeus cùng ngày là nó vẫn báo lỗi
 export const checkDateBefore = (fieldName, valueDate, maxDate, maxDateFieldName, dateFormats) => {
     const parsedValue = dayjs(valueDate, dateFormats, true);
     const parsedMax = dayjs(maxDate, dateFormats, true);
@@ -136,6 +136,28 @@ export const checkDateAfter = (fieldName, valueDate, minDate, minDateFieldName, 
     const parsedMin = dayjs(minDate, dateFormats, true);
 
     if (!parsedValue.isAfter(parsedMin)) {
+        return formatString(Messages.MSG_E_00009, fieldName, minDateFieldName);
+    }
+
+    return null;
+};
+
+export const checkOnlyDateAfter = (fieldName, valueDate, minDate, minDateFieldName, dateFormats) => {
+    const parsedValue = dayjs(valueDate, dateFormats, true);
+    const parsedMin = dayjs(minDate, dateFormats, true);
+
+    if (parsedValue.isBefore(parsedMin, 'day')) {
+        return formatString(Messages.MSG_E_00009, fieldName, minDateFieldName);
+    }
+
+    return null;
+};
+
+export const checkOnlyDateBefore = (fieldName, valueDate, minDate, minDateFieldName, dateFormats) => {
+    const parsedValue = dayjs(valueDate, dateFormats, true);
+    const parsedMin = dayjs(minDate, dateFormats, true);
+
+    if (parsedValue.isAfter(parsedMin, 'day')) {
         return formatString(Messages.MSG_E_00009, fieldName, minDateFieldName);
     }
 
