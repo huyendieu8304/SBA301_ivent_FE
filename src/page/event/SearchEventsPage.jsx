@@ -42,13 +42,15 @@ const DEFAULT_PAGE_SIZE = 16;
 function SearchEventsPage() {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [searchResult, setSearchResult] = useState(null);
 
     const scrollContainerRef = useRef(null);
-    const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+
+    const [page, setPage] = useState(1);
+    const pageRef = useRef(page);
+    const isFetchingRef = useRef(false);
 
 
     //GET CATEGORY
@@ -70,10 +72,18 @@ function SearchEventsPage() {
     // Reset khi param aka filter đổi
     useEffect(() => {
         setPage(1);
+        pageRef.current = 1;
         setSearchResult([]);
         setHasMore(true);
-        searchEvents(1);
     }, [searchParams]);
+
+    // Khi page thay đổi → gọi API
+    useEffect(() => {
+        pageRef.current = page;
+        if (page === 1 && searchResult?.length > 0) return; // Tránh gọi lại page 1 sau khi reset
+        searchEvents(page);
+    }, [page]);
+
 
     const searchEvents = (targetPage = 1) => {
         // Nếu đang loading hoặc hết data thì không gọi
@@ -97,12 +107,13 @@ function SearchEventsPage() {
             setSearchResult(prev => [...prev, ...data]);
         }
         setHasMore(data.length ===  DEFAULT_PAGE_SIZE); // Nếu ít hơn => không còn nữa
-        setIsFetchingNextPage(false);
+        isFetchingRef.current = false; //Đánh dấu đã fetch xong
         setIsLoading(false);
     }
     const searchEventsFail = (error) => {
-        console.log("get categories fail")
+        console.log("search events fail")
         console.error(error)
+        isFetchingRef.current = false;
         setIsLoading(false);
     }
 
@@ -112,33 +123,29 @@ function SearchEventsPage() {
         if (!container) return;
 
         const handleScroll = () => {
-            console.log("=== SCROLL CHECK ==="); //  Bắt đầu log được
-            console.log("ScrollTop:", container.scrollTop);
-            console.log("clientHeight:", container.clientHeight);
-            console.log("scrollHeight:", container.scrollHeight);
+            const container = scrollContainerRef.current;
+            if (!container) return;
 
             if (
                 container.scrollTop + container.clientHeight >= container.scrollHeight - 100 &&
                 hasMore &&
                 !isLoading &&
-                !isFetchingNextPage
+                !isFetchingRef.current
             ) {
-                console.log("=== LOAD NEXT PAGE ===");
-                setIsFetchingNextPage(true);
-                const nextPage = page + 1;
-                searchEvents(nextPage);
-                setPage(nextPage);
+                isFetchingRef.current = true;
+                setPage(prev => prev + 1);
             }
         };
 
         container.addEventListener("scroll", handleScroll);
         return () => container.removeEventListener("scroll", handleScroll);
-    }, [hasMore, isLoading, isFetchingNextPage, page, searchParams]);
+    }, [hasMore, isLoading, searchParams]);
 
     return (
         <Container maxWidth={"lg"}>
             <Box>
                 {/*//todo css lại*/}
+                {/*todo link với trang home*/}
                 <SearchDates
                     searchParams={searchParams}
                     setSearchParams={setSearchParams}
@@ -151,7 +158,7 @@ function SearchEventsPage() {
                 />
             </Box>
 
-
+            {/*todo trường hợp không có result*/}
             {searchResult && (
                 <div
                     ref={scrollContainerRef}
