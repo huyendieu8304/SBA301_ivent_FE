@@ -143,9 +143,6 @@ function SearchDates({ searchParams, setSearchParams }) {
                     },
                 }}
             >
-                {/*todo bỏ cái này ra ngoài*/}
-                <Typography color="primary"> {`${formatVNDateFromISO(from)} - ${formatVNDateFromISO(to)}`} </Typography>
-
                 <Stack spacing={1} mt={1}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker

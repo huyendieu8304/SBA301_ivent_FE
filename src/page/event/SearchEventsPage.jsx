@@ -137,6 +137,8 @@ function SearchEventsPage() {
         return () => container.removeEventListener("scroll", handleScroll);
     }, [hasMore, isLoading]);
 
+    console.log(searchResult)
+
     return (
         <Box ref={scrollContainerRef} sx={{height: "91.5vh", overflowY: "auto"}}>
             <Container maxWidth={"lg"}
@@ -147,19 +149,23 @@ function SearchEventsPage() {
                     justifyContent={"end"}
                     gap={2}
                 >
-                    {/*todo link với trang home*/}
+                    {/*todo cho trang home có search box*/}
                     <SearchDates
                         searchParams={searchParams}
+                        setSearchParams={setSearchParams}
                     />
                     <SearchFilter
                         searchParams={searchParams}
+                        setSearchParams={setSearchParams}
                         provinceList={PROVINCE_LIST}
                         categories={categories}
                     />
                 </Stack>
 
-                {/*todo trường hợp không có result*/}
-                {searchResult && (
+                {/*{!searchResult && (*/}
+                {/*    */}
+                {/*)}*/}
+                {searchResult && searchResult.length > 0 ? (
                     <ImageList
                         // sx={{
                         //     overflowY: "auto"
@@ -175,6 +181,19 @@ function SearchEventsPage() {
                             <EventCard event={item} key={`${item.id}-${index}`}/>
                         ))}
                     </ImageList>
+                ) : (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center", // căn giữa theo chiều ngang
+                            textAlign: "center",  // căn giữa nội dung text trong Typography
+                            mt: 4
+                        }}
+                    >
+                        <Typography variant="h5" sx={{color: "white"}}>Rất tiếc! Không tìm thấy kết quả nào </Typography>
+                        <Typography sx={{color: "white"}} >Bạn hãy thử điều chỉnh lại bộ lọc, sử dụng các từ khóa phổ biến hơn </Typography>
+                    </Box>
                 )}
             </Container>
             <Box

@@ -1,6 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {Button, Popover, Stack, Typography} from "@mui/material";
 import ValidateSelect from "./validateInput/ValidateSelect.jsx";
+import dayjs from "dayjs";
+import {checkOnlyDateAfter, checkOnlyDateBefore, checkValidDate} from "../common/ValidateFunction.jsx";
+import {DATE_FORMAT, DATETIME_FORMAT} from "../common/Constant.jsx";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers";
 
 function SearchFilter({searchParams, setSearchParams, categories, provinceList}) {
 
@@ -92,6 +98,7 @@ function SearchFilter({searchParams, setSearchParams, categories, provinceList})
                         error={""}
                         onChange={setProvince}
                         listOptions={provinceList}
+                        size={"small"}
                     />
 
                     <ValidateSelect
@@ -101,6 +108,7 @@ function SearchFilter({searchParams, setSearchParams, categories, provinceList})
                         error={""}
                         onChange={setCategory}
                         listOptions={categoryList}
+                        size={"small"}
                     />
 
                     <Stack direction="row" spacing={1} mt={1} justifyContent={"end"}>

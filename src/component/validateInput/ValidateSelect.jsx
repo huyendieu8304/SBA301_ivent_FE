@@ -51,6 +51,7 @@ function ValidateSelect({
                 label={label}
                 onChange={e => handleChange(e)}
                 onBlur={e => handleBlur(e)}
+                size={size}
             >
                 {listOptions.map((option) => (
                     <MenuItem value={option.value} key={option.id}>{option.label}</MenuItem>
