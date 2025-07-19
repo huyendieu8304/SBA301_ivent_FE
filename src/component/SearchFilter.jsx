@@ -1,13 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Popover, Stack, Typography} from "@mui/material";
 import ValidateSelect from "./validateInput/ValidateSelect.jsx";
-import AddressData from "../AddressData.js";
-import dayjs from "dayjs";
-import {DATETIME_FORMAT} from "../common/Constant.jsx";
-import {useSearchParams} from "react-router-dom";
-import categoryApi from "../api/service/categoryApi.jsx";
-
-
 
 function SearchFilter({searchParams, setSearchParams, categories, provinceList}) {
 

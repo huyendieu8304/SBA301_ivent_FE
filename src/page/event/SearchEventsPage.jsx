@@ -1,6 +1,5 @@
-import FakeData from "../../FakeData.jsx";
 import EventCard from "../../component/EventCard.jsx";
-import {Box, Container, ImageList, Typography} from "@mui/material";
+import {Box, Container, ImageList, Stack, Typography} from "@mui/material";
 import SearchDates from "../../component/SearchDates.jsx";
 import SearchFilter from "../../component/SearchFilter.jsx";
 import {useSearchParams} from "react-router-dom";
@@ -8,7 +7,6 @@ import {useEffect, useRef, useState} from "react";
 import categoryApi from "../../api/service/categoryApi.jsx";
 import AddressData from "../../AddressData.js";
 import eventApi from "../../api/service/eventApi.jsx";
-import {Outlet} from "react-router";
 
 
 const CATEGORY_TEMP = [
@@ -137,66 +135,65 @@ function SearchEventsPage() {
         };
         container.addEventListener("scroll", handleScroll);
         return () => container.removeEventListener("scroll", handleScroll);
-    }, [hasMore, isLoading, searchParams]);
+    }, [hasMore, isLoading]);
 
     return (
-        <>
-            <Box ref={scrollContainerRef} sx={{height: "91.5vh", overflowY: "auto"}}>
-                <Container maxWidth={"lg"}
-                           sx={{minHeight: "85vh", padding: "24px"}}
+        <Box ref={scrollContainerRef} sx={{height: "91.5vh", overflowY: "auto"}}>
+            <Container maxWidth={"lg"}
+                       sx={{minHeight: "85vh", padding: "24px"}}
+            >
+                <Stack
+                    direction="row"
+                    justifyContent={"end"}
+                    gap={2}
                 >
-                    <Box>
-                        {/*//todo css lại*/}
-                        {/*todo link với trang home*/}
-                        <SearchDates
-                            searchParams={searchParams}
-                            setSearchParams={setSearchParams}
-                        />
-                        <SearchFilter
-                            searchParams={searchParams}
-                            setSearchParams={setSearchParams}
-                            provinceList={PROVINCE_LIST}
-                            categories={categories}
-                        />
-                    </Box>
+                    {/*todo link với trang home*/}
+                    <SearchDates
+                        searchParams={searchParams}
+                    />
+                    <SearchFilter
+                        searchParams={searchParams}
+                        provinceList={PROVINCE_LIST}
+                        categories={categories}
+                    />
+                </Stack>
 
-                    {/*todo trường hợp không có result*/}
-                    {searchResult && (
-                        <ImageList
-                            // sx={{
-                            //     overflowY: "auto"
-                            // }}
-                            // ref={scrollContainerRef}
-                            sx={{width: "100%"}}
-                            cols={4}
-                            rowHeight="auto"
-                            variant="standard"
-                            gap={20}
-                        >
-                            {searchResult.map((item, index) => (
-                                <EventCard event={item} key={`${item.id}-${index}`}/>
-                            ))}
-                        </ImageList>
-                    )}
-                </Container>
-                <Box
-                    component="footer"
-                    sx={{
-                        height: "6.5vh",
-                        backgroundColor: "#1D1D1D",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "inset 0 1px 0 rgba(0, 0, 0, 0.1)",
-                    }}
-                >
-                    <Typography variant="body2" sx={{color: "#B3B3B3", margin: 0}} gutterBottom>
-                        © {year} Bản quyền thuộc công ty ivent
-                    </Typography>
-                </Box>
+                {/*todo trường hợp không có result*/}
+                {searchResult && (
+                    <ImageList
+                        // sx={{
+                        //     overflowY: "auto"
+                        // }}
+                        // ref={scrollContainerRef}
+                        sx={{width: "100%"}}
+                        cols={4}
+                        rowHeight="auto"
+                        variant="standard"
+                        gap={20}
+                    >
+                        {searchResult.map((item, index) => (
+                            <EventCard event={item} key={`${item.id}-${index}`}/>
+                        ))}
+                    </ImageList>
+                )}
+            </Container>
+            <Box
+                component="footer"
+                sx={{
+                    height: "6.5vh",
+                    backgroundColor: "#1D1D1D",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "inset 0 1px 0 rgba(0, 0, 0, 0.1)",
+                }}
+            >
+                <Typography variant="body2" sx={{color: "#B3B3B3", margin: 0}} gutterBottom>
+                    © {year} Bản quyền thuộc công ty ivent
+                </Typography>
             </Box>
-        </>
+        </Box>
     );
 }
 
