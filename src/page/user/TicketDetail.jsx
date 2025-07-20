@@ -18,36 +18,27 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 const TicketDetail = () => {
     const {paymentId} = useParams();
     const [ticket, setTicket] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const theme = useTheme();
 
     useEffect(() => {
         if (paymentId) {
+            setIsLoading(true);
             ticketApi.getTicketDetail(paymentId, handleSuccess, handleError);
         }
     }, [paymentId]);
 
     const handleSuccess = (data) => {
         setTicket(data?.data || data);
-        setLoading(false);
+        setIsLoading(false);
     };
 
     const handleError = (err) => {
         console.error("Error loading ticket detail", err);
-        setLoading(false);
+        setIsLoading(false);
     };
 
-    if (loading) return <LoadingComponent/>;
-
-    if (!ticket) {
-        return (
-            <Container maxWidth="sm" sx={{paddingTop: 4, color: theme.palette.common.white, textAlign: "center"}}>
-                <Typography variant="h6">Không tìm thấy vé.</Typography>
-            </Container>
-        );
-    }
-
-    return (
+    return (<>
         <Container maxWidth="xl" sx={{
             display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
             height: "fit-content",
@@ -76,52 +67,69 @@ const TicketDetail = () => {
                         </Typography>
                         <MascotSvg/>
                     </Stack>
-                    <Stack direction="column" justifyContent="space-between" alignItems="flex-start" sx={{width: '90%'}}>
-                        <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start" sx={{width: '100%', marginBottom:" 24px"}}>
-                            <Stack direction="column" gap={1} sx={{width: "60%"}}>
-                                <Typography variant="h6" fontWeight="bold" sx={{color: "#12B76A"}}>
-                                    {ticket.eventName?.toUpperCase()}
-                                </Typography>
-                                <Stack direction="row" gap={1} justifyContent="flex-start" alignItems="center">
-                                    <LocationOnIcon sx={{color: "#A4A7AE"}}/>
-                                    <Typography variant="body2" sx={{margin: "0 !important"}}>
-                                        {ticket.eventLocation}
-                                    </Typography>
+                    {ticket
+                        ? (
+                            <Stack direction="column" justifyContent="space-between" alignItems="flex-start"
+                                   sx={{width: '90%'}}>
+                                <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start"
+                                       sx={{width: '100%', marginBottom: " 24px"}}>
+                                    <Stack direction="column" gap={1} sx={{width: "60%"}}>
+                                        <Typography variant="h6" fontWeight="bold" sx={{color: "#12B76A"}}>
+                                            {ticket.eventName?.toUpperCase()}
+                                        </Typography>
+                                        <Stack direction="row" gap={1} justifyContent="flex-start" alignItems="center">
+                                            <LocationOnIcon sx={{color: "#A4A7AE"}}/>
+                                            <Typography variant="body2" sx={{margin: "0 !important"}}>
+                                                {ticket.eventLocation}
+                                            </Typography>
+                                        </Stack>
+                                        <Stack direction="row" gap={1} justifyContent="flex-start" alignItems="center">
+                                            <CalendarMonthIcon sx={{color: "#A4A7AE"}}/>
+                                            <Typography variant="body2" sx={{margin: "0 !important"}}>
+                                                {formatDateTimeRange(ticket.eventStartTime, ticket.eventEndTime)}
+                                            </Typography>
+                                        </Stack>
+                                        <Typography variant="body1" fontWeight="bold">
+                                            Loại vé: {ticket.ticketTypeName}
+                                        </Typography>
+                                        <Typography variant="body1">
+                                            Số lượng: {ticket.quantity}
+                                        </Typography>
+                                        <Typography variant="body1">
+                                            Tổng giá vé: {formatCurrency(ticket.amount, "đ")}
+                                        </Typography>
+                                    </Stack>
+                                    <Box
+                                        component="img"
+                                        src={ticket.qrUrl}
+                                        alt="ticket qr"
+                                        sx={{
+                                            width: "40%",
+                                            height: "auto",
+                                            margin: "0 !important"
+                                        }}
+                                    />
                                 </Stack>
-                                <Stack direction="row" gap={1} justifyContent="flex-start" alignItems="center">
-                                    <CalendarMonthIcon sx={{color: "#A4A7AE"}}/>
-                                    <Typography variant="body2" sx={{margin: "0 !important"}}>
-                                        {formatDateTimeRange(ticket.eventStartTime, ticket.eventEndTime)}
-                                    </Typography>
-                                </Stack>
-                                <Typography variant="body1" fontWeight="bold">
-                                    Loại vé: {ticket.ticketTypeName}
-                                </Typography>
-                                <Typography variant="body1">
-                                    Số lượng: {ticket.quantity}
-                                </Typography>
-                                <Typography variant="body1">
-                                    Tổng giá vé: {formatCurrency(ticket.amount, "đ")}
-                                </Typography>
                             </Stack>
-                            <Box
-                                component="img"
-                                src={ticket.qrUrl}
-                                alt="ticket qr"
-                                sx={{
-                                    width: "40%",
-                                    height: "auto",
-                                    margin: "0 !important"
-                                }}
-                            />
-                        </Stack>
-                    </Stack>
+                    )
+                        : (
+                            <Stack direction="column" justifyContent="space-between" alignItems="flex-start"
+                                   sx={{width: '90%'}}>
+                                <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start"
+                                       sx={{width: '100%', marginBottom: " 24px"}}>
+                                    <Stack direction="column" gap={1} sx={{width: "100%"}}>
+                                        <Typography variant="h6" fontWeight="bold" sx={{color: "red", textAlign: "center"}}>
+                                            Không tìm thấy vé
+                                        </Typography>
+                                    </Stack>
+                                </Stack>
+                            </Stack>
+                        )}
                 </CardContent>
             </Card>
         </Container>
-
-
-    );
+        {isLoading && <LoadingComponent/>}
+    </>);
 };
 
 export default TicketDetail;
