@@ -53,7 +53,7 @@ const CardSliderReactSlick = ({
                                   autoplay = false,
                                   dotDisplay = false,
                                   infinite = false,
-                                  data,
+                                  events,
                               }) => {
     const navigate = useNavigate();
     const settings = {
@@ -78,9 +78,8 @@ const CardSliderReactSlick = ({
     return (
         <Box sx={{width: "100%", margin: "24px 0 40px"}}>
             <Slider {...settings}>
-                {/*{data?.length> 0 && data.map((item, index) => (*/}
-
-                {images.map((item, index) => (
+                {/*{images.map((item, index) => (*/}
+                {events && events.map((item, index) => (
                     <Box
                         className="item"
                         key={`${item.id || 'fallback'}-${index}`}
