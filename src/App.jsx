@@ -18,7 +18,8 @@ import {
     LazyForgotPasswordPage,
     LazyOperatorLayout,
     LazyOperatorEvent,
-    LazyOperatorDashboard, LazyOperatorEventPending,
+    LazyOperatorDashboard,
+    LazyOperatorEventPending,
     LazyCreateEventPage,
     LazyBookingTicketPage,
     LazyTransactionResultPage,
@@ -27,6 +28,9 @@ import {
     LazyMyBoughtTickets,
     LazyChangePasswordPage,
     LazyEventDetail,
+    LazyCreateAdminAccountPage,
+    LazyAdminLayout,
+    LazyAdminUserBanList,
     LazySearchEventsPage,
     LazySearchLayout,
 } from "./common/LazyLoad.jsx";
@@ -48,8 +52,23 @@ const routeDefinitions = createRoutesFromElements(
                 <Route path="/change-password" element={<LazyChangePasswordPage/>} />
             </Route>
         </Route>
-
         {/*WITH ONLY ADMIN ROLE*/}
+        <Route element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
+            <Route
+                element={
+                    <Suspense fallback={<LoadingComponent />}>
+                        <LazyAdminLayout />
+                    </Suspense>
+                }
+            >
+                <Route path="/admin/create-admin-account" element={<LazyCreateAdminAccountPage />} />
+                <Route path="/admin/users-ban-list" element={<LazyAdminUserBanList />} />
+            </Route>
+        </Route>
+
+
+
+        {/*WITH ONLY OPERATOR ROLE*/}
         <Route  element={<ProtectedRoute allowedRole={[ROLES.OPERATOR]} />}>
             <Route
                 element={
@@ -71,7 +90,7 @@ const routeDefinitions = createRoutesFromElements(
                     path="/approve"
                     element={<LazyOperatorEventPending />}
                 />
-                <Route path="/operator/:eventId" element={<LazyEventDetail/>} />
+                <Route path="/approve/:eventId" element={<LazyEventDetail/>} />
             </Route>
         </Route>
 

@@ -7,7 +7,7 @@ import LoadingComponent from "../../component/LoadingComponent";
 import {useNavigate} from "react-router-dom";
 import {PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
 
-const EventListPage = () => {
+const AccountPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState(null);
     const [page, setPage] = useState(0);
@@ -73,7 +73,7 @@ const EventListPage = () => {
             }
 
         }
-,
+        ,
         {
             field: 'actions',
             headerName: 'Chi tiết',
@@ -175,4 +175,4 @@ const EventListPage = () => {
 
 };
 
-export default EventListPage;
+export default AccountPage;

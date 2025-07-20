@@ -16,6 +16,8 @@ export default class Messages {
     static MSG_E_00015 = "{0} phải nhỏ hơn {1}";
     static MSG_E_00016 = "Giao dịch thất bại";
     static MSG_E_00017 = "Sự kiện không miễn phí phải có ít nhất 1 loại vé";
+    static MSG_E_00018 = "Tạo tài khoản thất bại, đã có lỗi xảy ra";
+
 
     static MSG_I_00001 = "Đăng nhập thành công";
     static MSG_I_00002 = "Đăng ký người dùng thành công";
@@ -29,4 +31,7 @@ export default class Messages {
     static MSG_I_00010 = "Giao dịch đang chờ thanh toán";
     static MSG_I_00011 = "Cập nhật sự kiện thành công";
     static MSG_I_00012 = "Đổi mật khẩu thành công";
+    static MSG_I_00013 = "Tạo tài khoản thành công";
+    static MSG_I_00014 = "Khóa tài khoản thành công";
+    static MSG_I_00015 = "Khóa tài khoản thất bại";
 }

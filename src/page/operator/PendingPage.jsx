@@ -5,11 +5,15 @@ import dayjs from "dayjs";
 import {Box, Button, Card, CardContent, Chip, Container, TextField, Typography, useTheme} from "@mui/material";
 import TableComponent from "../../component/TableComponent";
 import LoadingComponent from "../../component/LoadingComponent";
+import {PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
 
 const EventListPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
     const navigate = useNavigate();
+    const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(1));
+    const [eventName, setEventName] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
     const theme = useTheme();
 
     const columns = [
@@ -97,11 +101,7 @@ const EventListPage = () => {
     useEffect(() => {
         setIsLoading(true);
         eventApi.getPendingEvent(getDataSuccess,getDataFail)
-    }, []);
-
-    const handleDetailClick = (row) => {
-        navigate(`/operator/${row.id}`);
-    }
+    }, [isSearching]);
 
     const getDataSuccess = (data) => {
         setEvents(data);
@@ -118,14 +118,21 @@ const EventListPage = () => {
             }
         })
     }
-    // const fetchEvents = (name = "") => {
-    //     setIsLoading(true);
-    //     eventApi.getAllOperatorEvents(accountId, page, size, name, getDataSuccess, getDataFail);
-    // };
-    // const handleSearchSubmit = (e) => {
-    //     e.preventDefault();
-    //     fetchEvents(eventName);
-    // };
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        setPage(0);
+        setSize(10);
+        setIsSearching(true);
+    };
+    const handlePaginationChange = (newPage, newSize) => {
+        setPage(newPage);
+        setSize(newSize);
+        setIsSearching(true);
+    }
+
+    const handleDetailClick = (eventId) => {
+        navigate(`/operator/${eventId}`);
+    }
 
     return (
         <>
@@ -136,23 +143,20 @@ const EventListPage = () => {
                         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
                             Tất cả Sự kiện
                         </Typography>
-                        {/*<form onSubmit={handleSearchSubmit}>*/}
-                        {/*    <Box display="flex" alignItems="center" gap={2} mb={2}>*/}
-                        {/*        <TextField*/}
-                        {/*            label="Nhập tên sự kiện"*/}
-                        {/*            variant="outlined"*/}
-                        {/*            value={eventName}*/}
-                        {/*            onChange={(e) => setEventName(e.target.value)}*/}
-                        {/*            size="small"*/}
-                        {/*            sx={{width: 300}}*/}
-                        {/*        />*/}
-                        {/*        <Button type="submit" variant="contained" color="primary" size="medium"*/}
-                        {/*                sx={{color: "white", fontWeight: "bold", textTransform: "none"}}>*/}
-                        {/*            Tìm kiếm*/}
-                        {/*        </Button>*/}
-                        {/*    </Box>*/}
-                        {/*</form>*/}
-                        <TableComponent columns={columns} data={events} handleClickRow={() => {}}/>
+                        <form onSubmit={handleSearchSubmit}>
+                            <Box display="flex" alignItems="center" gap={2} mb={2}>
+                                <TextField label="Tìm theo tên sự kiện" variant="outlined" value={eventName}
+                                           onChange={(e) => setEventName(e.target.value)} size="small" sx={{width: 300}}/>
+                                <Button type="submit" variant="contained" color="primary" size="medium"
+                                        sx={{color: "white", textTransform: 'none'}}>
+                                    Tìm kiếm
+                                </Button>
+                            </Box>
+                        </form>
+                        <TableComponent columns={columns} rows={data?.content || []} page={page} pageSize={size}
+                                        totalRowCount={data?.totalElements || 0}
+                                        handleClickRow={(id) => console.log("Click row id:", id)}
+                                        handlePaginationChange={handlePaginationChange}/>
                     </CardContent>
                 </Card>
                 {isLoading && <LoadingComponent />}

@@ -42,12 +42,20 @@ export const url = {
     getStatusStatistic: PATH_OPERATOR + "/by-status",
     getMonthStatistic: PATH_OPERATOR + "/by-month",
     getCategoryStatistic: PATH_OPERATOR + "/by-category",
-    //USER - ADMIN
+
+    // ADMIN
+    adminAccount: ( page = 0, size = 10)=> `${PATH_ADMIN}/account/?page=${page}&size=${size}`,
+    getRoleStatistic: PATH_ADMIN + "/by-role",
+    getStatusAccountStatistic: PATH_ADMIN + "/by-status",
+    getOrganizerStatistic: PATH_ADMIN + "/organizer-event-count",
+    getPaymentStatistic: PATH_ADMIN + "/total-payment-by-account",
+    createAdminAccount: PATH_ADMIN + "/create",
+    banUser: "/api/v1/admin/ban",
+    getUserAccounts: "/api/v1/admin/users-ban-list",
 
     //PAYMENT
     payment: PATH_PAYMENT+"/vn-pay",
     getPaymentDetails: (txnRefCode) => PATH_PAYMENT + `/get-payment-details/${txnRefCode}`,
-
 
     //COMMON
     getCategories: PATH_CATEGORY + "/",
