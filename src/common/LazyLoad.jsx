@@ -46,6 +46,10 @@ export const LazyOperatorLayout = React.lazy(
     () => import("../layout/./OperatorLayout"),
 );
 
+export const LazyAdminLayout = React.lazy(
+    () => import("../layout/./AdminLayout.jsx"),
+);
+
 export const LazySimpleLayout = React.lazy(
     () => import("../layout/SimpleLayout.jsx"),
 );
@@ -99,3 +103,7 @@ export const LazyMyEventDetailPage = React.lazy(
 export const LazyChangePasswordPage = React.lazy(
     () => import("../page/user/ChangePasswordPage.jsx"),
 )
+
+export const LazyCreateAdminAccountPage = React.lazy(
+    () => import("../page/admin/./CreateAdminAccount"),
+);

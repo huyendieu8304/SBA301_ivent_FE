@@ -26,7 +26,7 @@ import {
     LazyMyEventDetailPage,
     LazyMyBoughtTickets,
     LazyChangePasswordPage,
-    LazyEventDetail,
+    LazyEventDetail, LazyCreateAdminAccountPage, LazyAdminLayout,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -46,6 +46,20 @@ const routeDefinitions = createRoutesFromElements(
                 <Route path="/change-password" element={<LazyChangePasswordPage/>} />
             </Route>
         </Route>
+        {/*WITH ONLY ADMIN ROLE*/}
+        <Route element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
+            <Route
+                element={
+                    <Suspense fallback={<LoadingComponent />}>
+                        <LazyAdminLayout />
+                    </Suspense>
+                }
+            >
+                <Route path="/admin/create-admin-account" element={<LazyCreateAdminAccountPage />} />
+            </Route>
+        </Route>
+
+
 
         {/*WITH ONLY OPERATOR ROLE*/}
         <Route  element={<ProtectedRoute allowedRole={[ROLES.OPERATOR]} />}>

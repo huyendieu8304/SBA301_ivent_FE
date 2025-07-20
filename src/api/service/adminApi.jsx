@@ -52,6 +52,17 @@ const adminApi = {
             true,
             successHandler,
             errorHandler,
+          ),
+    createAdminAccount: (formData, successHandler, errorHandler) =>
+        callApi(
+            url.createAdminAccount,
+            HTTP_METHOD.POST,
+            {},
+            formData,
+            true,
+            successHandler,
+            errorHandler,
+            true,
         ),
 };
 

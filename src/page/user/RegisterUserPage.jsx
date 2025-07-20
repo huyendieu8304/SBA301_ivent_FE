@@ -75,7 +75,8 @@ const RegisterUserPage = () => {
 
     const validateRePassword = (value, relatedValue) => {
         const fieldName = "Xác nhận mật khẩu";
-        const error = checkRequiredInput(fieldName, value) || checkPasswordAndRePasswordInput(value, relatedValue);
+        const relatedFieldName = "Mật khẩu";
+        const error = checkRequiredInput(fieldName, value) || checkPasswordAndRePasswordInput(fieldName, value, relatedFieldName, relatedValue);
         if (error) {
             return error;
         }
