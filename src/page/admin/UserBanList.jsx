@@ -16,6 +16,7 @@ import TableComponent from "../../component/TableComponent.jsx";
 import {MESSAGE_TYPES, PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
 import Messages from "../../common/Message.jsx";
 import { messageService } from "../../service/MessageService.jsx";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const UserBanList = () => {
     const theme = useTheme();
