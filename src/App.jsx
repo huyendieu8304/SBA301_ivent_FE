@@ -50,7 +50,6 @@ const routeDefinitions = createRoutesFromElements(
                 <Route path="/change-password" element={<LazyChangePasswordPage/>} />
             </Route>
         </Route>
-
         {/*WITH ONLY ADMIN ROLE*/}
         <Route element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
             <Route
@@ -89,7 +88,7 @@ const routeDefinitions = createRoutesFromElements(
                     path="/approve"
                     element={<LazyOperatorEventPending />}
                 />
-                <Route path="/operator/:eventId" element={<LazyEventDetail/>} />
+                <Route path="/approve/:eventId" element={<LazyEventDetail/>} />
             </Route>
 
         </Route>

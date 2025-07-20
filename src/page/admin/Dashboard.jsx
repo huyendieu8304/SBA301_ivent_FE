@@ -4,10 +4,14 @@ import {BarChart} from '@mui/x-charts/BarChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { LineChart } from '@mui/x-charts/LineChart';
 import {Box, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
-import operatorApi from "../../api/service/operatorApi.jsx";
+import adminApi from "../../api/service/adminApi.jsx";
 import LoadingComponent from "../../component/LoadingComponent.jsx";
 import {messageService} from "../../service/MessageService.jsx";
 import {MESSAGE_TYPES} from "../../common/Constant.jsx";
+
+function valueFormatter(value) {
+    return `${value}mm`;
+}
 
 function getFullMonthData(months) {
     return Array.from({ length: 12 }, (_, i) => {
@@ -21,55 +25,33 @@ const Dashboard = () => {
     const {setPageTitle} = useOutletContext();
     const theme = useTheme();
     const [isLoading, setIsLoading] = useState(false);
-    const [provinceStatistic, setProvinceStatistic] = useState([]);
+    const [roleStatistic, setRoleStatistic] = useState([]);
     const [statusStatistic, setStatusStatistic] = useState([]);
-    const [monthStatistic, setMonthStatistic] = useState([]);
-    const [categoryStatistic, setCategoryStatistic] = useState([]);
+    const [organizerStatistic, setOrganizerStatistic] = useState([]);
+    const [paymentStatistic, setPaymentStatistic] = useState([]);
 
     useEffect(() => {
         setPageTitle("Dashboard");
         setIsLoading(true);
-        operatorApi.getProvinceStatistic((data) => getDataSuccess(data, "province"), getDataFail);
-        operatorApi.getStatusStatistic((data) => getDataSuccess(data, "status"), getDataFail);
-        operatorApi.getMonthStatistic((data) => getDataSuccess(data, "month"), getDataFail);
-        operatorApi.getCategoryStatistic((data) => getDataSuccess(data, "category"), getDataFail);
+        adminApi.getRoleStatistic((data) => getDataSuccess(data, "role"), getDataFail);
+        adminApi.getStatusAccountStatistic((data) => getDataSuccess(data, "status"), getDataFail);
+        adminApi.getOrganizerStatistic((data) => getDataSuccess(data, "organizer"), getDataFail);
+        adminApi.getPaymentStatistic((data) => getDataSuccess(data, "payment"), getDataFail);
     }, []);
 
     const getDataSuccess = (data, type) => {
         setIsLoading(false);
-        if (type === "province") {
-            const filteredData = Array.isArray(data)
-                ? data.filter(item => item.label != null)
-                : [];
-            setProvinceStatistic(filteredData);
+        if(type === "role") {
+            setRoleStatistic(data);
         }
-        if (type === "status") {
-            const filteredData = Array.isArray(data)
-                ? data.filter(item => item.label != null)
-                    .map(item => ({
-                        id: item.label,
-                        value: item.count ?? 0,
-                        label: item.label
-                    }))
-                : [];
-            setStatusStatistic(filteredData);
+        if(type === "status") {
+            setStatusStatistic(data.map(item => ({id: item.label, value: item.count, label: item.label})));
         }
-        if (type === "month") {
-            const filteredData = Array.isArray(data)
-                ? data.filter(item => item.label != null)
-                : [];
-            setMonthStatistic(getFullMonthData(filteredData));
+        if(type === "organizer") {
+            setOrganizerStatistic(getFullMonthData(data));
         }
-        if (type === "category") {
-            const filteredData = Array.isArray(data)
-                ? data.filter(item => item.label != null)
-                    .map(item => ({
-                        id: item.label,
-                        value: item.count ?? 0,
-                        label: item.label
-                    }))
-                : [];
-            setCategoryStatistic(filteredData);
+        if(type === "payment") {
+            setPaymentStatistic(data.map(item => ({id: item.label, value: item.count, label: item.label})));
         }
     }
 
@@ -92,8 +74,8 @@ const Dashboard = () => {
                                         Thống kê tỉnh thành
                                     </Typography>
                                     <BarChart
-                                        xAxis={[{ scaleType: 'band', data: provinceStatistic.map(p => p.label) }]}
-                                        series={[{ data: provinceStatistic.map(p => p.count), label: 'Số sự kiện' }]}
+                                        xAxis={[{ scaleType: 'band', data: roleStatistic.map(p => p.label) }]}
+                                        series={[{ data: roleStatistic.map(p => p.count), label: 'Số sự kiện' }]}
                                         width={600}
                                         height={400}
                                     />
@@ -111,7 +93,7 @@ const Dashboard = () => {
                                         xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }]}
                                         series={[
                                             {
-                                                data: monthStatistic,
+                                                data: organizerStatistic,
                                             },
                                         ]}
                                         height={400}
@@ -147,7 +129,7 @@ const Dashboard = () => {
                                     </Typography>
                                     <PieChart
                                         series={[
-                                            {data: categoryStatistic,},
+                                            {data: paymentStatistic,},
                                         ]}
                                         width={200}
                                         height={200}

@@ -17,7 +17,7 @@ export const LazyProfilePage = React.lazy(
 );
 
 export const LazyOperatorDashboard = React.lazy(
-    () => import("../page/operator/./Dashboard"),
+    () => import("../page/operator/Dashboard"),
 );
 export const LazyOperatorEvent = React.lazy(
     () => import("../page/operator/EventPage.jsx"),
