@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {
     Box,
     Card,
     CardContent,
-    Container,
+    Container, Stack,
     Typography,
     useTheme
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import ticketApi from "../../api/service/ticketApi.jsx";
 import LoadingComponent from "../../component/LoadingComponent.jsx";
-import { formatDateTimeRange } from "../../common/FormatFunction.jsx";
+import {formatCurrency, formatDateTimeRange} from "../../common/FormatFunction.jsx";
 import MascotSvg from "../../component/svg/MascotSvg.jsx";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const TicketDetail = () => {
-    const { paymentId } = useParams();
+    const {paymentId} = useParams();
     const [ticket, setTicket] = useState(null);
     const [loading, setLoading] = useState(true);
     const theme = useTheme();
@@ -35,82 +37,85 @@ const TicketDetail = () => {
         setLoading(false);
     };
 
-    if (loading) return <LoadingComponent />;
+    if (loading) return <LoadingComponent/>;
 
     if (!ticket) {
         return (
-            <Container maxWidth="sm" sx={{ paddingTop: 4, color: theme.palette.common.white, textAlign: "center" }}>
+            <Container maxWidth="sm" sx={{paddingTop: 4, color: theme.palette.common.white, textAlign: "center"}}>
                 <Typography variant="h6">Không tìm thấy vé.</Typography>
             </Container>
         );
     }
 
     return (
-        <Container maxWidth="md" sx={{ paddingTop: 4, display: "flex", justifyContent: "center" }}>
-            <Card sx={{ borderRadius: 2, border: `2px solid ${theme.palette.primary.main}`, padding: 2, width: "100%", maxWidth: 600 }}>
-                <CardContent>
-                    <Box
-                        sx={{
-                            border: `1px dashed ${theme.palette.grey[500]}`,
-                            borderRadius: 2,
-                            padding: 2
-                        }}
-                    >
-                        <Box display="flex" justifyContent="space-between" alignItems="flex-start">
-                            {/* Thông tin vé */}
-                            <Box flex={1} pr={2}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    [TICKET INFO]
-                                </Typography>
-                                <Typography variant="h6" fontWeight="bold">
+        <Container maxWidth="xl" sx={{
+            display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
+            height: "fit-content",
+        }}>
+            <Card sx={{width: "fit-content", minWidth: "600px", height: "fit-content", borderRadius: "16px"}}>
+                <CardContent sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "0 !important"
+                }}>
+                    <Stack sx={{
+                        width: "100%",
+                        height: "80px",
+                        marginBottom: "24px",
+                        backgroundColor: theme.palette.primary.main,
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        alignItems: "end"
+                    }}>
+                        <Typography variant="h5" component="div"
+                                    sx={{fontWeight: "bold", color: "white", textAlign: "center", marginBottom: 2}}>
+                            Thông tin vé
+                        </Typography>
+                        <MascotSvg/>
+                    </Stack>
+                    <Stack direction="column" justifyContent="space-between" alignItems="flex-start" sx={{width: '90%'}}>
+                        <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="flex-start" sx={{width: '100%', marginBottom:" 24px"}}>
+                            <Stack direction="column" gap={1} sx={{width: "60%"}}>
+                                <Typography variant="h6" fontWeight="bold" sx={{color: "#12B76A"}}>
                                     {ticket.eventName?.toUpperCase()}
                                 </Typography>
-                                <Typography variant="body2" mt={1}>
-                                    🏛️ {ticket.eventLocation}
+                                <Stack direction="row" gap={1} justifyContent="flex-start" alignItems="center">
+                                    <LocationOnIcon sx={{color: "#A4A7AE"}}/>
+                                    <Typography variant="body2" sx={{margin: "0 !important"}}>
+                                        {ticket.eventLocation}
+                                    </Typography>
+                                </Stack>
+                                <Stack direction="row" gap={1} justifyContent="flex-start" alignItems="center">
+                                    <CalendarMonthIcon sx={{color: "#A4A7AE"}}/>
+                                    <Typography variant="body2" sx={{margin: "0 !important"}}>
+                                        {formatDateTimeRange(ticket.eventStartTime, ticket.eventEndTime)}
+                                    </Typography>
+                                </Stack>
+                                <Typography variant="body1" fontWeight="bold">
+                                    Loại vé: {ticket.ticketTypeName}
                                 </Typography>
-                                <Typography variant="body2">
-                                    🕒 {formatDateTimeRange(ticket.eventStartTime, ticket.eventEndTime)}
+                                <Typography variant="body1">
+                                    Số lượng: {ticket.quantity}
                                 </Typography>
-
-                                <Box mt={3}>
-                                    <Typography variant="body1" fontWeight="bold">
-                                        Loại vé: {ticket.ticketTypeName}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            whiteSpace: "pre-line",
-                                            wordBreak: "break-word",
-                                            overflowWrap: "break-word",
-                                        }}
-                                    >
-                                        Mô tả: {ticket.ticketDescription}
-                                    </Typography>
-
-                                    <Typography variant="body1">
-                                        Số lượng: {ticket.quantity}
-                                    </Typography>
-                                    <Typography variant="body1" mt={1}>
-                                        Tổng giá vé: {ticket.amount?.toLocaleString("vi-VN")} đ
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            {/* Logo */}
+                                <Typography variant="body1">
+                                    Tổng giá vé: {formatCurrency(ticket.amount, "đ")}
+                                </Typography>
+                            </Stack>
                             <Box
+                                component="img"
+                                src={ticket.qrUrl}
+                                alt="ticket qr"
                                 sx={{
-                                    display: "flex",
-                                    alignItems: "flex-end",
-                                    justifyContent: "flex-end",
-                                    mt: "auto",
+                                    width: "40%",
+                                    height: "auto",
+                                    margin: "0 !important"
                                 }}
-                            >
-                                <MascotSvg style={{ width: "100px", height: "auto" }} />
-                            </Box>
-
-
-                        </Box>
-                    </Box>
+                            />
+                        </Stack>
+                    </Stack>
                 </CardContent>
             </Card>
         </Container>

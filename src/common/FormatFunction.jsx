@@ -71,3 +71,10 @@ export const formatDateTimeRange = (startTime, endTime) =>  {
         return `${formatTime(start)}, ${formatDate(start)} - ${formatTime(end)}, ${formatDate(end)}`;
     }
 }
+
+export const formatCurrency = (number, suffix = "") => {
+    if (isNaN(number)) return null;
+    return number
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + `${suffix}`;
+};
