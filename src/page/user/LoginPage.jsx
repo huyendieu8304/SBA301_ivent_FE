@@ -139,7 +139,7 @@ const LoginPage = () => {
                 display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
                 height: "fit-content",
             }}>
-                <Card sx={{width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px",}}>
+                <Card sx={{width: "fit-content", minWidth: "400px", height: "fit-content", borderRadius: "16px"}}>
                     <CardContent sx={{
                         display: "flex",
                         flexDirection: "column",
