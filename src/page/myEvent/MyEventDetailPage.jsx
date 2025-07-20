@@ -390,7 +390,7 @@ function MyEventDetailPage(props) {
     const updateSuccessfully = (data) => {
         messageService.showMessage(Messages.MSG_I_00011, MESSAGE_TYPES.INFO);
         setIsLoading(false);
-        // todo navigate toi my events list
+        navigate("my-events");
     }
 
     const updateFail = (error) => {

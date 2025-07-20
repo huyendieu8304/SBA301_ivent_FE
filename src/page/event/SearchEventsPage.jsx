@@ -74,12 +74,13 @@ function SearchEventsPage() {
         pageRef.current = 1;
         setSearchResult([]);
         setHasMore(true);
+        searchEvents(1);
     }, [searchParams]);
 
     // Khi page thay đổi → gọi API
     useEffect(() => {
         pageRef.current = page;
-        if (page === 1 && searchResult?.length > 0) return; // Tránh gọi lại page 1 sau khi reset
+        if (page === 1) return; // Tránh gọi lại page 1 sau khi reset
         searchEvents(page);
     }, [page]);
 
@@ -136,8 +137,6 @@ function SearchEventsPage() {
         container.addEventListener("scroll", handleScroll);
         return () => container.removeEventListener("scroll", handleScroll);
     }, [hasMore, isLoading]);
-
-    console.log(searchResult)
 
     return (
         <Box ref={scrollContainerRef} sx={{height: "91.5vh", overflowY: "auto"}}>

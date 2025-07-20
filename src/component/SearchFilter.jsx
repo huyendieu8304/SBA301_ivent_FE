@@ -1,12 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Popover, Stack, Typography} from "@mui/material";
 import ValidateSelect from "./validateInput/ValidateSelect.jsx";
-import dayjs from "dayjs";
-import {checkOnlyDateAfter, checkOnlyDateBefore, checkValidDate} from "../common/ValidateFunction.jsx";
-import {DATE_FORMAT, DATETIME_FORMAT} from "../common/Constant.jsx";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DatePicker} from "@mui/x-date-pickers";
 
 function SearchFilter({searchParams, setSearchParams, categories, provinceList}) {
 
@@ -36,8 +30,7 @@ function SearchFilter({searchParams, setSearchParams, categories, provinceList})
     }
 
     const handlePickingFilter = () => {
-        const newParams = new URLSearchParams(searchParams); // giữ lại các param khác nếu cần
-
+        const newParams = new URLSearchParams(searchParams.toString()); // giữ lại các param khác
         if (province) {
             newParams.set("p", province);
         } else {
