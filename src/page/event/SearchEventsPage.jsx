@@ -7,6 +7,9 @@ import {useEffect, useRef, useState} from "react";
 import categoryApi from "../../api/service/categoryApi.jsx";
 import AddressData from "../../AddressData.js";
 import eventApi from "../../api/service/eventApi.jsx";
+import {messageService} from "../../service/MessageService.jsx";
+import {MESSAGE_TYPES} from "../../common/Constant.jsx";
+import LoadingComponent from "../../component/LoadingComponent.jsx";
 
 
 const CATEGORY_TEMP = [
@@ -39,17 +42,12 @@ const PROVINCE_LIST = AddressData.map(
 const DEFAULT_PAGE_SIZE = 16;
 
 function SearchEventsPage() {
-
     const [searchParams, setSearchParams] = useSearchParams();
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [searchResult, setSearchResult] = useState(null);
-
     const scrollContainerRef = useRef(null);
-
-    const [page, setPage] = useState(1);
-    const pageRef = useRef(page);
-    const isFetchingRef = useRef(false);
+    const pageRef = useRef(1);
     const year = new Date().getFullYear();
 
     //GET CATEGORY
@@ -62,33 +60,20 @@ function SearchEventsPage() {
         setCategories(data)
         setIsLoading(false);
     }
-    const getCategoriesFail = (data) => {
-        console.log("get categories fail")
-        console.error(data)
+    const getCategoriesFail = (error) => {
+        console.error(error);
+        messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
         setIsLoading(false);
     }
 
     // Reset khi param aka filter đổi
     useEffect(() => {
-        setPage(1);
         pageRef.current = 1;
-        setSearchResult([]);
-        setHasMore(true);
         searchEvents(1);
     }, [searchParams]);
 
-    // Khi page thay đổi → gọi API
-    useEffect(() => {
-        pageRef.current = page;
-        if (page === 1) return; // Tránh gọi lại page 1 sau khi reset
-        searchEvents(page);
-    }, [page]);
-
-
     const searchEvents = (targetPage = 1) => {
         // Nếu đang loading hoặc hết data thì không gọi
-        if (!hasMore || isLoading) return;
-
         setIsLoading(true);
         const params = {
             ...Object.fromEntries(searchParams.entries()),
@@ -107,13 +92,11 @@ function SearchEventsPage() {
             setSearchResult(prev => [...prev, ...data]);
         }
         setHasMore(data.length === DEFAULT_PAGE_SIZE); // Nếu ít hơn => không còn nữa
-        isFetchingRef.current = false; //Đánh dấu đã fetch xong
         setIsLoading(false);
     }
     const searchEventsFail = (error) => {
-        console.log("search events fail")
-        console.error(error)
-        isFetchingRef.current = false;
+        console.error(error);
+        messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
         setIsLoading(false);
     }
 
@@ -126,19 +109,17 @@ function SearchEventsPage() {
             if (!container) return;
             if (
                 container.scrollTop + container.clientHeight >= container.scrollHeight - 100 &&
-                hasMore &&
-                !isLoading &&
-                !isFetchingRef.current
+                hasMore
             ) {
-                isFetchingRef.current = true;
-                setPage(prev => prev + 1);
+                pageRef.current = pageRef.current + 1;
+                searchEvents(pageRef.current);
             }
         };
         container.addEventListener("scroll", handleScroll);
         return () => container.removeEventListener("scroll", handleScroll);
-    }, [hasMore, isLoading]);
+    }, []);
 
-    return (
+    return (<>
         <Box ref={scrollContainerRef} sx={{height: "91.5vh", overflowY: "auto"}}>
             <Container maxWidth={"lg"}
                        sx={{minHeight: "85vh", padding: "24px"}}
@@ -190,8 +171,10 @@ function SearchEventsPage() {
                             mt: 4
                         }}
                     >
-                        <Typography variant="h5" sx={{color: "white"}}>Rất tiếc! Không tìm thấy kết quả nào </Typography>
-                        <Typography sx={{color: "white"}} >Bạn hãy thử điều chỉnh lại bộ lọc, sử dụng các từ khóa phổ biến hơn </Typography>
+                        <Typography variant="h5" sx={{color: "white"}}>Rất tiếc! Không tìm thấy kết quả
+                            nào </Typography>
+                        <Typography sx={{color: "white"}}>Bạn hãy thử điều chỉnh lại bộ lọc, sử dụng các từ khóa phổ
+                            biến hơn </Typography>
                     </Box>
                 )}
             </Container>
@@ -212,7 +195,8 @@ function SearchEventsPage() {
                 </Typography>
             </Box>
         </Box>
-    );
+        {isLoading && <LoadingComponent/>}
+    </>);
 }
 
 export default SearchEventsPage;

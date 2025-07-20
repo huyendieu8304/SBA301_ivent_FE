@@ -1,19 +1,17 @@
-import {Link, Outlet, useNavigate} from "react-router";
+import {Outlet, useNavigate} from "react-router";
 import {
     Box, Button,
-    Container, Divider,
-    InputBase,
-    Paper,
+    Container,
     Stack,
     Typography, useTheme,
 } from "@mui/material";
 import {useAuth} from "../context/AuthContext.jsx";
 import '@fontsource/comfortaa/700.css';
 import TicketIconSvg from "../component/svg/TicketIconSvg.jsx";
-import SearchIcon from '@mui/icons-material/Search';
 import AvatarMenu from "../component/AvatarMenu.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
 import {useState} from "react";
+import LogoAndSearch from "../component/LogoAndSearch.jsx";
 
 const SearchLayout = () => {
     const {authorities} = useAuth();
@@ -42,42 +40,9 @@ const SearchLayout = () => {
             >
                 <Container maxWidth="lg">
                     <Stack direction="row" spacing={2} sx={{alignItems: "center", justifyContent: "space-between"}}>
-                        <Stack direction="row" spacing={2}>
-                            <Link to="/" style={{textDecoration: "none"}}>
-                                {/*<Avatar alt="ivent logo" src="/ivent_logo.png" sx={{height: 40, width: 40}}/>*/}
-                                <Typography
-                                    variant="h3"
-                                    gutterBottom
-                                    sx={{color: "white", fontFamily: 'Comfortaa', fontWeight: 700, margin: 0}}
-                                >
-                                    ivent
-                                </Typography>
-                            </Link>
-                        </Stack>
+                        <LogoAndSearch/>
                         {authorities ?
                             <>
-                                <Paper
-                                    component="form"
-                                    sx={{p: '0px 4px', display: 'flex', alignItems: 'center', width: 400}}
-                                >
-                                    <SearchIcon sx={{p: '10px', color: "#BDBDBD"}}/>
-                                    <InputBase
-                                        sx={{ml: 1, flex: 1}}
-                                        placeholder="Bạn tìm gì hôm nay?"
-                                    />
-                                    <Divider sx={{height: 28, m: 0.5}} orientation="vertical"/>
-                                    <Button sx={{
-                                        textTransform: "none",
-                                        borderRadius: "10px"
-                                    }}>
-                                        <Typography
-                                            variant="subtitle1"
-                                            sx={{color: "black", fontFamily: 'Arial', fontSize: "14px"}}
-                                        >
-                                            Tìm kiếm
-                                        </Typography>
-                                    </Button>
-                                </Paper>
                                 <Stack direction="row" spacing={3}>
                                     <Button variant="outlined"
                                             sx={{textTransform: "none", borderColor: "white", borderRadius: "10px"}}
