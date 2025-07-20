@@ -16,11 +16,14 @@ export const LazyProfilePage = React.lazy(
     () => import("../page/user/ProfilePage.jsx"),
 );
 
-export const LazyAdminDashboard = React.lazy(
-    () => import("../page/admin/AdminDashboard.jsx"),
+export const LazyOperatorDashboard = React.lazy(
+    () => import("../page/operator/./Dashboard"),
 );
-export const LazyAdminEvent = React.lazy(
-    () => import("../page/admin/AdminEventPage.jsx"),
+export const LazyOperatorEvent = React.lazy(
+    () => import("../page/operator/EventPage.jsx"),
+);
+export const LazyOperatorEventPending = React.lazy(
+    () => import("../page/operator/PendingPage.jsx"),
 );
 
 export const LazyEmailValidationTokenPage = React.lazy(
@@ -39,8 +42,8 @@ export const LazyMainLayout = React.lazy(
     () => import("../layout/MainLayout.jsx"),
 );
 
-export const LazyAdminLayout = React.lazy(
-    () => import("../layout/AdminLayout.jsx"),
+export const LazyOperatorLayout = React.lazy(
+    () => import("../layout/./OperatorLayout"),
 );
 
 export const LazySimpleLayout = React.lazy(
@@ -63,6 +66,9 @@ export const LazyMyEvents = React.lazy(
 export const LazyEventDetailsPage = React.lazy(
     () => import("../page/event/EventDetailsPage.jsx"),
 )
+export const LazyEventDetail = React.lazy(
+    () => import("../page/operator/EventDetail.jsx"),
+)
 
 export const LazyOrganizerLayout = React.lazy(
     () => import("../layout/OrganizerLayout.jsx"),
@@ -83,10 +89,22 @@ export const LazyBookingTicketPage = React.lazy(
 export const LazyTransactionResultPage = React.lazy(
     () => import("../page/event/TransactionResult.jsx"),
 )
+export const LazyMyBoughtTickets = React.lazy(
+    () => import("../page/user/MyBoughtTickets.jsx"),
+);
+
+export const LazyTicketDetail = React.lazy(
+    () => import("../page/user/TicketDetail.jsx"),
+);
 
 export const LazyMyEventDetailPage = React.lazy(
     () => import("../page/myEvent/MyEventDetailPage.jsx"),
 )
+
+export const LazyChangePasswordPage = React.lazy(
+    () => import("../page/user/ChangePasswordPage.jsx"),
+)
+
 
 export const LazySearchEventsPage = React.lazy(
     () => import("../page/event/SearchEventsPage.jsx"),

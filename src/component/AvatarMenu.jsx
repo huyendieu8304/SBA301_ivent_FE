@@ -63,7 +63,10 @@ const AvatarMenu = ({setIsLoading}) => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                 >
-                    <MenuItem>
+                    <MenuItem onClick={() => {
+                        handleCloseUserMenu();
+                        navigate("/my-bought-tickets");
+                    }}>
                         <Typography sx={{
                             textAlign: 'center',
                             color: theme.palette.primary.main,
@@ -93,6 +96,15 @@ const AvatarMenu = ({setIsLoading}) => {
                             margin: "0 6px"
                         }}>
                             Tài khoản
+                        </Typography>
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate("/change-password")}>
+                        <Typography sx={{
+                            textAlign: 'center',
+                            color: theme.palette.primary.main,
+                            margin: "0 6px"
+                        }}>
+                            Đổi mật khẩu
                         </Typography>
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>

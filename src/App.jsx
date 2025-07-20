@@ -4,9 +4,6 @@ import LoadingComponent from "./component/LoadingComponent.jsx";
 import {
     LazyEventDetailsPage,
     LazyOrganizerLayout,
-    LazyAdminDashboard,
-    LazyAdminEvent,
-    LazyAdminLayout,
     LazyEmailValidationTokenPage,
     LazyErrorPage,
     LazyHomePage,
@@ -19,11 +16,19 @@ import {
     LazyOAuth2RedirectPage,
     LazySimpleLayout,
     LazyForgotPasswordPage,
+    LazyOperatorLayout,
+    LazyOperatorEvent,
+    LazyOperatorDashboard, LazyOperatorEventPending,
     LazyCreateEventPage,
     LazyBookingTicketPage,
     LazyTransactionResultPage,
+    LazyTicketDetail,
     LazyMyEventDetailPage,
-    LazySearchEventsPage, LazySearchLayout,
+    LazyMyBoughtTickets,
+    LazyChangePasswordPage,
+    LazyEventDetail,
+    LazySearchEventsPage,
+    LazySearchLayout,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -40,27 +45,33 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/profile" element={<LazyProfilePage/>} />
+                <Route path="/change-password" element={<LazyChangePasswordPage/>} />
             </Route>
         </Route>
 
         {/*WITH ONLY ADMIN ROLE*/}
-        <Route  path="/admin" element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
+        <Route  element={<ProtectedRoute allowedRole={[ROLES.OPERATOR]} />}>
             <Route
                 element={
                     <Suspense fallback={<LoadingComponent />}>
-                        <LazyAdminLayout />
+                        <LazyOperatorLayout />
                     </Suspense>
                 }
             >
-                {/* Tự chuyển về /admin/event */}
-                <Route index element={<LazyAdminDashboard />} />
-
                 {/* Trang event table */}
                 <Route
-                    path="event"
-                    element={<LazyAdminEvent />}
+                    path="/operator"
+                    element={<LazyOperatorDashboard />}
                 />
-
+                <Route
+                    path="/event"
+                    element={<LazyOperatorEvent />}
+                />
+                <Route
+                    path="/approve"
+                    element={<LazyOperatorEventPending />}
+                />
+                <Route path="/operator/:eventId" element={<LazyEventDetail/>} />
             </Route>
         </Route>
 
@@ -86,6 +97,8 @@ const routeDefinitions = createRoutesFromElements(
             >
                 <Route path="/booking/:eventId" element={<LazyBookingTicketPage/>} />
                 <Route path="/transaction-result" element={<LazyTransactionResultPage/>} />
+                <Route path="/my-bought-tickets" element={<LazyMyBoughtTickets />} />
+                <Route path="/detail/:paymentId" element={<LazyTicketDetail />} />
             </Route>
         </Route>
 

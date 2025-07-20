@@ -17,16 +17,34 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import AvatarMenu from "../component/AvatarMenu.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
+import authSettingApi from "../api/service/authSettingApi.jsx";
 
 const drawerWidth = 240;
 
-const AdminLayout = () => {
+const OperatorLayout = () => {
     const [pageTitle, setPageTitle] = useState("");
-    const {authorities} = useAuth();
+    const {authorities, logout} = useAuth();
     const theme = useTheme();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const handleLogout = () => {
+        authSettingApi.logout(LogoutSuccess, LogoutFail);
+        setIsLoading(true);
+    }
+    const LogoutSuccess = (data) => {
+        logout();
+        console.log(data);
+    }
 
+    const LogoutFail = (e) => {
+        console.log(e);
+        navigate("/error", {
+            state: {
+                message: e.response.data.message,
+                code: e.status,
+            }
+        })
+    }
     return (
         <>
             <Box sx={{ display: 'flex', minHeight: "100dvh", margin: 0, padding: 0 }}>
@@ -105,38 +123,47 @@ const AdminLayout = () => {
                     <Divider />
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/admin">
+                            <ListItemButton component={Link} to="/operator">
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
                                 <ListItemText primary="Thống kê" />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/admin/event">
+                            <ListItemButton component={Link} to="/event">
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
                                 <ListItemText primary="Quản lý sự kiện" />
                             </ListItemButton>
                         </ListItem>
 
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/admin/users">
+                            <ListItemButton component={Link} to="/approve">
                                 <ListItemIcon><MailIcon /></ListItemIcon>
-                                <ListItemText primary="Quản lý người dùng" />
+                                <ListItemText primary="Phê duyệt sự kiện" />
                             </ListItemButton>
                         </ListItem>
                     </List>
 
                     <Divider />
                     <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/operator/profile">
+                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemText primary="Thông tin tài khoản" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/event">
+                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemText primary="Danh sách sự kiện" />
+                            </ListItemButton>
+                        </ListItem>
+
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={handleLogout}>
+                                <ListItemIcon><MailIcon /></ListItemIcon>
+                                <ListItemText primary="Đăng xuất" />
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </Drawer>
                 <Box
@@ -164,4 +191,4 @@ const AdminLayout = () => {
     );
 };
 
-export default AdminLayout;
+export default OperatorLayout;

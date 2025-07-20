@@ -2,7 +2,7 @@ export default class Messages {
     static MSG_E_00001 = "{0} không đúng định dạng";
     static MSG_E_00002 = "{0} phải được nhập";
     static MSG_E_00003 = "{0} phải đúng định dạng {1}";
-    static MSG_E_00004 = "Xác nhận mật khẩu phải giống Mật khẩu";
+    static MSG_E_00004 = "{0} phải giống {1}";
     static MSG_E_00005 = "{0} đã tồn tại";
     static MSG_E_00006 = "{0} không được dài quá {1} kí tự";
     static MSG_E_00007 = "Đăng nhập thất bại, đã có lỗi xảy ra";
@@ -28,4 +28,5 @@ export default class Messages {
     static MSG_I_00009 = "Giao dịch thành công";
     static MSG_I_00010 = "Giao dịch đang chờ thanh toán";
     static MSG_I_00011 = "Cập nhật sự kiện thành công";
+    static MSG_I_00012 = "Đổi mật khẩu thành công";
 }

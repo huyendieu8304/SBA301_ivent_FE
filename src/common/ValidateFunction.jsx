@@ -119,7 +119,7 @@ export const checkValidDate = (fieldName, dateStr, dateFormats) => {
     return null;
 };
 
-//thực ra cái này là check cả datetime phải after nhé, chuws neeus cùng ngày là nó vẫn báo lỗi
+// cái này là check cả datetime phải after nhé, chuws neeus cùng ngày là nó vẫn báo lỗi
 export const checkDateBefore = (fieldName, valueDate, maxDate, maxDateFieldName, dateFormats) => {
     const parsedValue = dayjs(valueDate, dateFormats, true);
     const parsedMax = dayjs(maxDate, dateFormats, true);
@@ -164,9 +164,9 @@ export const checkOnlyDateBefore = (fieldName, valueDate, minDate, minDateFieldN
     return null;
 };
 
-export const checkPasswordAndRePasswordInput = (rePassword, password) => {
-    if (password !== rePassword) {
-        return Messages.MSG_E_00004;
+export const checkPasswordAndRePasswordInput = (fieldName, value, relatedFieldName, relatedValue) => {
+    if (value !== relatedValue) {
+        return formatString(Messages.MSG_E_00004, fieldName, relatedFieldName);
     }
     return null;
 }

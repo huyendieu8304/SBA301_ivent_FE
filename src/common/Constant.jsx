@@ -15,6 +15,7 @@ export const HTTP_METHOD = {
 export const ROLES = {
     ADMIN: "ROLE_ADMIN",
     USER: "ROLE_USER",
+    OPERATOR: "ROLE_OPERATOR",
 };
 
 export const MESSAGE_TYPES = {
@@ -27,3 +28,5 @@ export const MESSAGE_TYPES = {
 export const DATE_FORMAT = "DD/MM/YYYY";
 export const DATETIME_SIMPLE_FORMAT = "DD/MM/YYYY HH:mm";
 export const DATETIME_FORMAT = "YYYY-MM-DDTHH:mm:ss";
+
+export const PAGE_SIZE_OPTIONS = [10,20,30,50];
