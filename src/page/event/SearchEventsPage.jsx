@@ -142,15 +142,8 @@ function SearchEventsPage() {
                     />
                 </Stack>
 
-                {/*{!searchResult && (*/}
-                {/*    */}
-                {/*)}*/}
                 {searchResult && searchResult.length > 0 ? (
                     <ImageList
-                        // sx={{
-                        //     overflowY: "auto"
-                        // }}
-                        // ref={scrollContainerRef}
                         sx={{width: "100%"}}
                         cols={4}
                         rowHeight="auto"

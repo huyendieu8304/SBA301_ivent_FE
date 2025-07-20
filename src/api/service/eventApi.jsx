@@ -78,6 +78,17 @@ const eventApi = {
             successHandler,
             errorHandler,
             false,
+        ),
+    getHomePageData: (successHandler, errorHandler) =>
+        callApi(
+            url.getHomePageData,
+            HTTP_METHOD.GET,
+            {},
+            {},
+            false,
+            successHandler,
+            errorHandler,
+            false,
         )
 };
 

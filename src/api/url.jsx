@@ -51,4 +51,5 @@ export const url = {
 
     //COMMON
     getCategories: PATH_CATEGORY + "/",
+    getHomePageData: PATH_EVENT_PUBLIC_URL + `/home`,
 };
