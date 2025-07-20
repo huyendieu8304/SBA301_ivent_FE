@@ -1,17 +1,18 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import eventApi from "../../api/service/./operatorApi.jsx";
 import dayjs from "dayjs";
 import {Box, Button, Card, CardContent, Chip, Container, TextField, Typography, useTheme} from "@mui/material";
 import TableComponent from "../../component/TableComponent";
 import LoadingComponent from "../../component/LoadingComponent";
 import {useNavigate} from "react-router-dom";
-import {PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
+import {MESSAGE_TYPES, PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
+import {messageService} from "../../service/MessageService.jsx";
 
 const EventListPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState(null);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(1));
+    const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(0));
     const [eventName, setEventName] = useState("");
     const theme = useTheme();
     const [isSearching, setIsSearching] = useState(false);
@@ -71,9 +72,7 @@ const EventListPage = () => {
                     </Box>
                 );
             }
-
-        }
-,
+        },
         {
             field: 'actions',
             headerName: 'Chi tiết',
@@ -87,24 +86,22 @@ const EventListPage = () => {
                 <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => handleDetailClick(params.row.eventId)}
+                    onClick={() => handleDetailClick(params.row.id)}
                     sx={{ textTransform: "none" }}
                 >
                     Chi tiết
                 </Button>
             )
-        }
-
-
+        },
     ];
 
-
     useEffect(() => {
-        setIsSearching(false);
-        setIsLoading(true);
-        eventApi.getAllOperatorEvents( page, size, eventName, getDataSuccess,getDataFail)
+        if (page !== undefined && size !== undefined) {
+            setIsSearching(false);
+            setIsLoading(true);
+            eventApi.getAllOperatorEvents(page, size, eventName, getDataSuccess, getDataFail);
+        }
     }, [isSearching]);
-
 
     const getDataSuccess = (d) => {
         setData(d);
@@ -114,18 +111,9 @@ const EventListPage = () => {
     }
 
     const getDataFail = (error) => {
-        console.error("error", error);
+        console.log("error", error);
+        messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
         setIsLoading(false);
-
-        const message = error?.response?.data?.message || "Unknown error";
-        const statusCode = error?.response?.status || 500;
-
-        navigate("/error", {
-            state: {
-                message,
-                code: statusCode,
-            }
-        });
     };
 
     const handleSearchSubmit = (e) => {
@@ -142,7 +130,7 @@ const EventListPage = () => {
     }
 
     const handleDetailClick = (eventId) => {
-        navigate(`/operator/${eventId}`);
+        navigate(`/approve/${eventId}`);
     }
 
     return (

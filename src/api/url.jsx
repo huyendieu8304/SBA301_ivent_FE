@@ -33,7 +33,7 @@ export const url = {
     updateMyEventDetail: PATH_MY_EVENT,
 
     //EVENT - OPERATOR  
-    operatorEvent : ( page = 0, size = 10)=> `${PATH_OPERATOR}/event/?page=${page}&size=${size}`,
+    operatorEvent: (page = 0, size = 10)=> `${PATH_OPERATOR}/event?page=${page}&size=${size}`,
     operatorEventDetails: (eventId) => PATH_OPERATOR +`/${eventId}`,
     pendingEvent: ( page = 0, size = 10) => `${PATH_OPERATOR}/approve/?page=${page}&size=${size}`,
     updateEventStatus: (eventId, status) => `/${eventId}/status?status=${status}`,

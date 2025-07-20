@@ -3,29 +3,29 @@ import {callApi} from "../CallApi.jsx";
 import {url} from "../url.jsx";
 
 const operatorApi = {
-    getAllOperatorEvents: ( page, size, eventName,successHandler, errorHandler) =>
-    callApi(
-        url.operatorEvent,
-        HTTP_METHOD.GET,
-        {
-            eventName: eventName?.trim() || undefined
-        },
-        {},
-        true,
-        successHandler,
-        errorHandler,
-    ),
+    getAllOperatorEvents: (page, size, eventName, successHandler, errorHandler) =>
+        callApi(
+            url.operatorEvent(page, size),
+            HTTP_METHOD.GET,
+            {
+                name: eventName?.trim() || "",
+            },
+            {},
+            true,
+            successHandler,
+            errorHandler,
+        ),
     getEventDetailsById: (eventId, successHandler, errorHandler) =>
-    callApi(
-        url.operatorEventDetails(eventId),
-        HTTP_METHOD.GET,
-        {},
-        {},
-        true,
-        successHandler,
-        errorHandler,
-    ),
-    getPendingEvent: ( page, size, eventName, successHandler, errorHandler) =>
+        callApi(
+            url.operatorEventDetails(eventId),
+            HTTP_METHOD.GET,
+            {},
+            {},
+            true,
+            successHandler,
+            errorHandler,
+        ),
+    getPendingEvent: (page, size, eventName, successHandler, errorHandler) =>
         callApi(
             url.pendingEvent,
             HTTP_METHOD.GET,
