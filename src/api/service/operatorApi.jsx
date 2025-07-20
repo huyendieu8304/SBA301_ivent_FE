@@ -7,7 +7,9 @@ const operatorApi = {
     callApi(
         url.operatorEvent,
         HTTP_METHOD.GET,
-        {},
+        {
+            eventName: eventName?.trim() || undefined
+        },
         {},
         true,
         successHandler,

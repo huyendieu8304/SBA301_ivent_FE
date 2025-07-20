@@ -1,17 +1,17 @@
-import { Link, Outlet, useNavigate } from "react-router";
+
+import {Link, Outlet, useNavigate} from "react-router";
 import {
-  Box, Button,
-  Divider, Drawer,
-  ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Stack,
-  Typography, useTheme,
+    Box, Button,
+    Divider, Drawer,
+    ListItem, ListItemButton, ListItemIcon, ListItemText,
+    Stack,
+    Typography, useTheme,
 } from "@mui/material";
 import List from '@mui/material/List';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext.jsx";
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import React, {useState, Fragment} from "react";
+import {useAuth} from "../context/AuthContext.jsx";
 import '@fontsource/comfortaa/700.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
