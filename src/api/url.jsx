@@ -47,6 +47,8 @@ export const url = {
     payment: PATH_PAYMENT+"/vn-pay",
     getPaymentDetails: (txnRefCode) => PATH_PAYMENT + `/get-payment-details/${txnRefCode}`,
 
+    //ADMIN
+    createAdminAccount: PATH_ADMIN + "/create",
 
     //COMMON
     getCategories: PATH_CATEGORY + "/",
