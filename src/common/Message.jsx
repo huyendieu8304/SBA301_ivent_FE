@@ -32,4 +32,6 @@ export default class Messages {
     static MSG_I_00011 = "Cập nhật sự kiện thành công";
     static MSG_I_00012 = "Đổi mật khẩu thành công";
     static MSG_I_00013 = "Tạo tài khoản thành công";
+    static MSG_I_00014 = "Khóa tài khoản thành công";
+    static MSG_I_00015 = "Khóa tài khoản thất bại";
 }

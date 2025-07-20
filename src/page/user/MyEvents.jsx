@@ -16,34 +16,32 @@ import eventApi from "../../api/service/eventApi.jsx";
 import LoadingComponent from "../../component/LoadingComponent.jsx";
 import TableComponent from "../../component/TableComponent.jsx";
 import { formatVNDateFromISO } from "../../common/FormatFunction.jsx";
+import { PAGE_SIZE_OPTIONS } from "../../common/Constant.jsx";
 
 const MyEvents = () => {
     const theme = useTheme();
     const navigate = useNavigate();
     const { id: accountId } = useAuth();
 
-    const [events, setEvents] = useState([]);
+    const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
-    const [totalPages, setTotalPages] = useState(0);
+    const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(1));
     const [eventName, setEventName] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
 
     useEffect(() => {
+        setIsSearching(false);
         if (accountId) {
-            fetchEvents(eventName);
+            setIsLoading(true);
+            eventApi.getMyEvents(accountId, page, size, eventName, fetchSuccess, fetchFail);
         }
-    }, [accountId, page, size]);
+    }, [accountId, isSearching]);
 
-    const fetchEvents = (name = "") => {
-        setIsLoading(true);
-        eventApi.getMyEvents(accountId, page, size, name.trim(), fetchSuccess, fetchFail);
-    };
-
-    const fetchSuccess = (data) => {
-        const content = data?.content || [];
-        setEvents(content);
-        setTotalPages(data?.totalPages || 1);
+    const fetchSuccess = (d) => {
+        setData(d);
+        setPage(d.pageable.pageNumber + 1);
+        setSize(d.pageable.pageSize);
         setIsLoading(false);
     };
 
@@ -54,60 +52,61 @@ const MyEvents = () => {
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
-        setPage(0); // reset to first page
-        fetchEvents(eventName);
+        setPage(0);
+        setSize(PAGE_SIZE_OPTIONS.at(1));
+        setIsSearching(true);
     };
+
+    const handlePaginationChange = (newPage, newSize) => {
+        setPage(newPage);
+        setSize(newSize);
+        setIsSearching(true);
+    };
+
 
     const handleClickRow = (event) => {
         navigate(`/organizer/event-detail/${event.row.id}`);
     };
-
 
     const columns = [
         {
             field: 'name',
             headerName: 'Tên sự kiện',
             width: 330,
-            flex: 1,
-            align: "center"
+            flex: 1
         },
         {
             field: 'province',
             headerName: 'Địa điểm',
             width: 260,
-            flex: 1,
-            align: "center"
+            flex: 1
         },
         {
             field: 'startTime',
             headerName: 'Ngày bắt đầu',
             width: 260,
             valueGetter: (params) => formatVNDateFromISO(params),
-            flex: 1,
-            align: "center"
+            flex: 1
         },
         {
             field: 'endTime',
             headerName: 'Ngày kết thúc',
             width: 260,
             valueGetter: (params) => formatVNDateFromISO(params),
-            flex: 1,
-            align: "center"
+            flex: 1
         },
         {
             field: 'createdAt',
             headerName: 'Ngày tạo',
             width: 260,
             valueGetter: (params) => formatVNDateFromISO(params),
-            flex: 1,
-            align: "center"
+            flex: 1
         },
         {
             field: 'status',
             headerName: 'Trạng thái',
             width: 160,
             flex: 1,
-            align: "center",
             renderCell: (params) => (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Chip
@@ -157,8 +156,12 @@ const MyEvents = () => {
 
                     <TableComponent
                         columns={columns}
-                        data={events}
+                        rows={data?.content || []}
+                        page={page}
+                        pageSize={size}
+                        totalRowCount={data?.totalElements || 0}
                         handleClickRow={handleClickRow}
+                        handlePaginationChange={handlePaginationChange}
                     />
                 </CardContent>
             </Card>

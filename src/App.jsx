@@ -18,7 +18,8 @@ import {
     LazyForgotPasswordPage,
     LazyOperatorLayout,
     LazyOperatorEvent,
-    LazyOperatorDashboard, LazyOperatorEventPending,
+    LazyOperatorDashboard,
+    LazyOperatorEventPending,
     LazyCreateEventPage,
     LazyBookingTicketPage,
     LazyTransactionResultPage,
@@ -26,7 +27,10 @@ import {
     LazyMyEventDetailPage,
     LazyMyBoughtTickets,
     LazyChangePasswordPage,
-    LazyEventDetail, LazyCreateAdminAccountPage, LazyAdminLayout,
+    LazyEventDetail,
+    LazyCreateAdminAccountPage,
+    LazyAdminLayout,
+    LazyAdminUserBanList,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -57,6 +61,7 @@ const routeDefinitions = createRoutesFromElements(
                 }
             >
                 <Route path="/admin/create-admin-account" element={<LazyCreateAdminAccountPage />} />
+                <Route path="/admin/users-ban-list" element={<LazyAdminUserBanList />} />
             </Route>
         </Route>
 

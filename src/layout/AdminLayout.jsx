@@ -98,14 +98,14 @@ const AdminLayout = () => {
 
           <List>
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/admin/create-account">
+              <ListItemButton component={Link} to="/admin/create-admin-account">
                 <ListItemIcon><AdminPanelSettingsIcon /></ListItemIcon>
                 <ListItemText primary="Tạo tài khoản quản trị viên" />
               </ListItemButton>
             </ListItem>
 
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/admin/users">
+              <ListItemButton component={Link} to="/admin/users-ban-list">
                 <ListItemIcon><SettingsIcon /></ListItemIcon>
                 <ListItemText primary="Danh sách người dùng" />
               </ListItemButton>

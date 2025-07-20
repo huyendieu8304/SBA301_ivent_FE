@@ -52,4 +52,6 @@ export const url = {
 
     //COMMON
     getCategories: PATH_CATEGORY + "/",
+    banUser: "/api/v1/admin/ban",
+    getUserAccounts: "/api/v1/admin/users-ban-list",
 };

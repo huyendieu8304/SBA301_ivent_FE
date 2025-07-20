@@ -105,5 +105,9 @@ export const LazyChangePasswordPage = React.lazy(
 )
 
 export const LazyCreateAdminAccountPage = React.lazy(
-    () => import("../page/admin/./CreateAdminAccount"),
+    () => import("../page/admin/CreateAdminAccount.jsx"),
+);
+
+export const LazyAdminUserBanList = React.lazy(
+    () => import("../page/admin/UserBanList.jsx"),
 );
