@@ -16,6 +16,7 @@ import Messages from "../../common/Message.jsx";
 import eventApi from "../../api/service/eventApi.jsx";
 import {checkAllFieldsValid} from "../../common/ValidateFunction.jsx";
 import {useNavigate, useParams} from "react-router";
+import MyEventStatistic from "../../component/eventDetail/MyEventStatistic.jsx";
 
 const CATEGORY_TEMP= [
     {
@@ -248,6 +249,7 @@ function MyEventDetailPage(props) {
         isFree: {needToCheckBeForSubmit: true, label: "Sự kiện miễn phí", value: false, error: ""},
         status: "",
     });
+    const [ticketTypes, setTicketTypes] = useState([]);
 
     //for validate before send
     useEffect(() => {
@@ -307,6 +309,7 @@ function MyEventDetailPage(props) {
 
     const getEventDetailSuccess = (data) => {
         setFormFields(mapEventResponseToFormFields(data));
+        setTicketTypes(data.ticketTypes);
         setIsLoading(false);
     }
 
@@ -443,6 +446,14 @@ function MyEventDetailPage(props) {
                 Lưu ý: Bạn chỉ có thể thay đổi thông tin sự kiện khi sự kiện chưa được duyệt.
             </Typography>
 
+            {ticketTypes?.length > 0 && isDisabled &&
+                (
+                    <MyEventStatistic
+                        ticketTypes={ticketTypes || []
+                        }
+                    />
+                )
+            }
             <EventInfo
                 formFields={formFields}
                 setFormFields={setFormFields}
