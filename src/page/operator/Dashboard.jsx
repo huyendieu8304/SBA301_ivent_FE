@@ -9,10 +9,6 @@ import LoadingComponent from "../../component/LoadingComponent.jsx";
 import {messageService} from "../../service/MessageService.jsx";
 import {MESSAGE_TYPES} from "../../common/Constant.jsx";
 
-function valueFormatter(value) {
-    return `${value}mm`;
-}
-
 function getFullMonthData(months) {
     return Array.from({ length: 12 }, (_, i) => {
         const month = (i + 1).toString();
@@ -41,17 +37,39 @@ const Dashboard = () => {
 
     const getDataSuccess = (data, type) => {
         setIsLoading(false);
-        if(type === "province") {
-            setProvinceStatistic(data);
+        if (type === "province") {
+            const filteredData = Array.isArray(data)
+                ? data.filter(item => item.label != null)
+                : [];
+            setProvinceStatistic(filteredData);
         }
-        if(type === "status") {
-            setStatusStatistic(data.map(item => ({id: item.label, value: item.count, label: item.label})));
+        if (type === "status") {
+            const filteredData = Array.isArray(data)
+                ? data.filter(item => item.label != null)
+                    .map(item => ({
+                        id: item.label,
+                        value: item.count ?? 0,
+                        label: item.label
+                    }))
+                : [];
+            setStatusStatistic(filteredData);
         }
-        if(type === "month") {
-            setMonthStatistic(getFullMonthData(data));
+        if (type === "month") {
+            const filteredData = Array.isArray(data)
+                ? data.filter(item => item.label != null)
+                : [];
+            setMonthStatistic(getFullMonthData(filteredData));
         }
-        if(type === "category") {
-            setCategoryStatistic(data.map(item => ({id: item.label, value: item.count, label: item.label})));
+        if (type === "category") {
+            const filteredData = Array.isArray(data)
+                ? data.filter(item => item.label != null)
+                    .map(item => ({
+                        id: item.label,
+                        value: item.count ?? 0,
+                        label: item.label
+                    }))
+                : [];
+            setCategoryStatistic(filteredData);
         }
     }
 
