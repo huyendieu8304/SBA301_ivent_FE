@@ -47,7 +47,7 @@ const routeDefinitions = createRoutesFromElements(
             </Route>
         </Route>
 
-        {/*WITH ONLY ADMIN ROLE*/}
+        {/*WITH ONLY OPERATOR ROLE*/}
         <Route  element={<ProtectedRoute allowedRole={[ROLES.OPERATOR]} />}>
             <Route
                 element={
@@ -69,7 +69,7 @@ const routeDefinitions = createRoutesFromElements(
                     path="/approve"
                     element={<LazyOperatorEventPending />}
                 />
-                <Route path="/operator/:eventId" element={<LazyEventDetail/>} />
+                <Route path="/approve/:eventId" element={<LazyEventDetail/>} />
             </Route>
 
         </Route>
