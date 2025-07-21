@@ -393,7 +393,7 @@ function MyEventDetailPage(props) {
     const updateSuccessfully = (data) => {
         messageService.showMessage(Messages.MSG_I_00011, MESSAGE_TYPES.INFO);
         setIsLoading(false);
-        navigate("my-events");
+        navigate("/organizer/my-events");
     }
 
     const updateFail = (error) => {

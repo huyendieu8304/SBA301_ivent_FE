@@ -146,7 +146,7 @@ const OperatorLayout = () => {
                     <Divider />
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/operator/profile">
+                            <ListItemButton component={Link} to="/profile">
                                 <ListItemIcon><InboxIcon /></ListItemIcon>
                                 <ListItemText primary="Thông tin tài khoản" />
                             </ListItemButton>

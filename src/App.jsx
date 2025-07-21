@@ -84,11 +84,11 @@ const routeDefinitions = createRoutesFromElements(
                 />
                 <Route
                     path="/event"
-                    element={<LazyOperatorEvent />}
+                    element={<LazyOperatorEventPending />}
                 />
                 <Route
                     path="/approve"
-                    element={<LazyOperatorEventPending />}
+                    element={<LazyOperatorEvent />}
                 />
                 <Route path="/approve/:eventId" element={<LazyEventDetail/>} />
             </Route>
