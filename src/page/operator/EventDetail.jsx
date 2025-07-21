@@ -354,12 +354,12 @@ function EventDetail(props) {
         if (!reason) return;
 
         setIsLoading(true);
-        operatorApi.updateEventStatus(eventId, "REJECTED", {reason},
+        operatorApi.updateEventStatus(eventId, "REJECTED", reason,
             (d) => {
                 messageService.showMessage("Đã từ chối sự kiện!", MESSAGE_TYPES.INFO);
                 setIsLoading(false);
                 setIsOpen(false);
-                navigate("/event");
+                navigate("/approve");
             },
             (error) => {
                 messageService.showMessage("Từ chối sự kiện thất bại!", MESSAGE_TYPES.ERROR);

@@ -7,8 +7,15 @@ import {
     Typography, useTheme,
 } from "@mui/material";
 import List from '@mui/material/List';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import {
+    Dashboard as DashboardIcon,
+    Event as EventIcon,
+    CheckCircle as CheckCircleIcon,
+    AccountCircle as AccountCircleIcon,
+    Logout as LogoutIcon,
+    ListAlt as ListAltIcon,
+} from '@mui/icons-material';
+
 import React, {useState, Fragment} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import '@fontsource/comfortaa/700.css';
@@ -124,20 +131,19 @@ const OperatorLayout = () => {
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton component={Link} to="/operator">
-                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemIcon><DashboardIcon /></ListItemIcon>
                                 <ListItemText primary="Thống kê" />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
                             <ListItemButton component={Link} to="/event">
-                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemIcon><EventIcon /></ListItemIcon>
                                 <ListItemText primary="Quản lý sự kiện" />
                             </ListItemButton>
                         </ListItem>
-
                         <ListItem disablePadding>
                             <ListItemButton component={Link} to="/approve">
-                                <ListItemIcon><MailIcon /></ListItemIcon>
+                                <ListItemIcon><CheckCircleIcon /></ListItemIcon>
                                 <ListItemText primary="Phê duyệt sự kiện" />
                             </ListItemButton>
                         </ListItem>
@@ -146,21 +152,20 @@ const OperatorLayout = () => {
                     <Divider />
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton component={Link} to="/profile">
-                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                            <ListItemButton component={Link} to="#">
+                                <ListItemIcon><AccountCircleIcon /></ListItemIcon>
                                 <ListItemText primary="Thông tin tài khoản" />
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
                             <ListItemButton component={Link} to="/event">
-                                <ListItemIcon><InboxIcon /></ListItemIcon>
+                                <ListItemIcon><ListAltIcon /></ListItemIcon>
                                 <ListItemText primary="Danh sách sự kiện" />
                             </ListItemButton>
                         </ListItem>
-
                         <ListItem disablePadding>
                             <ListItemButton onClick={handleLogout}>
-                                <ListItemIcon><MailIcon /></ListItemIcon>
+                                <ListItemIcon><LogoutIcon /></ListItemIcon>
                                 <ListItemText primary="Đăng xuất" />
                             </ListItemButton>
                         </ListItem>

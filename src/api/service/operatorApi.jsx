@@ -41,7 +41,7 @@ const operatorApi = {
             url.updateEventStatus(eventId, status),
             HTTP_METHOD.PUT,
             {},
-            reason || {},                         // Nếu có lý do thì truyền, không thì truyền chuỗi rỗng
+            reason ? reason : "",                     // Nếu có lý do thì truyền, không thì truyền chuỗi rỗng
             true,
             successHandler,
             errorHandler,

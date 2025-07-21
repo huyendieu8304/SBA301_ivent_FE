@@ -32,7 +32,7 @@ import {
     LazyAdminLayout,
     LazyAdminUserBanList,
     LazySearchEventsPage,
-    LazySearchLayout,
+    LazySearchLayout, LazyAdminAccountPage, LazyAdminDashboard,
 } from "./common/LazyLoad.jsx";
 import ProtectedRoute from "./component/ProtectedRoute.jsx";
 import {ROLES} from "./common/Constant.jsx";
@@ -52,6 +52,7 @@ const routeDefinitions = createRoutesFromElements(
                 <Route path="/change-password" element={<LazyChangePasswordPage/>} />
             </Route>
         </Route>
+
         {/*WITH ONLY ADMIN ROLE*/}
         <Route element={<ProtectedRoute allowedRole={[ROLES.ADMIN]} />}>
             <Route
@@ -61,6 +62,8 @@ const routeDefinitions = createRoutesFromElements(
                     </Suspense>
                 }
             >
+                <Route path="/admin/statistic" element={<LazyAdminDashboard />} />
+                <Route path="/admin/account" element={<LazyAdminAccountPage />} />
                 <Route path="/admin/create-admin-account" element={<LazyCreateAdminAccountPage />} />
                 <Route path="/admin/users-ban-list" element={<LazyAdminUserBanList />} />
             </Route>
