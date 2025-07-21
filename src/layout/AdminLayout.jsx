@@ -1,6 +1,9 @@
 
 import {Link, Outlet, useNavigate} from "react-router";
 import {
+  Dashboard as DashboardIcon,
+} from '@mui/icons-material';
+import {
     Box, Button,
     Divider, Drawer,
     ListItem, ListItemButton, ListItemIcon, ListItemText,
@@ -97,6 +100,18 @@ const AdminLayout = () => {
           <Divider />
 
           <List>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/admin/statistic">
+                <ListItemIcon><DashboardIcon /></ListItemIcon>
+                <ListItemText primary="Thống kê" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/admin/account">
+                <ListItemIcon><SettingsIcon /></ListItemIcon>
+                <ListItemText primary="Quản lý tài khoản" />
+              </ListItemButton>
+            </ListItem>
             <ListItem disablePadding>
               <ListItemButton component={Link} to="/admin/create-admin-account">
                 <ListItemIcon><AdminPanelSettingsIcon /></ListItemIcon>

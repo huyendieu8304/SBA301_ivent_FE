@@ -5,9 +5,9 @@ import {url} from "../url.jsx";
 const adminApi = {
     getAllAccount: ( page, size, name,successHandler, errorHandler) =>
         callApi(
-            url.adminAccount,
+            url.adminAccount(page, size),
             HTTP_METHOD.GET,
-            { name: name?.trim() || undefined},
+            {name: name?.trim() || "",},
             {},
             true,
             successHandler,

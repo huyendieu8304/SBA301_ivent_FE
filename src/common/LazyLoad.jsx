@@ -113,6 +113,14 @@ export const LazyCreateAdminAccountPage = React.lazy(
     () => import("../page/admin/CreateAdminAccount.jsx"),
 );
 
+export const LazyAdminAccountPage = React.lazy(
+    () => import("../page/admin/AccountPage.jsx"),
+);
+export const LazyAdminDashboard = React.lazy(
+    () => import("../page/admin/Dashboard.jsx"),
+);
+
+
 export const LazyAdminUserBanList = React.lazy(
     () => import("../page/admin/UserBanList.jsx"),
 );

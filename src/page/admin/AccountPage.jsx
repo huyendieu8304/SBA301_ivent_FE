@@ -6,103 +6,77 @@ import TableComponent from "../../component/TableComponent";
 import LoadingComponent from "../../component/LoadingComponent";
 import {useNavigate} from "react-router-dom";
 import {PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
+import adminApi from "../../api/service/adminApi.jsx";
 
 const AccountPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState(null);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(1));
-    const [eventName, setEventName] = useState("");
+    const [name, setName] = useState("");
     const theme = useTheme();
     const [isSearching, setIsSearching] = useState(false);
     const navigate = useNavigate();
 
     const columns = [
-        { field: 'name', headerName: 'Tên sự kiện', width: 330, flex: 1, align: "center" },
-        { field: 'province', headerName: 'Địa điểm', width: 300, flex: 1, align: "center"},
-        { field: 'startTime', headerName: 'Ngày bắt đầu', width: 300, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
-        { field: 'endTime', headerName: 'Ngày kết thúc', width: 300, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
+        { field: 'fullName', headerName: 'Họ tên', width: 200, flex: 1 },
+        { field: 'email', headerName: 'Email', width: 250, flex: 1 },
+        { field: 'phone', headerName: 'Số điện thoại', width: 200, flex: 1 },
+
+        {
+            field: 'gender',
+            headerName: 'Giới tính',
+            width: 200,
+            flex: 1,
+            renderCell: (params) => {
+                const gender = params.value;
+                return gender === 'Male' ? 'Nam' :
+                    gender === 'Female' ? 'Nữ' : 'Khác';
+            }
+        },
+
+        {
+            field: 'role',
+            headerName: 'Vai trò',
+            width: 200,
+            flex: 1,
+            renderCell: (params) => {
+                const role = params.value;
+                return role === 'ROLE_ADMIN' ? 'Quản trị viên' :
+                    role === 'ROLE_OPERATOR' ? 'Người kiểm duyệt' :
+                        role === 'ROLE_USER' ? 'Người dùng' : role;
+            }
+        },
+
         {
             field: 'status',
             headerName: 'Trạng thái',
             width: 160,
             flex: 1,
-            align: "left",
-            headerAlign: "left",
             renderCell: (params) => {
-                let label = "";
-                let color = "";
-
-                switch (params.value) {
-                    case "APPROVED":
-                        label = "Approved";
-                        color = theme.palette.primary.main;
-                        break;
-                    case "REJECTED":
-                        label = "Denied";
-                        color = "red";
-                        break;
-                    case "PENDING":
-                    default:
-                        label = "Pending";
-                        color = "orange";
-                        break;
-                }
-
+                const status = params.value;
+                const label = status === 'ACTIVE' ? 'Đang hoạt động' : 'Không hoạt động';
+                const color = status === 'ACTIVE' ? theme.palette.success.main : theme.palette.error.main;
                 return (
-                    <Box
+                    <Chip
+                        label={label}
                         sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-start',
-                            height: '100%',
-                            width: '100%',
-                            pl: 1
+                            backgroundColor: color,
+                            color: 'white',
+                            fontWeight: 'bold'
                         }}
-                    >
-                        <Chip
-                            label={label}
-                            sx={{
-                                backgroundColor: color,
-                                color: "white",
-                                fontWeight: "bold"
-                            }}
-                        />
-                    </Box>
+                    />
                 );
             }
-
         }
-        ,
-        {
-            field: 'actions',
-            headerName: 'Chi tiết',
-            width: 120,
-            sortable: false,
-            filterable: false,
-            disableColumnMenu: true,
-            align: "center",
-            headerAlign: "center",
-            renderCell: (params) => (
-                <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleDetailClick(params.row.eventId)}
-                    sx={{ textTransform: "none" }}
-                >
-                    Chi tiết
-                </Button>
-            )
-        }
-
-
     ];
+
 
 
     useEffect(() => {
         setIsSearching(false);
         setIsLoading(true);
-        eventApi.getAllOperatorEvents( page, size, eventName, getDataSuccess,getDataFail)
+        adminApi.getAllAccount( page, size, name, getDataSuccess,getDataFail)
     }, [isSearching]);
 
 
@@ -141,22 +115,18 @@ const AccountPage = () => {
         setIsSearching(true);
     }
 
-    const handleDetailClick = (eventId) => {
-        navigate(`/operator/${eventId}`);
-    }
-
     return (
         <Container maxWidth="xl" sx={{paddingTop: 4}}>
             <Card sx={{borderRadius: 2}}>
                 <CardContent>
                     <Typography variant="h5" sx={{fontWeight: "bold", marginBottom: 2}}>
-                        Tất cả sự kiện
+                        Tất cả tài khoản
                     </Typography>
 
                     <form onSubmit={handleSearchSubmit}>
                         <Box display="flex" alignItems="center" gap={2} mb={2}>
-                            <TextField label="Tìm theo tên sự kiện" variant="outlined" value={eventName}
-                                       onChange={(e) => setEventName(e.target.value)} size="small" sx={{width: 300}}/>
+                            <TextField label="Tìm theo tên" variant="outlined" value={name}
+                                       onChange={(e) => setName(e.target.value)} size="small" sx={{width: 300}}/>
                             <Button type="submit" variant="contained" color="primary" size="medium"
                                     sx={{color: "white", textTransform: 'none'}}>
                                 Tìm kiếm
@@ -165,7 +135,6 @@ const AccountPage = () => {
                     </form>
                     <TableComponent columns={columns} rows={data?.content || []} page={page} pageSize={size}
                                     totalRowCount={data?.totalElements || 0}
-                                    handleClickRow={(id) => console.log("Click row id:", id)}
                                     handlePaginationChange={handlePaginationChange}/>
                 </CardContent>
             </Card>

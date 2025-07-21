@@ -44,7 +44,7 @@ export const url = {
     getCategoryStatistic: PATH_OPERATOR + "/by-category",
 
     // ADMIN
-    adminAccount: ( page = 0, size = 10)=> `${PATH_ADMIN}/account/?page=${page}&size=${size}`,
+    adminAccount: ( page = 0, size = 10)=> `${PATH_ADMIN}/account?page=${page}&size=${size}`,
     getRoleStatistic: PATH_ADMIN + "/by-role",
     getStatusAccountStatistic: PATH_ADMIN + "/by-status",
     getOrganizerStatistic: PATH_ADMIN + "/organizer-event-count",
