@@ -5,6 +5,7 @@ import "./CardSliderStyle.css"
 import {Box, IconButton} from "@mui/material";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import {useNavigate} from "react-router";
 
 const images = [
     {id: 1, url: "https://salt.tkbcdn.com/ts/ds/5a/37/c6/b5239073da24a288542c3a3a5aaa21d5.png"},
@@ -51,8 +52,10 @@ const CardSliderReactSlick = ({
                                   slidesToScroll,
                                   autoplay = false,
                                   dotDisplay = false,
-                                  infinite = false
+                                  infinite = false,
+                                  events,
                               }) => {
+    const navigate = useNavigate();
     const settings = {
         dots: dotDisplay,
         infinite: infinite,
@@ -75,10 +78,11 @@ const CardSliderReactSlick = ({
     return (
         <Box sx={{width: "100%", margin: "24px 0 40px"}}>
             <Slider {...settings}>
-                {images.map((item) => (
+                {/*{images.map((item, index) => (*/}
+                {events && events.map((item, index) => (
                     <Box
                         className="item"
-                        key={item.id}
+                        key={`${item.id || 'fallback'}-${index}`}
                         sx={{
                             width: "100%",
                             height: "100%",
@@ -87,8 +91,9 @@ const CardSliderReactSlick = ({
                         }}
                     >
                         <Box
+                            // onClick={() => navigate(`/event/${item.id}`)}
                             component="img"
-                            src={item.url}
+                            src={item.bannerUri}
                             alt={`img-${item.id}`}
                             sx={{
                                 position: "relative",

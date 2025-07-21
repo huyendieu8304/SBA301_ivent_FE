@@ -13,13 +13,11 @@ import LoadingComponent from "../component/LoadingComponent.jsx";
 import {useState} from "react";
 import LogoAndSearch from "../component/LogoAndSearch.jsx";
 
-const MainLayout = () => {
+const SearchLayout = () => {
     const {authorities} = useAuth();
     const theme = useTheme();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-
-    const year = new Date().getFullYear();
 
     return (
         <>
@@ -48,7 +46,7 @@ const MainLayout = () => {
                                 <Stack direction="row" spacing={3}>
                                     <Button variant="outlined"
                                             sx={{textTransform: "none", borderColor: "white", borderRadius: "10px"}}
-                                        onClick={() => navigate("/organizer/create-event")}
+                                            onClick={() => navigate("/organizer/create-event")}
                                     >
                                         <Typography
                                             variant="subtitle1"
@@ -57,7 +55,7 @@ const MainLayout = () => {
                                             Tạo sự kiện
                                         </Typography>
                                     </Button>
-                                    <Button sx={{textTransform: "none", borderColor: "white", padding: 0}} onClick={()=> navigate("/my-bought-tickets")}>
+                                    <Button sx={{textTransform: "none", borderColor: "white", padding: 0}}>
                                         <Stack direction="row" spacing={0.5} justifyContent="center"
                                                alignItems="center">
                                             <TicketIconSvg style={{color: "white", fontSize: "20px"}}/>
@@ -97,31 +95,11 @@ const MainLayout = () => {
                 overflowY: "auto",
                 backgroundColor: theme.palette.backgroundColor.main,
             }}>
-                <Box component="main" sx={{minHeight:"85vh", }}>
-                    <Box sx={{padding: "24px"}}>
-                        <Outlet/>
-                    </Box>
-                </Box>
-                <Box
-                    component="footer"
-                    sx={{
-                        height: "6.5vh",
-                        backgroundColor: "#1D1D1D",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "inset 0 1px 0 rgba(0, 0, 0, 0.1)",
-                    }}
-                >
-                    <Typography variant="body2" sx={{color: "#B3B3B3", margin: 0}} gutterBottom>
-                        © {year} Bản quyền thuộc công ty ivent
-                    </Typography>
-                </Box>
+                <Outlet/>
             </Box>
             {isLoading && <LoadingComponent/>}
         </>
     );
 };
 
-export default MainLayout;
+export default SearchLayout;

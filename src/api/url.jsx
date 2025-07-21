@@ -20,6 +20,7 @@ export const url = {
     setPassword: PATH_URL + "/set-password",
     changePassword: PATH_URL + "/change-password",
     //EVENT - USER dùng
+    searchEvent: PATH_EVENT_PUBLIC_URL + "/search",
     getMyEvents: (id, page = 0, size = 10) =>
         `${PATH_URL}/event/my_events/${id}?page=${page}&size=${size}`,
     getEventDetails: (id) => PATH_EVENT_PUBLIC_URL + `/${id}`,
@@ -48,14 +49,15 @@ export const url = {
     getStatusAccountStatistic: PATH_ADMIN + "/by-status",
     getOrganizerStatistic: PATH_ADMIN + "/organizer-event-count",
     getPaymentStatistic: PATH_ADMIN + "/total-payment-by-account",
+    createAdminAccount: PATH_ADMIN + "/create",
+    banUser: "/api/v1/admin/ban",
+    getUserAccounts: "/api/v1/admin/users-ban-list",
 
     //PAYMENT
     payment: PATH_PAYMENT+"/vn-pay",
     getPaymentDetails: (txnRefCode) => PATH_PAYMENT + `/get-payment-details/${txnRefCode}`,
 
-    //ADMIN
-    createAdminAccount: PATH_ADMIN + "/create",
-
     //COMMON
     getCategories: PATH_CATEGORY + "/",
+    getHomePageData: PATH_EVENT_PUBLIC_URL + `/home`,
 };

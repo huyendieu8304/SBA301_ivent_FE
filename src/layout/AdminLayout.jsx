@@ -8,8 +8,6 @@ import {
     Typography, useTheme,
 } from "@mui/material";
 import List from '@mui/material/List';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import React, {useState, Fragment} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import '@fontsource/comfortaa/700.css';
@@ -19,7 +17,9 @@ import Toolbar from '@mui/material/Toolbar';
 import AvatarMenu from "../component/AvatarMenu.jsx";
 import LoadingComponent from "../component/LoadingComponent.jsx";
 import authSettingApi from "../api/service/authSettingApi.jsx";
-
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 const drawerWidth = 240;
 
 const AdminLayout = () => {
@@ -98,14 +98,14 @@ const AdminLayout = () => {
 
           <List>
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/admin/create-account">
+              <ListItemButton component={Link} to="/admin/create-admin-account">
                 <ListItemIcon><AdminPanelSettingsIcon /></ListItemIcon>
                 <ListItemText primary="Tạo tài khoản quản trị viên" />
               </ListItemButton>
             </ListItem>
 
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/admin/users">
+              <ListItemButton component={Link} to="/admin/users-ban-list">
                 <ListItemIcon><SettingsIcon /></ListItemIcon>
                 <ListItemText primary="Danh sách người dùng" />
               </ListItemButton>

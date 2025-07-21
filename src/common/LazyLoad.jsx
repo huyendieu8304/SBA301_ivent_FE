@@ -43,16 +43,21 @@ export const LazyMainLayout = React.lazy(
 );
 
 export const LazyOperatorLayout = React.lazy(
-    () => import("../layout/./OperatorLayout"),
+    () => import("../layout/OperatorLayout"),
 );
 
 export const LazyAdminLayout = React.lazy(
-    () => import("../layout/./AdminLayout.jsx"),
+    () => import("../layout/AdminLayout.jsx"),
 );
 
 export const LazySimpleLayout = React.lazy(
     () => import("../layout/SimpleLayout.jsx"),
 );
+
+export const LazySearchLayout = React.lazy(
+    () => import("../layout/SearchLayout.jsx"),
+);
+
 
 export const LazyForgotPasswordPage = React.lazy(
     () => import("../page/user/ForgotPasswordPage.jsx"),
@@ -105,5 +110,14 @@ export const LazyChangePasswordPage = React.lazy(
 )
 
 export const LazyCreateAdminAccountPage = React.lazy(
-    () => import("../page/admin/./CreateAdminAccount"),
+    () => import("../page/admin/CreateAdminAccount.jsx"),
 );
+
+export const LazyAdminUserBanList = React.lazy(
+    () => import("../page/admin/UserBanList.jsx"),
+);
+
+export const LazySearchEventsPage = React.lazy(
+    () => import("../page/event/SearchEventsPage.jsx"),
+)
+

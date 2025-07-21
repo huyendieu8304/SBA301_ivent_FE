@@ -1,5 +1,6 @@
 import {Card, CardContent, CardMedia, Tooltip, Typography, useTheme} from "@mui/material";
 import {formatVNDateFromISO} from "../common/FormatFunction.jsx";
+import {NavLink} from "react-router";
 
 const EventCard = ({event}) => {
     const theme = useTheme();
@@ -17,6 +18,9 @@ const EventCard = ({event}) => {
             />
             <CardContent sx={{height: "fit-content", padding: "8px 0 0 0 !important", color: "white"}}>
                 <Tooltip title={event.name} placement="top" arrow>
+                    <NavLink to={`/event/${event.id}`}
+                             style={{ textDecoration: "none", color: "inherit" }}
+                    >
                     <Typography
                         variant="h6"
                         component="div"
@@ -34,6 +38,7 @@ const EventCard = ({event}) => {
                     >
                         {event.name}
                     </Typography>
+                    </NavLink>
                 </Tooltip>
 
                 <Typography
@@ -48,7 +53,7 @@ const EventCard = ({event}) => {
                         textOverflow: "ellipsis",
                     }}
                 >
-                    {`Chỉ từ ${event.minTicketPrice} VNĐ`}
+                    {event.isOnline ? "Sự kiện online" : `${event.province}, ${event.ward}`}
                 </Typography>
 
                 <Typography

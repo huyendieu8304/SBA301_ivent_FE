@@ -64,6 +64,28 @@ const adminApi = {
             errorHandler,
             true,
         ),
+
+    banUser: (accountId, successHandler, errorHandler) =>
+        callApi(
+            `${url.banUser}/${accountId}`,
+            HTTP_METHOD.PUT,
+            {},
+            null,
+            true,
+            successHandler,
+            errorHandler
+        ),
+
+    getUserAccounts: (keyword, page, size, successHandler, errorHandler) =>
+        callApi(
+            url.getUserAccounts,
+            HTTP_METHOD.GET,
+            { keyword, page, size },
+            null,
+            true,
+            successHandler,
+            errorHandler
+        ),
 };
 
 export default adminApi;
