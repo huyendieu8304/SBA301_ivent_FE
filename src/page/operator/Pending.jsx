@@ -99,7 +99,7 @@ const EventListPage = () => {
         if (page !== undefined && size !== undefined) {
             setIsSearching(false);
             setIsLoading(true);
-            eventApi.getAllOperatorEvents(page, size, eventName, getDataSuccess, getDataFail);
+            eventApi.getPendingEvent(page, size, eventName, getDataSuccess, getDataFail);
         }
     }, [isSearching]);
 

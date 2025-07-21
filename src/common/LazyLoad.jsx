@@ -20,10 +20,10 @@ export const LazyOperatorDashboard = React.lazy(
     () => import("../page/operator/Dashboard"),
 );
 export const LazyOperatorEvent = React.lazy(
-    () => import("../page/operator/EventPage.jsx"),
+    () => import("../page/operator/Pending.jsx"),
 );
 export const LazyOperatorEventPending = React.lazy(
-    () => import("../page/operator/PendingPage.jsx"),
+    () => import("../page/operator/Event.jsx"),
 );
 
 export const LazyEmailValidationTokenPage = React.lazy(

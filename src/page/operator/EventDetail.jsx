@@ -14,8 +14,11 @@ import {DATETIME_FORMAT, MESSAGE_TYPES} from "../../common/Constant.jsx";
 import {messageService} from "../../service/MessageService.jsx";
 import Messages from "../../common/Message.jsx";
 import operatorApi from "../../api/service/operatorApi.jsx";
-import {checkAllFieldsValid} from "../../common/ValidateFunction.jsx";
+import {checkAllFieldsValid, checkEmailFormat, checkRequiredInput} from "../../common/ValidateFunction.jsx";
 import {useNavigate, useParams} from "react-router";
+import ConfirmModal from "../../component/ConfirmModal.jsx";
+import ValidationTextField from "../../component/validateInput/ValidationTextField.jsx";
+import authSettingApi from "../../api/service/authSettingApi.jsx";
 
 const CATEGORY_TEMP= [
     {
@@ -213,6 +216,11 @@ function EventDetail(props) {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const {eventId} = useParams();
+    const [isOpen, setIsOpen] = useState(false);
+    const [reason, setReason] = useState({
+        reason: "",
+        error: "",
+    })
 
     const [formFields, setFormFields] = useState({
         id: "",
@@ -255,6 +263,35 @@ function EventDetail(props) {
         categoryApi.getCategories(getCategoriesSuccess, getCategoriesFail)
     }, [])
 
+    const updateField = (fieldName, newValue) => {
+        setReason((prev) => ({
+            ...prev,
+            [fieldName]: {
+                ...prev[fieldName],
+                value: newValue,
+            },
+        }));
+    };
+
+    const updateError = (fieldName, errorMsg) => {
+        setReason((prev) => ({
+            ...prev,
+            [fieldName]: {
+                ...prev[fieldName],
+                error: errorMsg,
+            },
+        }));
+    };
+
+    const validateReason = (value) => {
+        const fieldName = "Lý do";
+        const error = checkRequiredInput(fieldName, value);
+        if (error) {
+            return error;
+        }
+        return null;
+    }
+
     const getCategoriesSuccess = (data) => {
         setCategories(data)
         setIsLoading(false);
@@ -283,6 +320,17 @@ function EventDetail(props) {
             setIsLoading(false);
         }
     }
+
+    const submitForm = () => {
+        const reasonErr = validateReason(reason.reason.value);
+        updateError("reason", reasonErr || "");
+        if (reasonErr) {
+            return;
+        }
+        setIsLoading(true);
+        handleRejectEvent(reason.reason.value);
+    };
+
     const handleApproveEvent = () => {
         setIsLoading(true);
         operatorApi.updateEventStatus(eventId, "APPROVED", null,
@@ -302,15 +350,16 @@ function EventDetail(props) {
             }
         );
     };
-    const handleRejectEvent = () => {
-        const reason = prompt("Nhập lý do từ chối sự kiện:");
+    const handleRejectEvent = (reason) => {
         if (!reason) return;
 
         setIsLoading(true);
-        operatorApi.updateEventStatus(eventId, "REJECTED", reason,
-            () => {
+        operatorApi.updateEventStatus(eventId, "REJECTED", {reason},
+            (d) => {
                 messageService.showMessage("Đã từ chối sự kiện!", MESSAGE_TYPES.INFO);
                 setIsLoading(false);
+                setIsOpen(false);
+                navigate("/event");
             },
             (error) => {
                 messageService.showMessage("Từ chối sự kiện thất bại!", MESSAGE_TYPES.ERROR);
@@ -332,7 +381,7 @@ function EventDetail(props) {
             <Typography variant="h1" color="primary"
                         style={{
                             fontWeight: "bold",
-                            fontSize: "4rem",
+                            fontSize: "2rem",
                         }}>
                 Thông tin sự kiện
             </Typography>
@@ -364,7 +413,7 @@ function EventDetail(props) {
             {formFields.status === "PENDING" && (
                 <Box sx={{ marginTop: '20px' }} display="flex" justifyContent="center" gap={2}>
                     <Button
-                        color="success"
+                        color="primary"
                         variant="contained"
                         size="large"
                         onClick={handleApproveEvent}
@@ -373,12 +422,28 @@ function EventDetail(props) {
                     </Button>
                     <Button
                         color="error"
-                        variant="outlined"
+                        variant="contained"
                         size="large"
-                        onClick={handleRejectEvent}
+                        onClick={() => setIsOpen(true)}
+                        // onClick={handleRejectEvent}
                     >
                         Từ chối
                     </Button>
+                    <ConfirmModal title={"Từ chối"} open={isOpen} setOpen={setIsOpen} hasCancel={true} handleConfirmSubmit={submitForm}
+                                  content={
+                                      <Stack direction="column" gap={2}>
+                                          <Typography variant="subtitle1"> Hãy nhập lý do để từ chối sự kiện này </Typography>
+                                          <ValidationTextField label="Lý do" fieldName="reason"
+                                                               value={reason.reason.value}
+                                                               setValue={updateField}
+                                                               error={reason.reason.error}
+                                                               setError={updateError}
+                                                               isRequired={true} size="small"
+                                                               type="text"
+                                                               validatorFunction={validateReason}/>
+                                      </Stack>
+                                  }
+                    />
                 </Box>
             )}
 

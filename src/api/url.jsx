@@ -35,8 +35,8 @@ export const url = {
     //EVENT - OPERATOR  
     operatorEvent: (page = 0, size = 10)=> `${PATH_OPERATOR}/event?page=${page}&size=${size}`,
     operatorEventDetails: (eventId) => PATH_OPERATOR +`/${eventId}`,
-    pendingEvent: ( page = 0, size = 10) => `${PATH_OPERATOR}/approve/?page=${page}&size=${size}`,
-    updateEventStatus: (eventId, status) => `/${eventId}/status?status=${status}`,
+    pendingEvent: ( page = 0, size = 10) => `${PATH_OPERATOR}/approve?page=${page}&size=${size}`,
+    updateEventStatus: (eventId, status) => PATH_OPERATOR + `/${eventId}/status?status=${status}`,
     getProvinceStatistic: PATH_OPERATOR + "/by-province",
     getStatusStatistic: PATH_OPERATOR + "/by-status",
     getMonthStatistic: PATH_OPERATOR + "/by-month",

@@ -27,9 +27,9 @@ const operatorApi = {
         ),
     getPendingEvent: (page, size, eventName, successHandler, errorHandler) =>
         callApi(
-            url.pendingEvent,
+            url.pendingEvent(page, size),
             HTTP_METHOD.GET,
-            {},
+            { name: eventName?.trim() || "",},
             {},
             true,
             successHandler,
@@ -41,11 +41,10 @@ const operatorApi = {
             url.updateEventStatus(eventId, status),
             HTTP_METHOD.PUT,
             {},
-            reason || "",                         // Nếu có lý do thì truyền, không thì truyền chuỗi rỗng
+            reason || {},                         // Nếu có lý do thì truyền, không thì truyền chuỗi rỗng
             true,
             successHandler,
             errorHandler,
-            true,
         ),
     getProvinceStatistic: (successHandler, errorHandler) =>
         callApi(

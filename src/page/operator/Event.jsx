@@ -5,20 +5,24 @@ import dayjs from "dayjs";
 import {Box, Button, Card, CardContent, Chip, Container, TextField, Typography, useTheme} from "@mui/material";
 import TableComponent from "../../component/TableComponent";
 import LoadingComponent from "../../component/LoadingComponent";
-import {PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
+import {MESSAGE_TYPES, PAGE_SIZE_OPTIONS} from "../../common/Constant.jsx";
+import {messageService} from "../../service/MessageService.jsx";
 
 const EventListPage = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [events, setEvents] = useState([]);
-    const navigate = useNavigate();
-    const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(1));
+    const [data, setData] = useState(null);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(PAGE_SIZE_OPTIONS.at(0));
     const [eventName, setEventName] = useState("");
-    const [isSearching, setIsSearching] = useState(false);
     const theme = useTheme();
+    const [isSearching, setIsSearching] = useState(false);
+    const navigate = useNavigate();
 
     const columns = [
         { field: 'name', headerName: 'Tên sự kiện', width: 330, flex: 1, align: "center" },
-        { field: 'province', headerName: 'Địa điểm', width: 300, flex: 1, align: "center"},
+        { field: 'province', headerName: 'Thành phố', width: 300, flex: 1, align: "center"},
+        { field: 'ward', headerName: 'Địa điểm', width: 300, flex: 1, align: "center"},
+        { field: 'organizerName', headerName: 'Tên tổ chức', width: 300, flex: 1, align: "center"},
         { field: 'startTime', headerName: 'Ngày bắt đầu', width: 300, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
         { field: 'endTime', headerName: 'Ngày kết thúc', width: 300, valueGetter: (params) => dayjs(params.value).format('DD/MM/YYYY HH:mm'), flex: 1, align: "center"},
         {
@@ -72,44 +76,28 @@ const EventListPage = () => {
             }
 
         }
-        ,
-        {
-            field: 'actions',
-            headerName: 'Chi tiết',
-            width: 120,
-            sortable: false,
-            filterable: false,
-            disableColumnMenu: true,
-            align: "center",
-            headerAlign: "center",
-            renderCell: (params) => (
-                <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleDetailClick(params.row)}
-                    sx={{ textTransform: "none" }}
-                >
-                    Chi tiết
-                </Button>
-            )
-        }
 
 
     ];
 
-
     useEffect(() => {
-        setIsLoading(true);
-        eventApi.getPendingEvent(getDataSuccess,getDataFail)
+        if (page !== undefined && size !== undefined) {
+            setIsSearching(false);
+            setIsLoading(true);
+            eventApi.getAllOperatorEvents(page, size, eventName, getDataSuccess, getDataFail);
+        }
     }, [isSearching]);
 
     const getDataSuccess = (data) => {
-        setEvents(data);
+        setData(data);
+        setPage(data.pageable.pageNumber + 1);
+        setSize(data.pageable.pageSize);
         setIsLoading(false);
     }
 
     const getDataFail = (error) => {
         console.log("error",error);
+        messageService.showMessage(error.response.data.message, MESSAGE_TYPES.ERROR);
         setIsLoading(false);
         navigate("/error", {
             state: {
@@ -128,10 +116,6 @@ const EventListPage = () => {
         setPage(newPage);
         setSize(newSize);
         setIsSearching(true);
-    }
-
-    const handleDetailClick = (eventId) => {
-        navigate(`/operator/${eventId}`);
     }
 
     return (
@@ -155,7 +139,6 @@ const EventListPage = () => {
                         </form>
                         <TableComponent columns={columns} rows={data?.content || []} page={page} pageSize={size}
                                         totalRowCount={data?.totalElements || 0}
-                                        handleClickRow={(id) => console.log("Click row id:", id)}
                                         handlePaginationChange={handlePaginationChange}/>
                     </CardContent>
                 </Card>
