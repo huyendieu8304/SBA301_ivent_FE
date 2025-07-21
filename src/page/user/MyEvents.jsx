@@ -110,11 +110,20 @@ const MyEvents = () => {
             renderCell: (params) => (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Chip
-                        label={params.value === "APPROVED" ? "Approved" : "Denied"}
+                        label={
+                            params.value === "APPROVED"
+                                ? "Đã duyệt"
+                                : params.value === "DENIED"
+                                    ? "Từ chối"
+                                    : "Chờ duyệt"
+                        }
                         sx={{
-                            backgroundColor: params.value === "APPROVED"
-                                ? theme.palette.primary.main
-                                : theme.palette.error.main,
+                            backgroundColor:
+                                params.value === "APPROVED"
+                                    ? theme.palette.primary.main
+                                    : params.value === "DENIED"
+                                        ? theme.palette.error.main
+                                        : theme.palette.warning.main,
                             color: "white",
                             fontWeight: "bold"
                         }}
@@ -122,6 +131,7 @@ const MyEvents = () => {
                 </Box>
             )
         }
+
     ];
 
     return (

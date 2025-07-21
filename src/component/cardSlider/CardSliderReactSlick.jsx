@@ -91,7 +91,7 @@ const CardSliderReactSlick = ({
                         }}
                     >
                         <Box
-                            // onClick={() => navigate(`/event/${item.id}`)}
+                             onClick={() => navigate(`/event/${item.id}`)}
                             component="img"
                             src={item.bannerUri}
                             alt={`img-${item.id}`}
