@@ -73,13 +73,11 @@ const ChangePasswordPage = () => {
     }
 
     const submitForm = () => {
-        const oldPasswordErr = validateOldPassword(formFields.oldPassword.value);
         const newPasswordErr = validateNewPassword(formFields.newPassword.value);
         const reNewPasswordErr = validateReNewPassword(formFields.reNewPassword.value, formFields.newPassword.value);
-        updateError("oldPassword", oldPasswordErr || "");
         updateError("newPassword", newPasswordErr || "");
         updateError("reNewPassword", reNewPasswordErr || "");
-        if (oldPasswordErr || newPasswordErr || reNewPasswordErr) {
+        if (newPasswordErr || reNewPasswordErr) {
             return;
         }
         const body = {
@@ -142,11 +140,16 @@ const ChangePasswordPage = () => {
                         <MascotSvg/>
                     </Stack>
                     <Stack direction="column" spacing={3} sx={{width: "80%"}}>
+                        {/*<ValidatedIconTextField label="Mật khẩu cũ" fieldName="oldPassword"*/}
+                        {/*                        value={formFields.oldPassword.value} setValue={updateField}*/}
+                        {/*                        error={formFields.oldPassword.error} setError={updateError}*/}
+                        {/*                        isRequired={true} size="small" type="password"*/}
+                        {/*                        validatorFunction={validateOldPassword}*/}
                         <ValidatedIconTextField label="Mật khẩu cũ" fieldName="oldPassword"
                                                 value={formFields.oldPassword.value} setValue={updateField}
                                                 error={formFields.oldPassword.error} setError={updateError}
-                                                isRequired={true} size="small" type="password"
-                                                validatorFunction={validateOldPassword}
+                                                isRequired={false} size="small" type="password"
+                                                validatorFunction={()=>{}}
                                                 endIcon={<VisibilityOffIcon/>}/>
                         <ValidatedIconTextField label="Mật khẩu mới" fieldName="newPassword"
                                                 value={formFields.newPassword.value} setValue={updateField}
