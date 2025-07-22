@@ -1,6 +1,6 @@
 import {Button, Card, CardContent, Container, Stack, Typography, useTheme} from "@mui/material";
 import ValidationTextField from "../../component/validateInput/ValidationTextField.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {checkEmailFormat, checkRequiredInput} from "../../common/ValidateFunction.jsx";
 import authSettingApi from "../../api/service/authSettingApi.jsx";
 import {useAuth} from "../../context/AuthContext.jsx";
@@ -9,7 +9,7 @@ import {useNavigate} from "react-router";
 import MascotSvg from "../../component/svg/MascotSvg.jsx";
 import {messageService} from "../../service/MessageService.jsx";
 import Messages from "../../common/Message.jsx";
-import {MESSAGE_TYPES} from "../../common/Constant.jsx";
+import {MESSAGE_TYPES, ROLES} from "../../common/Constant.jsx";
 import ValidatedIconTextField from "../../component/validateInput/ValidateIconTextField.jsx";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ConfirmModal from "../../component/ConfirmModal.jsx";
@@ -27,8 +27,20 @@ const LoginPage = () => {
         error: "",
     })
     const [isOpen, setIsOpen] = useState(false);
-    const {login} = useAuth();
+    const {login, authorities} = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(authorities === ROLES.USER){
+            navigate("/");
+        }
+        if(authorities === ROLES.ADMIN){
+            navigate("/admin/statistic");
+        }
+        if(authorities === ROLES.OPERATOR){
+            navigate("/operator");
+        }
+    },[authorities])
 
     const updateField = (fieldName, newValue) => {
         setFormFields((prev) => ({
@@ -85,9 +97,8 @@ const LoginPage = () => {
     };
     const loginSuccess = (data) => {
         login(data.jwtToken);
-        navigate("/");
         messageService.showMessage(Messages.MSG_I_00001, MESSAGE_TYPES.INFO);
-        // setIsLoading(false);
+        setIsLoading(false);
     }
     const loginFailure = (error) => {
         console.log(error);
