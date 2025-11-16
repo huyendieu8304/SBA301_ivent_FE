@@ -1,0 +1,33 @@
+html,
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+/*Custom Scrollbar*/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f6f6f6;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8DB2AB;
+  border-radius: 5px
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #718e88;
+}
+
+/*Custom Scrollbar*/
